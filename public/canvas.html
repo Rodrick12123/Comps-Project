@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Drawing Page</title>
+    <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cups.css') }}" />
+    <script type="text/javascript" src="{{ url_for('static', filename='cups.js') }}" ></script> -->
+  </head>
+
+  <body>
+  <div class="canvasMain">
+  <p>Draw the following: </p>
+  <p>*Funny Prompt*</p>
+
+<!--Set up canvas & quick version of setting up fabric-->
+  <canvas id="canvas" width="1000" height="500"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/fabric"></script>
+
+  <label for="colorpicker">Change Color:</label>
+  <input type="color" id="colorpicker" value="#0000ff" oninput="changeColor()">
+
+  <label for="sizepicker">Change Brush Size:</label>
+  <input type="number" id="sizepicker" min="1" value="5" oninput="changeSize()">
+
+  <script src="canvas.js"></script>
+  </div>
+  </body>
+</html>
