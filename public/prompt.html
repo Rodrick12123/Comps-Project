@@ -2,6 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="prompt.css">
         <title>Prompt Page</title>
         <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cups.css') }}" />
         <script type="text/javascript" src="{{ url_for('static', filename='cups.js') }}" ></script> -->
@@ -10,12 +12,13 @@
     <body>
         <div class="prompt">
             <div class="timer">
-                <!-- Timer form tbd -->
+                <p>Timer Location</p>
             </div>
             <p>
                 Text for giving prompt inspiration
             </p>
-            <input type="text" id="prompt" class="input_prompt" placeholder="Enter Prompt Here" />
+            <textarea name="text" id="prompt" rows="5"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
+            <!-- <input type="text" class="input_prompt" placeholder="Enter Prompt Here" /> -->
             <button class="enter_button" onclick="savePrompt()">Enter</button>
             <form action="canvas.html">
               <input type="submit" value="Go to canvas" />

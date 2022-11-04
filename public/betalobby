@@ -1,0 +1,65 @@
+
+
+<!DOCTYPE HTML>
+<html lang="en">
+<link rel="stylesheet" href="lobby.css" type="text/css" />
+
+    <head>
+
+<title>Hometown</title>
+    </head>
+
+    <body>
+        
+        
+        <div align="center">
+
+            <h1>
+                Welcome to the Game Lobby!
+            </h1>
+    
+        </div>
+        <div style = "position:relative; left:150px; top:80px">
+
+            <h2>
+                Game Code
+            </h2>
+        
+        </div>
+
+        <div style = "position:relative; left:135px; top:75px">
+
+            <div class="boxed">
+                Insert Game Code Here from Server
+              </div>
+
+            
+        </div>
+
+        <div style = "position:relative; left:150px; top:175px">
+            
+            <button class="start_button">
+                Start Game!
+            </button>
+
+        </div>
+            
+       
+
+        <div style = "position:relative; left:600px; top:-75px">
+           
+            <h2>Waiting Room:</h2>
+        
+        </div>
+        
+        <div style = "position:relative; left:550px; top:-75px">
+
+            <div class="lobbybox">
+                Names from the server that are already in the game
+            </div>
+
+        </div>
+
+    
+    </body>
+</html>
