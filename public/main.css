@@ -1,0 +1,72 @@
+html {
+    height: 100%;
+}
+
+body {
+    margin: 10px;
+    padding: 10px;
+    height: 100%;
+    background-color: rgb(146, 206, 249);
+    
+      
+}
+
+h1 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 36pt;
+}
+
+h2 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18pt;
+}
+
+button{
+    font-size: 14pt;
+}
+
+.start_button {
+    top:20%;
+    background-color:#bb54f2;
+    color: #fff;
+    border:none; 
+    border-radius:5px; 
+    padding:10px;
+    min-height:15px; 
+    min-width: 80px;
+  }
+
+  .boxed {
+    border: 1px solid rgb(0, 0, 0) ;
+    background-color: #fff;
+    max-width: 160px;
+  }
+
+  .lobbybox {
+    border: 1px solid rgb(0, 0, 0) ;
+    background-color: #fff;
+    width: 300px;
+    height: 350px;
+  }
+
+  .new_button {
+    top:20%;
+    background-color:#bb54f2;
+    color: #fff;
+    border:none; 
+    border-radius:5px; 
+    padding:10px;
+    min-height:15px; 
+    min-width: 80px;
+  }
+
+  .join_button {
+    top:20%;
+    background-color:#bb54f2;
+    color: #fff;
+    border:none; 
+    border-radius:5px; 
+    padding:10px;
+    min-height:15px; 
+    min-width: 80px;
+  }
