@@ -7,7 +7,7 @@ body {
     padding: 10px;
     height: 100%;
     background-color: rgb(146, 206, 249);
-    
+    color: gold;
       
 }
 
@@ -71,20 +71,6 @@ button{
     min-width: 80px;
   }
 
-.prompt{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-style: italic;
-}
-
-.input_prompt{
-    width: 70%;
-    text-overflow: clip;
-    
-}
 
 .enter_button{
     background: gold;
