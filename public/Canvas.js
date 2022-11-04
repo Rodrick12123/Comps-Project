@@ -13,3 +13,8 @@ function changeColor() {
 function changeSize() {
   canvas.freeDrawingBrush.width = document.getElementById("sizepicker").value;
 }
+
+function saveCanvas() {
+  var canvasInput = canvas.toJSON();
+  alert(canvas.loadFromJSON(canvasInput))
+}

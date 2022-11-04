@@ -15,12 +15,14 @@
             <p>
                 Text for giving prompt inspiration
             </p>
-            <input type="text" class="input_prompt" placeholder="Enter Prompt Here" />
-            <button class="enter_button">Enter</button>
+            <input type="text" id="prompt" class="input_prompt" placeholder="Enter Prompt Here" />
+            <button class="enter_button" onclick="savePrompt()">Enter</button>
             <form action="canvas.html">
               <input type="submit" value="Go to canvas" />
             </form>
         </div>
+
+        <script src="Prompt.js"></script>
         
     </body>
 </html>
