@@ -7,8 +7,8 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-var rooms = 0;
 var numRounds = 5;
+var numPlayers = 0;
 var maxPlayers = 8; //Will be in game object
 
 
@@ -32,7 +32,6 @@ function createGame() {
 
     let currGame = new Game(lobbyID);
     games.push(currGame);
-    rooms += 1;
 
     return lobbyID;
 }
@@ -62,12 +61,14 @@ function createBook(game, player){
 /* Helper Function:
 Creates the new Player object with the given username */
 function createPlayer(game, username, lobbyID){
+    numPlayers += 1;
+    
     if (username == ''){
-        username = "Player " + ++playerNum;
+        username = "Player " + numPlayers;
     }
     //need a new player object for the username and assign their book
-    game.playerNum += 1;
-    let currPlayer = new Player(game.playerNum, username, lobbyID);
+    
+    let currPlayer = new Player(numPlayers, username, lobbyID);
     game.addPlayer(currPlayer);
 
     createBook(game, currPlayer);
@@ -97,24 +98,24 @@ io.on('connection', function(socket){
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
-                if (games[i].playerNum >= maxPlayers){
+                if (numPlayers >= maxPlayers){
                     socket.emit("tooManyPlayers");
                 }
-                games[i].playerNum += 1;
                 
                 if (games[i].getCurrRound > 0){
                     socket.emit("gameInProgress");
                 }
-                
+
                 if (username == ''){
-                    username = "Player " + games[i].playerNum;
+                    username = "Player " + (numPlayers+1);
                 }
-
+                
                 createPlayer(games[i], username, lobbyID);
-
+                
                 socket.join(lobbyID);
 
-                socket.emit('playerToWaitingRoom');
+                console.log(games[i].players);
+                socket.emit('playerToWaitingRoom', games[i].players);
                 break;
             }
         }
