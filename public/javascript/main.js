@@ -1,50 +1,57 @@
-const socket = io.connect('http://localhost:5000');
-var numPlayers = 0
+
+// const socket = io();
+
+/* HTML elements */
+
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const dom = new JSDOM(__dirname + "/../betasCombined.html");
+
+const screenViews = {
+  mainPage: dom.window.document.getElementById("mainPage"),
+  joinPage: dom.window.document.getElementById("joinPage"),
+  lobbyPage: dom.window.document.getElementById("lobbyScreen")
+};
+
+/* Utility Functions */
+
+function switchView(newViewName){
+  console.log("hello");
+  for (let [viewName, view] of Object.entries(allViews)) {
+    if (viewName === newViewName) {
+      view.style.display = 'block';
+    } 
+    else {
+      view.style.display = 'none';
+    }
+  }
+}
+
+
+
+/* Game Functionality */
 
 // Create a new game. Emit newGame event.
-$('#new').on('click', () => {
-    const name = $('#nameNew').val();
-    if (!name) {
-      alert('Please enter your name.');
-      return;
-    }
-    socket.emit('createGame', { name });
-    player = new Player(name, P1);
-    ++numPlayers
-  });
+function createButtonClicked() {
+  socket.emit('createClicked');
+}
 
   // Join an existing game on the entered roomId. Emit the joinGame event.
-  $('#join').on('click', () => {
-    const name = $('#nameJoin').val();
-    const roomID = $('#room').val();
-    if (!name || !roomID) {
-      alert('Please enter your name and game ID.');
-      return;
-    }
-    socket.emit('joinGame', { name, room: roomID });
-    player = new Player(name, 'P' + numPlayers);
-  });
+// $('#join').on('click', () => {
+//     const name = $('#nameJoin').val();
+//     const roomID = $('#room').val();
+//     if (!name || !roomID) {
+//       alert('Please enter your name and game ID.');
+//       return;
+//     }
+//     socket.emit('joinGame', { name, room: roomID });
+//     player = new Player(name, 'P' + numPlayers);
+//   });
 
-  // New Game created by current client. Update the UI and create new Game var.
-  socket.on('newGame', (data) => {
-    const message =
-      `Hello, ${data.name}. Please ask your friend to enter Game ID: 
-      ${data.room}. Waiting for other players`;
 
-    // Create game for player 1
-    game = new Game(data.room);
-    game.displayBoard(message);
-  });
-    
-    // When game ends. Notify players that game has ended.
-    socket.on('gameEnd', (data) => {
-    game.endGame(data.message);
-    socket.leave(data.room);
-    });
+// socket.on("roomCreated", function(lobbyID) {
+//   console.log("yes");
+//   switchView("lobbyPage");
 
-    /**
-     * End the game on any err event. 
-     */
-    socket.on('err', (data) => {
-    game.endGame(data.message);
-    });
+//   gameCodeDisplay.value = lobbyId.substring(5, lobbyId.length + 1);
+// });

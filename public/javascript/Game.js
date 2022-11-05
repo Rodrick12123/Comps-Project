@@ -1,6 +1,6 @@
 
 /* Our main game Object */
-export class Game {
+class Game {
     constructor(lobbyID) {
         this.lobbyID = lobbyID;
         this.currRound = 0;
@@ -14,12 +14,12 @@ export class Game {
 
     /* Appends the player to the list of players */
     addPlayer(player) {
-        this.players.append(player);
+        this.players.push(player);
     }
 
     /* Appends the book to the list of books */
     addBook(book) {
-        this.books.append(book);
+        this.books.push(book);
     }
 
 
@@ -32,3 +32,5 @@ export class Game {
 
     // Might want some more methods implemented
 }
+
+module.exports = Game;

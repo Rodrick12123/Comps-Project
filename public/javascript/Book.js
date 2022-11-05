@@ -1,6 +1,6 @@
 
 /* Our main Book Object */
-export class Book {
+class Book {
     constructor(playerNum) {
         this.pages = [];
     }
@@ -8,10 +8,12 @@ export class Book {
 
     /* Appends a page to the list of pages for this book */
     addPage(page){
-        this.pages.append(page);
+        this.pages.push(page);
     }
 
     //Probably want get functions for these variables
 
     // Might want some more methods implemented
 }
+
+module.exports = Book;

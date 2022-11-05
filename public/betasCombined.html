@@ -1,0 +1,216 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<link rel="stylesheet" href="main.css" type="text/css" />
+
+    <head>
+        <title>Hometown</title>
+        <script src="./javascript/canvas.js" defer></script>
+        <script src="./javascript/prompt.js" defer></script>
+    </head>
+
+    <body>
+        
+        <!--Main Page screen-->
+        <div id="mainPage">
+            <div align="center">
+
+                <h1>
+                    Welcome to ... (game name)
+                </h1>
+        
+            </div>
+            <div align="center">
+
+                <h2>
+                    Start a new game?
+                </h2>
+        
+                <button class="new_button" onclick="createButtonClicked()">
+                    Make new game!
+                </button>
+
+            </div>
+
+            <div align="center">
+
+                <h2>
+                    Join an existing game?
+                </h2>
+
+                <button class="join_button" id="mainJoinButton" onclick="mainJoinButtonClicked()">
+                    Join existing game!
+                </button>
+        
+            </div>
+
+            <div align="center">
+
+                <h2>
+                    Rules:
+                </h2>
+
+                <p>
+                    blah blah blah blah blah blahblah blah blahblah blah blahblah 
+                    blah blahblah blah blahblah blah blahblah blah blahblah blah 
+                    blahblah blah blahblah blah blahblah blah blah
+                </p>
+        
+            </div>
+        </div>
+
+        <!--Transition join screen-->
+        <div id="joinPage" style="display:none">
+            <div align="center">
+
+                <h1>
+                    Join a new game!
+                </h1>
+        
+                
+            </div>
+
+            <div align="center">
+    
+                <h2>
+                    Enter game code:
+                </h2>
+        
+                <input type="text" id="lobbyIDInput" size = 20 maxlength=35 value="">
+    
+    
+            </div>
+    
+            <div align="center">
+    
+                <h2>
+                    Enter your name:
+                </h2>
+    
+                <input type="text" id="usernameInput" size = 20 maxlength=35 value="">
+        
+            </div>
+            <br></br>
+        
+            <div align="center">
+    
+                <button class="join_button" id="joinJoinButton" onclick="joinJoinButtonClicked()">
+                    Join!
+                </button>
+            
+            </div>
+        </div>
+
+        <!--Initial Lobby screen-->
+        <div id="lobbyScreen" style="display:none">
+            <div align="center">
+
+                <h1>
+                    Welcome to the Game Lobby!
+                </h1>
+        
+            </div>
+            <div style = "position:relative; left:150px; top:80px">
+    
+                <h2>
+                    Game Code
+                </h2>
+            
+            </div>
+    
+            <div style = "position:relative; left:135px; top:75px">
+    
+                <div class="boxed" id="lobbyIDDisplay"></div>
+    
+            </div>
+    
+            <div style = "position:relative; left:150px; top:175px">
+                
+                <button class="start_button">
+                    Start Game!
+                </button>
+    
+            </div>
+                
+           
+    
+            <div style = "position:relative; left:600px; top:-75px">
+               
+                <h2>Waiting Room:</h2>
+            
+            </div>
+            
+            <div style = "position:relative; left:550px; top:-75px">
+    
+                <div class="lobbybox">
+                    Names from the server that are already in the game
+                </div>
+    
+            </div>
+        </div>
+    
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io();
+            
+            /* HTML elements */
+            
+            const screenViews = {
+              mainPage: document.getElementById("mainPage"),
+              joinPage: document.getElementById("joinPage"),
+              lobbyPage: document.getElementById("lobbyScreen")
+            };
+
+            const lobbyIDInput = document.getElementById("lobbyIDInput");
+            const usernameInput = document.getElementById("usernameInput");
+            const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
+            
+            /* Utility Functions */
+            
+            function switchView(newViewName){
+              for (let [viewName, view] of Object.entries(screenViews)) {
+                if (viewName === newViewName) {
+                  view.style.display = 'block';
+                } 
+                else {
+                  view.style.display = 'none';
+                }
+              }
+            }
+            
+            
+            /* Game Functionality */
+            
+            /* Create a new game. Emit newGame event. */
+            function createButtonClicked() {
+                socket.emit('createClicked');
+            }
+            
+            
+            /* The join button was clicked on the initial main screen */
+            function mainJoinButtonClicked() {
+                switchView("joinPage");
+            }
+
+            /* The join button was clicked after entering the game code and name of player */
+            function joinJoinButtonClicked() {
+                socket.emit("joinClicked", usernameInput.value, lobbyIDInput.value);
+            }
+
+
+            /* Socket Functionality */
+
+            socket.on("roomCreated", function(lobbyID) {
+                switchView("lobbyPage");
+
+                lobbyIDDisplay.innerHTML = lobbyID;
+            });
+
+
+            socket.on("playerToWaitingRoom", function() {
+                switchView("lobbyPage"); //Will be a different page
+            });
+            
+        </script>
+    </body>
+</html>

@@ -1,6 +1,6 @@
 
 /* Our main Player Object */
-export class Player {
+class Player {
     constructor(playerNum, username, lobbyID) {
         this.playerNum = playerNum;
         this.username = username;
@@ -18,3 +18,5 @@ export class Player {
 
     // Might want some more methods implemented
 }
+
+module.exports = Player;

@@ -1,6 +1,6 @@
 
 /* out main Page Object */
-export class Page {
+class Page {
     constructor() {
         this.whoInputted;
         this.stringInput; //Should it be initializes with the empty string?
@@ -13,3 +13,5 @@ export class Page {
 
     // Might want some more methods implemented
 }
+
+module.exports = Page;
