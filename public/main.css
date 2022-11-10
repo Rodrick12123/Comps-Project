@@ -78,12 +78,15 @@ button{
 
 
 .enter_button{
-    background: gold;
-    border-radius: 5px;
-    border: 1px solid;
-    margin-top: 10px;
-    border-color: gold goldenrod rgb(165, 122, 42);
-    color: black;
+  top:20%;
+  background-color:#bb54f2;
+  color: #fff;
+  border:none; 
+  border-radius:5px; 
+  padding:10px;
+  min-height:15px; 
+  min-width: 80px;
+  
 }
 
 .gamecodetext {
@@ -120,5 +123,51 @@ button{
 
   margin-left: 60%;
   margin-top: -30%;
+
+}
+
+.gamecodebox {
+  margin-left: 18.5%;
+  
+
+}
+
+.start_button_location{
+
+  margin-left: 20%;
+  margin-top: 5%;
+ 
+
+}
+
+.waitingtext{
+
+  margin-left: 60%;
+  margin-top: -18%;
+ 
+
+}
+
+.waitingbox {
+
+  border: 1px solid rgb(0, 0, 0) ;
+  background-color: #fff;
+  width: 300px;
+  height: 150px;
+  margin-left: 54%;
+  margin-bottom: 0%;
+
+}
+
+.next_button {
+
+  top:20%;
+  background-color:#bb54f2;
+  color: #fff;
+  border:none; 
+  border-radius:5px; 
+  padding:10px;
+  min-height:15px; 
+  min-width: 80px;
 
 }
