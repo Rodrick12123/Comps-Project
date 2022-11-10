@@ -3,11 +3,11 @@ html {
 }
 
 body {
-    margin: 10px;
-    padding: 10px;
-    height: 100%;
-    color: gold;
-    background-image: url("https://wallpapercave.com/wp/wp3779126.jpg");
+  background-image: url("https://cdn.diys.com/wp-content/uploads/2019/09/Oil-Painting-of-Daisy-Flower-Field.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
+  background-size: cover;
+    
   
       
 }
@@ -15,15 +15,19 @@ body {
 h1 {
     font-family: 'Times New Roman', Times, serif;
     font-size: 36pt;
+    font-weight: bolder;
+    color: #fff;
 }
 
 h2 {
     font-family: 'Times New Roman', Times, serif;
     font-size: 18pt;
+    color: #fff;
 }
 
 button{
     font-size: 14pt;
+    
 }
 
 .start_button {
@@ -37,40 +41,40 @@ button{
     min-width: 80px;
   }
 
-  .boxed {
-    border: 1px solid rgb(0, 0, 0) ;
-    background-color: #fff;
-    max-width: 160px;
-  }
+.boxed {
+  border: 1px solid rgb(0, 0, 0) ;
+  background-color: #fff;
+  max-width: 160px;
+}
 
-  .lobbybox {
-    border: 1px solid rgb(0, 0, 0) ;
-    background-color: #fff;
-    width: 300px;
-    height: 350px;
-  }
+.lobbybox {
+  border: 1px solid rgb(0, 0, 0) ;
+  background-color: #fff;
+  width: 300px;
+  height: 150px;
+}
 
-  .new_button {
-    top:20%;
-    background-color:#bb54f2;
-    color: #fff;
-    border:none; 
-    border-radius:5px; 
-    padding:10px;
-    min-height:15px; 
-    min-width: 80px;
-  }
+.new_button {
+  top:20%;
+  background-color:#bb54f2;
+  color: #fff;
+  border:none; 
+  border-radius:5px; 
+  padding:10px;
+  min-height:15px; 
+  min-width: 80px;
+}
 
-  .join_button {
-    top:20%;
-    background-color:#bb54f2;
-    color: #fff;
-    border:none; 
-    border-radius:5px; 
-    padding:10px;
-    min-height:15px; 
-    min-width: 80px;
-  }
+.join_button {
+  top:20%;
+  background-color:#bb54f2;
+  color: #fff;
+  border:none; 
+  border-radius:5px; 
+  padding:10px;
+  min-height:15px; 
+  min-width: 80px;
+}
 
 
 .enter_button{
@@ -80,4 +84,41 @@ button{
     margin-top: 10px;
     border-color: gold goldenrod rgb(165, 122, 42);
     color: black;
+}
+
+.gamecodetext {
+    margin-left: 20%;
+    margin-top: 5%;
+
+}
+
+.gamedescrip {
+
+  margin-left: 25%;
+  word-wrap: break-word;
+  width: 50%;
+  
+
+}
+
+.description {
+
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 14pt;
+  font-weight: bolder;
+  color: rgb(255, 251, 251);
+}
+
+.serverlobby {
+
+  margin-left: 20%;
+  margin-top: 5%;
+
+}
+
+.serverlobby2 {
+
+  margin-left: 60%;
+  margin-top: -30%;
+
 }
