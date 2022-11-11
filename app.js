@@ -10,6 +10,7 @@ var io = require('socket.io')(http);
 var numRounds = 5;
 var numPlayers = 0;
 var maxPlayers = 8; //Will be in game object
+var numPlayersInWaitRoom = 0;
 
 
 /* Setting up the Server */
@@ -135,7 +136,41 @@ io.on('connection', function(socket){
     });
 
     socket.on('promptEntered', function(username, lobbyID){
-        socket.emit('playerToCanvas', games[i].players);
+        numPlayersInWaitRoom++
+        lobbyID = lobbyID.trim();
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].lobbyID == lobbyID){
+                // 2 is minPlayers placeholder
+                if (numPlayersInWaitRoom == 2){
+                    io.in(lobbyID).emit("playerToCanvas");
+                    numPlayersInWaitRoom=0
+                    break;
+                }
+                else{
+                    socket.emit('playerToWaitingNextRound', games[i].players);
+                    break
+                }
+            }
+        }
+    });
+
+    socket.on('canvasEntered', function(username, lobbyID){
+        numPlayersInWaitRoom++
+        lobbyID = lobbyID.trim();
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].lobbyID == lobbyID){
+                // 2 is minPlayers placeholder
+                if (numPlayersInWaitRoom == 2){
+                    io.in(lobbyID).emit("playerToPrompt");
+                    numPlayersInWaitRoom=0
+                    break;
+                }
+                else{
+                    socket.emit('playerToWaitingNextRound', games[i].players);
+                    break
+                }
+            }
+        }
     });
 
 });

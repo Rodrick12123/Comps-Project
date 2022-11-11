@@ -163,6 +163,19 @@
         </div>
 
 
+        <!--Waiting for next round screen-->
+        <div id="waitingNextRoundPage" style="display:none">
+            <div class="waiting_entertain">
+                <!-- Contents tbd -->
+            </div>
+            <div class="waiting_players">
+                <p>
+                    Waiting room
+                </p>
+            </div>
+        </div>
+
+
         <!--Canvas screen-->
         <div id="canvasPage" style="display:none">
             <p>Draw the following: </p>
@@ -181,10 +194,6 @@
             <script src="javascript/canvas.js"></script>
               
             <button class="enter_button" onclick="enterCanvasButtonClicked()">Enter</button>
-          
-            <form action="waiting.html">
-              <input type="submit" value="Go to waiting" />
-            </form>
         </div>
 
 
@@ -201,6 +210,7 @@
               joinPage: document.getElementById("joinPage"),
               lobbyPage: document.getElementById("lobbyPage"),
               promptPage: document.getElementById("promptPage"),
+              waitingNextRoundPage: document.getElementById("waitingNextRoundPage"),
               canvasPage: document.getElementById("canvasPage")
             };
 
@@ -272,6 +282,11 @@
 
             socket.on("playerToPrompt", function() {
                 switchView("promptPage");
+            });
+
+
+            socket.on("playerToWaitingNextRound", function() {
+                switchView("waitingNextRoundPage");
             });
             
 
