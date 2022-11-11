@@ -121,7 +121,23 @@ io.on('connection', function(socket){
         }
     });
 
-    
+    socket.on('startGameClicked', function(username, lobbyID){
+        lobbyID = lobbyID.trim();
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].lobbyID == lobbyID){
+                // 2 is minPlayers placeholder
+                if (numPlayers >= 2){
+                    io.in(lobbyID).emit("playerToPrompt");
+                    break;
+                }
+            }
+        }
+    });
+
+    socket.on('promptEntered', function(username, lobbyID){
+        socket.emit('playerToCanvas', games[i].players);
+    });
+
 });
 
 

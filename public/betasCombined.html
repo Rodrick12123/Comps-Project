@@ -101,7 +101,7 @@
         </div>
 
         <!--Initial Lobby screen-->
-        <div id="lobbyScreen" style="display:none">
+        <div id="lobbyPage" style="display:none">
             <div align="center">
 
                 <h1>
@@ -125,7 +125,7 @@
     
             <div style = "position:relative; left:150px; top:175px">
                 
-                <button class="start_button">
+                <button class="start_button" onclick="StartGameButtonClicked()">
                     Start Game!
                 </button>
     
@@ -149,6 +149,47 @@
         </div>
     
 
+        <!--Prompt screen-->
+        <div id="promptPage" style="display:none">
+            <div class="timer">
+                <p>Timer Location</p>
+            </div>
+            <p>
+                Text for giving prompt inspiration
+            </p>
+            <textarea name="text" id="prompt" rows="5"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
+            <!-- <input type="text" class="input_prompt" placeholder="Enter Prompt Here" /> -->
+            <button class="enter_button" onclick="enterPromptButtonClicked()">Enter</button>
+        </div>
+
+
+        <!--Canvas screen-->
+        <div id="canvasPage" style="display:none">
+            <p>Draw the following: </p>
+            <p>*Funny Prompt*</p>
+          
+          <!--Set up canvas & quick version of setting up fabric-->
+            <canvas id="canvas" width="1000" height="500"></canvas>
+            <script src="https://cdn.jsdelivr.net/npm/fabric"></script>
+          
+            <label for="colorpicker">Change Color:</label>
+            <input type="color" id="colorpicker" value="#0000ff" oninput="changeColor()">
+          
+            <label for="sizepicker">Change Brush Size:</label>
+            <input type="number" id="sizepicker" min="1" value="5" oninput="changeSize()">
+          
+            <script src="javascript/canvas.js"></script>
+              
+            <button class="enter_button" onclick="enterCanvasButtonClicked()">Enter</button>
+          
+            <form action="waiting.html">
+              <input type="submit" value="Go to waiting" />
+            </form>
+        </div>
+
+
+
+
         <script src="/socket.io/socket.io.js"></script>
         <script>
             const socket = io();
@@ -158,7 +199,9 @@
             const screenViews = {
               mainPage: document.getElementById("mainPage"),
               joinPage: document.getElementById("joinPage"),
-              lobbyPage: document.getElementById("lobbyScreen")
+              lobbyPage: document.getElementById("lobbyPage"),
+              promptPage: document.getElementById("promptPage"),
+              canvasPage: document.getElementById("canvasPage")
             };
 
             const lobbyIDInput = document.getElementById("lobbyIDInput");
@@ -197,6 +240,21 @@
                 socket.emit("joinClicked", usernameInput.value, lobbyIDInput.value);
             }
 
+            // The start game button was clicked
+            function StartGameButtonClicked() {
+                socket.emit("startGameClicked", usernameInput.value, lobbyIDInput.value);
+            }
+
+            // The enter prompt button was clicked
+            function enterPromptButtonClicked() {
+                socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value); //add prompt data
+            }
+
+            // The enter canvas button was clicked
+            function enterCanvasButtonClicked() {
+                socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value); //add canvas data
+            }
+
 
             /* Socket Functionality */
 
@@ -210,7 +268,17 @@
             socket.on("playerToWaitingRoom", function() {
                 switchView("lobbyPage"); //Will be a different page
             });
+
+
+            socket.on("playerToPrompt", function() {
+                switchView("promptPage");
+            });
             
+
+            socket.on("playerToCanvas", function() {
+                switchView("canvasPage");
+            });
+
         </script>
     </body>
 </html>
