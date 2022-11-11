@@ -6,7 +6,7 @@
     "scripts": {
         "start": "node app.js"
     },
-    "author": "Jeremy Beckler, James Berger, Will Fleming, Brian Rhee, Rodrick Langford",
+    "author": "Jeremy Beckler, James Berger, Will Fleming, Brian Rhee, Rodrick Lankford",
     "license": "ISC",
     "dependencies": {
         "express": "^4.18.2",
