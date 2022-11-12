@@ -15,6 +15,7 @@ class Game {
     /* Appends the player to the list of players */
     addPlayer(player) {
         this.players.push(player);
+        this.numPlayers++
     }
 
     /* Appends the book to the list of books */
@@ -28,6 +29,14 @@ class Game {
     Used to check if the game is started and when it should finish */
     getCurrRound(){
         return this.currRound;
+    }
+
+    getPlayerByName(name){
+        for(let i=0; i<this.numPlayers; i++){
+            if(this.players[i].username==name){
+                return this.players[i];
+            }
+        }
     }
 
     // Might want some more methods implemented

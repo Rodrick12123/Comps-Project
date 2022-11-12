@@ -135,7 +135,8 @@ io.on('connection', function(socket){
         }
     });
 
-    socket.on('promptEntered', function(username, lobbyID){
+    socket.on('promptEntered', function(username, lobbyID, prompt){
+        console.log(prompt)
         numPlayersInWaitRoom++
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
@@ -148,7 +149,7 @@ io.on('connection', function(socket){
                 }
                 else{
                     socket.emit('playerToWaitingNextRound', games[i].players);
-                    break
+                    break;
                 }
             }
         }
@@ -167,10 +168,19 @@ io.on('connection', function(socket){
                 }
                 else{
                     socket.emit('playerToWaitingNextRound', games[i].players);
-                    break
+                    break;
                 }
             }
         }
+    });
+
+    socket.on("getPlayerNames", function(players) {
+        //could maybe have player array at the top of the class
+        var playerNames = [];
+        for (let i = 0; i < players.length; i++) {
+            playerNames.push(players[i].username);
+        }
+        io.in(players[0].gameLobbyID).emit("showPlayerNames", playerNames);
     });
 
 });
