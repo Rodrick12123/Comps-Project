@@ -141,8 +141,8 @@
             
             <div style = "position:relative; left:550px; top:-75px">
     
-                <div class="lobbybox">
-                    Names from the server that are already in the game
+                <div class="lobbybox" id="playerList">
+                    
                 </div>
     
             </div>
@@ -217,6 +217,7 @@
             const lobbyIDInput = document.getElementById("lobbyIDInput");
             const usernameInput = document.getElementById("usernameInput");
             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
+            const playerList = document.getElementById("playerList")
             
             /* Utility Functions */
             
@@ -275,8 +276,13 @@
             });
 
 
-            socket.on("playerToWaitingRoom", function() {
+            socket.on("playerToWaitingRoom", function(players) {
                 switchView("lobbyPage"); //Will be a different page
+                console.log('In lobbyPage:', players);
+            
+                playerUsernames = players.map((player) => player.username);
+                console.log('playerUsernames:', playerUsernames.join('<br>'));
+                playerList.innerHTML = playerUsernames.join('<br>');
             });
 
 

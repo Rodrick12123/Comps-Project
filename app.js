@@ -116,7 +116,7 @@ io.on('connection', function(socket){
                 socket.join(lobbyID);
 
                 console.log(games[i].players);
-                socket.emit('playerToWaitingRoom', games[i].players);
+                io.emit('playerToWaitingRoom', games[i].players);
                 break;
             }
         }
