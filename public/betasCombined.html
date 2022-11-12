@@ -142,10 +142,7 @@
             <div style = "position:relative; left:550px; top:-75px">
     
                 <div class="lobbybox" id="playerList">
-<<<<<<< HEAD
                     
-=======
->>>>>>> 7dba09cf01cf1490d50e06df4d5cf3f1296249fb
                 </div>
     
             </div>
@@ -220,12 +217,7 @@
             const lobbyIDInput = document.getElementById("lobbyIDInput");
             const usernameInput = document.getElementById("usernameInput");
             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
-<<<<<<< HEAD
             const playerList = document.getElementById("playerList")
-=======
-            const playerList = document.getElementById("playerList");
-            const prompt = document.getElementById("prompt");
->>>>>>> 7dba09cf01cf1490d50e06df4d5cf3f1296249fb
             
             /* Utility Functions */
             
@@ -286,20 +278,11 @@
 
             socket.on("playerToWaitingRoom", function(players) {
                 switchView("lobbyPage"); //Will be a different page
-<<<<<<< HEAD
                 console.log('In lobbyPage:', players);
             
                 playerUsernames = players.map((player) => player.username);
                 console.log('playerUsernames:', playerUsernames.join('<br>'));
                 playerList.innerHTML = playerUsernames.join('<br>');
-=======
-                
-                socket.emit("getPlayerNames", players);
-            });
-
-            socket.on("showPlayerNames", function(players) {
-                playerList.innerHTML = players;
->>>>>>> 7dba09cf01cf1490d50e06df4d5cf3f1296249fb
             });
 
 
