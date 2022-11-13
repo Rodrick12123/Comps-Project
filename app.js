@@ -29,12 +29,13 @@ const Page = require("./public/javascript/Page.js");
 
 
 const games = [];
-function createGame() {
-    let lobbyID = Math.floor(Math.random() * (Math.floor(99999) - Math.ceil(10000) + 1)) + Math.ceil(10000);
+function createGame(socketID) {
+    let lobbyID = (Math.floor(Math.random() * (Math.floor(99999) - Math.ceil(10000) + 1)) + Math.ceil(10000));
 
-    let currGame = new Game(lobbyID);
-    let host = new Host(currGame);
+    let host = new Host();
+    let currGame = new Game(lobbyID, host, socketID);
     games.push(currGame);
+    console.log(games);
 
     return lobbyID;
 }
@@ -65,6 +66,9 @@ function createBook(game, player){
 Creates the new Player object with the given username */
 function createPlayer(game, username, lobbyID){
     numPlayers += 1;
+    if (numPlayers >= 2) {
+        game.host.setReadyToStart(true);
+    }
     
     if (username == ''){
         username = "Player " + numPlayers;
@@ -83,8 +87,8 @@ io.on('connection', function(socket){
 	/* Create game server functionality 
     No new player is added to the lobby
     This is done on an outside device (Main Screen) */
-    socket.on('createClicked', function(){
-        lobbyID = createGame();
+    socket.on('createClicked', function(socketID){
+        lobbyID = createGame(socketID);
         console.log(lobbyID);
 
         // Make the home screen the correct html
@@ -125,14 +129,15 @@ io.on('connection', function(socket){
         }
     });
 
-    socket.on('startGameClicked', function(username, lobbyID){
-        lobbyID = lobbyID.trim();
+    socket.on('startGameClicked', function(socketID){
         for (let i = 0; i < games.length; i++) {
-            if (games[i].lobbyID == lobbyID){
-                // 2 is minPlayers placeholder
-                if (numPlayers >= 2){
-                    io.in(lobbyID).emit("playerToPrompt");
+            if (games[i].socketID == socketID){
+                if (games[i].host.getReadyToStart()) {
+                    socket.broadcast.emit("playerToPrompt");
                     break;
+                }
+                else {
+                    console.log("Not ready to start.");
                 }
             }
         }

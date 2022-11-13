@@ -1,15 +1,16 @@
 
 /* Our main game Object */
 class Game {
-    constructor(lobbyID, host) {
+    constructor(lobbyID, host, socketID) {
         this.lobbyID = lobbyID;
+        this.socketID = socketID;
         this.currRound = 0;
         this.numPlayers = 0;
         this.players = [];
         this.books = [];
         this.drawTime = 60;
         this.guessTime = 30;
-        this.Host = host;
+        this.host = host;
     }
 
 

@@ -1,13 +1,16 @@
 
 /* Our main Host Object for the main screen */
 class Host {
-    constructor(game) {
-        this.game = game;
+    constructor() {
         this.readyToStart = false;
     }
 
-    setReadyToStart(trueOrFalse){
+    setReadyToStart(trueOrFalse) {
         this.readyToStart = trueOrFalse;
+    }
+
+    getReadyToStart() {
+        return this.readyToStart;
     }
 }
 
