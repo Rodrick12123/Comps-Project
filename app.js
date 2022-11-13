@@ -22,6 +22,7 @@ app.get('/', function(req, res) {
 
 
 const Game = require("./public/javascript/Game.js");
+const Host = require("./public/javascript/Host.js");
 const Player = require("./public/javascript/Player.js");
 const Book = require("./public/javascript/Book.js");
 const Page = require("./public/javascript/Page.js");
@@ -32,6 +33,7 @@ function createGame() {
     let lobbyID = Math.floor(Math.random() * (Math.floor(99999) - Math.ceil(10000) + 1)) + Math.ceil(10000);
 
     let currGame = new Game(lobbyID);
+    let host = new Host(currGame);
     games.push(currGame);
 
     return lobbyID;
@@ -116,7 +118,8 @@ io.on('connection', function(socket){
                 socket.join(lobbyID);
 
                 console.log(games[i].players);
-                io.emit('playerToWaitingRoom', games[i].players);
+                io.emit('addPlayerToWaitingList', games[i].players);
+                io.to(socket.id).emit('playerToWaitingRoom');
                 break;
             }
         }

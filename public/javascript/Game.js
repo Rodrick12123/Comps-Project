@@ -1,7 +1,7 @@
 
 /* Our main game Object */
 class Game {
-    constructor(lobbyID) {
+    constructor(lobbyID, host) {
         this.lobbyID = lobbyID;
         this.currRound = 0;
         this.numPlayers = 0;
@@ -9,6 +9,7 @@ class Game {
         this.books = [];
         this.drawTime = 60;
         this.guessTime = 30;
+        this.Host = host;
     }
 
 
