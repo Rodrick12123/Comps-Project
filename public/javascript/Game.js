@@ -1,20 +1,23 @@
 
 /* Our main game Object */
 class Game {
-    constructor(lobbyID) {
+    constructor(lobbyID, host, socketID) {
         this.lobbyID = lobbyID;
+        this.socketID = socketID;
         this.currRound = 0;
         this.numPlayers = 0;
         this.players = [];
         this.books = [];
         this.drawTime = 60;
         this.guessTime = 30;
+        this.host = host;
     }
 
 
     /* Appends the player to the list of players */
     addPlayer(player) {
         this.players.push(player);
+        this.numPlayers++
     }
 
     /* Appends the book to the list of books */
@@ -28,6 +31,14 @@ class Game {
     Used to check if the game is started and when it should finish */
     getCurrRound(){
         return this.currRound;
+    }
+
+    getPlayerByName(name){
+        for(let i=0; i<this.numPlayers; i++){
+            if(this.players[i].username==name){
+                return this.players[i];
+            }
+        }
     }
 
     // Might want some more methods implemented

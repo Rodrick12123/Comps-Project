@@ -10,6 +10,7 @@ var io = require('socket.io')(http);
 var numRounds = 5;
 var numPlayers = 0;
 var maxPlayers = 8; //Will be in game object
+var numPlayersInWaitRoom = 0;
 
 
 /* Setting up the Server */
@@ -21,17 +22,20 @@ app.get('/', function(req, res) {
 
 
 const Game = require("./public/javascript/Game.js");
+const Host = require("./public/javascript/Host.js");
 const Player = require("./public/javascript/Player.js");
 const Book = require("./public/javascript/Book.js");
 const Page = require("./public/javascript/Page.js");
 
 
 const games = [];
-function createGame() {
-    let lobbyID = Math.floor(Math.random() * (Math.floor(99999) - Math.ceil(10000) + 1)) + Math.ceil(10000);
+function createGame(socketID) {
+    let lobbyID = (Math.floor(Math.random() * (Math.floor(99999) - Math.ceil(10000) + 1)) + Math.ceil(10000));
 
-    let currGame = new Game(lobbyID);
+    let host = new Host();
+    let currGame = new Game(lobbyID, host, socketID);
     games.push(currGame);
+    console.log(games);
 
     return lobbyID;
 }
@@ -62,6 +66,9 @@ function createBook(game, player){
 Creates the new Player object with the given username */
 function createPlayer(game, username, lobbyID){
     numPlayers += 1;
+    if (numPlayers >= 2) {
+        game.host.setReadyToStart(true);
+    }
     
     if (username == ''){
         username = "Player " + numPlayers;
@@ -80,8 +87,8 @@ io.on('connection', function(socket){
 	/* Create game server functionality 
     No new player is added to the lobby
     This is done on an outside device (Main Screen) */
-    socket.on('createClicked', function(){
-        lobbyID = createGame();
+    socket.on('createClicked', function(socketID){
+        lobbyID = createGame(socketID);
         console.log(lobbyID);
 
         // Make the home screen the correct html
@@ -115,27 +122,73 @@ io.on('connection', function(socket){
                 socket.join(lobbyID);
 
                 console.log(games[i].players);
-                socket.emit('playerToWaitingRoom', games[i].players);
+                io.emit('addPlayerToWaitingList', games[i].players);
+                io.to(socket.id).emit('playerToWaitingRoom');
                 break;
             }
         }
     });
 
-    socket.on('startGameClicked', function(username, lobbyID){
+    socket.on('startGameClicked', function(socketID){
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].socketID == socketID){
+                if (games[i].host.getReadyToStart()) {
+                    socket.broadcast.emit("playerToPrompt");
+                    break;
+                }
+                else {
+                    console.log("Not ready to start.");
+                }
+            }
+        }
+    });
+
+    socket.on('promptEntered', function(username, lobbyID, prompt){
+        console.log(prompt)
+        numPlayersInWaitRoom++
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 // 2 is minPlayers placeholder
-                if (numPlayers >= 2){
-                    io.in(lobbyID).emit("playerToPrompt");
+                if (numPlayersInWaitRoom == 2){
+                    io.in(lobbyID).emit("playerToCanvas");
+                    numPlayersInWaitRoom=0
+                    break;
+                }
+                else{
+                    socket.emit('playerToWaitingNextRound', games[i].players);
                     break;
                 }
             }
         }
     });
 
-    socket.on('promptEntered', function(username, lobbyID){
-        socket.emit('playerToCanvas', games[i].players);
+    socket.on('canvasEntered', function(username, lobbyID){
+        numPlayersInWaitRoom++
+        lobbyID = lobbyID.trim();
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].lobbyID == lobbyID){
+                // 2 is minPlayers placeholder
+                if (numPlayersInWaitRoom == 2){
+                    io.in(lobbyID).emit("playerToPrompt");
+                    numPlayersInWaitRoom=0
+                    break;
+                }
+                else{
+                    socket.emit('playerToWaitingNextRound', games[i].players);
+                    break;
+                }
+            }
+        }
+    });
+
+    socket.on("getPlayerNames", function(players) {
+        //could maybe have player array at the top of the class
+        var playerNames = [];
+        for (let i = 0; i < players.length; i++) {
+            playerNames.push(players[i].username);
+        }
+        io.in(players[0].gameLobbyID).emit("showPlayerNames", playerNames);
     });
 
 });

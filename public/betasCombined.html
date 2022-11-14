@@ -100,7 +100,7 @@
             </div>
         </div>
 
-        <!--Initial Lobby screen-->
+        <!--Main Screen Lobby screen-->
         <div id="lobbyPage" style="display:none">
             <div align="center">
 
@@ -125,7 +125,7 @@
     
             <div style = "position:relative; left:150px; top:175px">
                 
-                <button class="start_button" onclick="StartGameButtonClicked()">
+                <button class="start_button" onclick="startGameButtonClicked()">
                     Start Game!
                 </button>
     
@@ -141,8 +141,34 @@
             
             <div style = "position:relative; left:550px; top:-75px">
     
-                <div class="lobbybox">
-                    Names from the server that are already in the game
+                <div class="lobbybox" id="playerList">
+                    
+                </div>
+    
+            </div>
+        </div>
+
+
+        <!--Player Lobby screen-->
+        <div id="playerLobbyPage" style="display:none">
+            <div align="center">
+
+                <h1>
+                    Welcome to the Game Lobby!
+                </h1>
+        
+            </div>
+    
+            <div style = "position:relative; left:600px; top:-75px">
+               
+                <h2>Waiting Room:</h2>
+            
+            </div>
+            
+            <div style = "position:relative; left:550px; top:-75px">
+    
+                <div class="lobbybox" id="playerListPlayer">
+                    
                 </div>
     
             </div>
@@ -160,6 +186,19 @@
             <textarea name="text" id="prompt" rows="5"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
             <!-- <input type="text" class="input_prompt" placeholder="Enter Prompt Here" /> -->
             <button class="enter_button" onclick="enterPromptButtonClicked()">Enter</button>
+        </div>
+
+
+        <!--Waiting for next round screen-->
+        <div id="waitingNextRoundPage" style="display:none">
+            <div class="waiting_entertain">
+                <!-- Contents tbd -->
+            </div>
+            <div class="waiting_players">
+                <p>
+                    Waiting room
+                </p>
+            </div>
         </div>
 
 
@@ -181,10 +220,6 @@
             <script src="javascript/canvas.js"></script>
               
             <button class="enter_button" onclick="enterCanvasButtonClicked()">Enter</button>
-          
-            <form action="waiting.html">
-              <input type="submit" value="Go to waiting" />
-            </form>
         </div>
 
 
@@ -200,13 +235,17 @@
               mainPage: document.getElementById("mainPage"),
               joinPage: document.getElementById("joinPage"),
               lobbyPage: document.getElementById("lobbyPage"),
+              playerLobbyPage: document.getElementById("playerLobbyPage"),
               promptPage: document.getElementById("promptPage"),
+              waitingNextRoundPage: document.getElementById("waitingNextRoundPage"),
               canvasPage: document.getElementById("canvasPage")
             };
 
             const lobbyIDInput = document.getElementById("lobbyIDInput");
             const usernameInput = document.getElementById("usernameInput");
             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
+            const playerList = document.getElementById("playerList");
+            const playerListPlayer = document.getElementById("playerListPlayer");
             
             /* Utility Functions */
             
@@ -226,7 +265,7 @@
             
             /* Create a new game. Emit newGame event. */
             function createButtonClicked() {
-                socket.emit('createClicked');
+                socket.emit('createClicked', socket.id);
             }
             
             
@@ -241,13 +280,13 @@
             }
 
             // The start game button was clicked
-            function StartGameButtonClicked() {
-                socket.emit("startGameClicked", usernameInput.value, lobbyIDInput.value);
+            function startGameButtonClicked() {
+                socket.emit("startGameClicked", socket.id);
             }
 
             // The enter prompt button was clicked
             function enterPromptButtonClicked() {
-                socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value); //add prompt data
+                socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, prompt.value);
             }
 
             // The enter canvas button was clicked
@@ -265,13 +304,26 @@
             });
 
 
+            socket.on("addPlayerToWaitingList", function(players) {
+                playerUsernames = players.map((player) => player.username);
+                console.log('playerUsernames:', playerUsernames.join('<br>'));
+                playerList.innerHTML = playerUsernames.join('<br>');
+                playerListPlayer.innerHTML = playerUsernames.join('<br>');
+            });
+
+
             socket.on("playerToWaitingRoom", function() {
-                switchView("lobbyPage"); //Will be a different page
+                switchView("playerLobbyPage"); //Will be a different page
             });
 
 
             socket.on("playerToPrompt", function() {
                 switchView("promptPage");
+            });
+
+
+            socket.on("playerToWaitingNextRound", function() {
+                switchView("waitingNextRoundPage");
             });
             
 
