@@ -12,3 +12,20 @@
     text-overflow: clip;
     
 }
+
+
+#timer {
+    display: flex;
+    align-items: center;
+    font-family: "Fira Sans", sans-serif;  
+    padding: 30px; 
+    background: #1d81af;
+    margin: 20px 0; 
+    border-radius: 5px; 
+    color: white; 
+}
+
+#timer span {
+    font-weight: bold; 
+    font-size: 30px; 
+}

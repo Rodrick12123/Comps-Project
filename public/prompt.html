@@ -5,14 +5,17 @@
         <link rel="stylesheet" href="main.css">
         <link rel="stylesheet" href="prompt.css">
         <title>Prompt Page</title>
+        
         <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cups.css') }}" />
         <script type="text/javascript" src="{{ url_for('static', filename='cups.js') }}" ></script> -->
     </head>
 
     <body>
         <div class="prompt">
-            <div class="timer">
-                <p>Timer Location</p>
+            <div id="timer-container">
+                <div id="timer">
+                    <span id="minutes">0m</span> : <span id="seconds">0s</span>
+                </div>
             </div>
             <p>
                 Text for giving prompt inspiration
