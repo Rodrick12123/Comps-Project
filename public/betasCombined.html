@@ -6,6 +6,7 @@
         <title>Hometown</title>
         <script src="./javascript/canvas.js" defer></script>
         <script src="./javascript/prompt.js" defer></script>
+        <link rel="stylesheet" href="prompt.css">
     </head>
 
     <body>
@@ -190,15 +191,22 @@
 
         <!--Prompt screen-->
         <div id="promptPage" style="display:none">
-            <div class="timer">
-                <p>Timer Location</p>
+            <div class="prompt">
+                <div id="timer-container">
+                    <div id="timer">
+                        <span id="minutes">0m</span> : <span id="seconds">0s</span>
+                    </div>
+                </div>
+                <p>
+                    Text for giving prompt inspiration
+                </p>
+                <textarea name="text" id="prompt" rows="5"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
+                <!-- <input type="text" class="input_prompt" placeholder="Enter Prompt Here" /> -->
+                <button class="enter_button" onclick="savePrompt()">Enter</button>
+                <form action="canvas.html">
+                  <input type="submit" value="Go to canvas" />
+                </form>
             </div>
-            <p>
-                Text for giving prompt inspiration
-            </p>
-            <textarea name="text" id="prompt" rows="5"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
-            <!-- <input type="text" class="input_prompt" placeholder="Enter Prompt Here" /> -->
-            <button class="enter_button" onclick="enterPromptButtonClicked()">Enter</button>
         </div>
 
 
