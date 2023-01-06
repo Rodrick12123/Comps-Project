@@ -38,3 +38,23 @@ var x = setInterval(() => {
     totalSeconds--;
     tempSeconds = totalSeconds;
 }, 1000);
+
+const tLimit = 60;
+let timePassed = 0;
+let timeLeft = tLimit;
+
+function TimeLeft(time) {
+    // Get the minutes of the time
+    const minutes = Math.floor(time / 60);
+    
+    // The secounds are what remains of what can not be evenly divided 
+    let seconds = time % 60;
+    
+    // puts a 0 before all secounds < 10
+    if (seconds < 10) {
+      seconds = `0${seconds}`;
+    }
+  
+    // The output in MM:SS format
+    return `${minutes}:${seconds}`;
+  }

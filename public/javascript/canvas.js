@@ -19,3 +19,4 @@ function saveCanvas() {
   var canvasInput = canvas.toJSON();
   alert(canvas.loadFromJSON(canvasInput))
 }
+

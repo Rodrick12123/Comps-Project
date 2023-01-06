@@ -180,9 +180,14 @@
 
         <!--Prompt screen-->
         <div id="promptPage" style="display:none">
-            <div class="timer">
-                <p>Timer Location</p>
-            </div>
+            <svg class="promptTimer" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <g class="promptTimerCircle">
+                  <circle class="promptTimepath" cx="50" cy="50" r="45" />
+                </g>
+            </svg>
+            <span class="timerLablel" onload="TimeLeft(time)">
+
+            </span>
             <p>
                 Text for giving prompt inspiration
             </p>
