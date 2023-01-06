@@ -43,12 +43,12 @@ const tLimit = 60;
 let timePassed = 0;
 let timeLeft = tLimit;
 
-function TimeLeft(time) {
+function TimeLeft() {
     // Get the minutes of the time
-    const minutes = Math.floor(time / 60);
+    const minutes = Math.floor(timeLeft / 60);
     
     // The secounds are what remains of what can not be evenly divided 
-    let seconds = time % 60;
+    let seconds = timeLeft % 60;
     
     // puts a 0 before all secounds < 10
     if (seconds < 10) {
@@ -57,4 +57,20 @@ function TimeLeft(time) {
   
     // The output in MM:SS format
     return `${minutes}:${seconds}`;
-  }
+}
+
+let interval = null;
+
+document.getElementById("app").innerHTML = `...`
+
+function startTimer() {
+  interval = setInterval(() => {
+    
+    // The amount of time passed increments by one
+    timePassed = timePassed += 1;
+    timeLeft = tLimit - timePassed;
+    
+    // The time left label is updated
+    document.getElementById("timerLabel").innerHTML = TimeLeft(timeLeft);
+  }, 1000);
+}
