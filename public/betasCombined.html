@@ -209,7 +209,7 @@
     
             <div align = "center">
     
-                <div class="lobbybox">
+                <div class="lobbybox" id="finishedPlayers">
                     Names from the server that are already done
                 </div>
     
@@ -282,11 +282,11 @@
               canvasPage: document.getElementById("canvasPage")
             };
 
-            const lobbyIDInput = document.getElementById("lobbyIDInput");
-            const usernameInput = document.getElementById("usernameInput");
             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
             const playerList = document.getElementById("playerList");
             const playerListPlayer = document.getElementById("playerListPlayer");
+            const finishedPlayers = document.getElementById("finishedPlayers");
+            
             
             /* Utility Functions */
             
@@ -317,6 +317,8 @@
 
             /* The join button was clicked after entering the game code and name of player */
             function joinJoinButtonClicked() {
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                const usernameInput = document.getElementById("usernameInput");
                 socket.emit("joinClicked", usernameInput.value, lobbyIDInput.value);
             }
 
@@ -327,11 +329,16 @@
 
             // The enter prompt button was clicked
             function enterPromptButtonClicked() {
-                socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, prompt.value);
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                const usernameInput = document.getElementById("usernameInput");
+                const promptValue = document.getElementById("prompt").value;
+                socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, promptValue);
             }
 
             // The enter canvas button was clicked
             function enterCanvasButtonClicked() {
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                const usernameInput = document.getElementById("usernameInput");
                 socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value); //add canvas data
             }
 
@@ -355,6 +362,12 @@
 
             socket.on("playerToWaitingRoom", function() {
                 switchView("playerLobbyPage"); //Will be a different page
+            });
+
+
+            socket.on("addPlayerToFinishedList", function(username){
+                console.log('usernames:', username.join('<br>'));
+                finishedPlayers.innerHTML = username.join('<br>');
             });
 
 

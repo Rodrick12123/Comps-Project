@@ -26,6 +26,7 @@ const Host = require("./public/javascript/Host.js");
 const Player = require("./public/javascript/Player.js");
 const Book = require("./public/javascript/Book.js");
 const Page = require("./public/javascript/Page.js");
+const { finished } = require('stream');
 
 
 const games = [];
@@ -156,6 +157,8 @@ io.on('connection', function(socket){
                     break;
                 }
                 else{
+                    console.log("hiei" + username);
+                    io.emit('addPlayerToFinishedList', username);
                     socket.emit('playerToWaitingNextRound', games[i].players);
                     break;
                 }

@@ -7,6 +7,7 @@ class Game {
         this.currRound = 0;
         this.numPlayers = 0;
         this.players = [];
+        this.finishedPlayers = [];
         this.books = [];
         this.drawTime = 60;
         this.guessTime = 30;
