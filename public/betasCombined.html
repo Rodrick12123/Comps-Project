@@ -331,6 +331,7 @@
             function joinJoinButtonClicked() {
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
+                
                 socket.emit("joinClicked", usernameInput.value, lobbyIDInput.value);
             }
 

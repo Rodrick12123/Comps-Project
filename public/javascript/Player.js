@@ -1,7 +1,8 @@
 
 /* Our main Player Object */
 class Player {
-    constructor(playerNum, username, lobbyID) {
+    constructor(playerNum, username, lobbyID, socketID) {
+        this.socketID = socketID;
         this.playerNum = playerNum;
         this.username = username;
         this.startBook;
