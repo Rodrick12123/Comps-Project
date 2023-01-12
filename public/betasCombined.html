@@ -357,7 +357,6 @@
 
             socket.on("addPlayerToWaitingList", function(players) {
                 playerUsernames = players.map((player) => player.username);
-                console.log('playerUsernames:', playerUsernames.join('<br>'));
                 playerList.innerHTML = playerUsernames.join('<br>');
                 playerListPlayer.innerHTML = playerUsernames.join('<br>');
             });
@@ -368,9 +367,9 @@
             });
 
 
-            socket.on("addPlayerToFinishedList", function(username){
-                console.log('usernames:', username.join('<br>'));
-                finishedPlayers.innerHTML = username.join('<br>');
+            socket.on("addPlayerToFinishedList", function(players){
+                playerUsernames = players.map((player) => player.username);
+                finishedPlayers.innerHTML = playerUsernames.join('<br>'); //Might want to change this to appending a child, otherwise it will replace
             });
 
 

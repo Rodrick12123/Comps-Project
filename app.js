@@ -154,8 +154,7 @@ io.on('connection', function(socket){
                     break;
                 }
                 else{
-                    console.log("hiei" + username);
-                    io.emit('addPlayerToFinishedList', username);
+                    io.emit('addPlayerToFinishedList', games[i].players); // All the players are already in this list so it tries to display them all
                     socket.emit('playerToWaitingNextRound', games[i].players);
                     break;
                 }
