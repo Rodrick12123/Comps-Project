@@ -393,6 +393,7 @@
             
 
             socket.on("playerToCanvas", function() {
+                document.getElementById("prompt").value = "";
                 switchView("canvasPage");
             });
 
