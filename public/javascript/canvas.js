@@ -4,6 +4,7 @@ const canvas = new fabric.Canvas("canvas")
   canvas.freeDrawingBrush.color = 'blue';
   canvas.freeDrawingBrush.width = 5;
   canvas.backgroundColor = "white";
+  canvas.renderAll();
 
 //changes brush color
 function changeColor() {
