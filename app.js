@@ -8,9 +8,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var numRounds = 5;
-var numPlayers = 0;
 var maxPlayers = 8; //Will be in game object
-var numPlayersInWaitRoom = 0;
 
 
 /* Setting up the Server */
@@ -66,17 +64,16 @@ function createBook(game, player){
 /* Helper Function:
 Creates the new Player object with the given username */
 function createPlayer(game, username, lobbyID){
-    numPlayers += 1;
-    if (numPlayers >= 2) {
+    if (game.numPlayers >= 2) {
         game.host.setReadyToStart(true);
     }
     
     if (username == ''){
-        username = "Player " + numPlayers;
+        username = "Player " + game.numPlayers;
     }
     //need a new player object for the username and assign their book
     
-    let currPlayer = new Player(numPlayers, username, lobbyID);
+    let currPlayer = new Player(game.numPlayers, username, lobbyID);
     game.addPlayer(currPlayer);
 
     createBook(game, currPlayer);
@@ -106,7 +103,7 @@ io.on('connection', function(socket){
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
-                if (numPlayers >= maxPlayers){
+                if (games[i].numPlayers >= maxPlayers){
                     socket.emit("tooManyPlayers");
                 }
                 
@@ -115,7 +112,7 @@ io.on('connection', function(socket){
                 }
 
                 if (username == ''){
-                    username = "Player " + (numPlayers+1);
+                    username = "Player " + (games[i].numPlayers+1);
                 }
                 
                 createPlayer(games[i], username, lobbyID);
@@ -146,14 +143,14 @@ io.on('connection', function(socket){
 
     socket.on('promptEntered', function(username, lobbyID, prompt){
         console.log(prompt)
-        numPlayersInWaitRoom++
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
+                games[i].numPlayersInWaitRoom++
                 // 2 is minPlayers placeholder
-                if (numPlayersInWaitRoom == 2){
+                if (games[i].numPlayersInWaitRoom == 2){
                     io.in(lobbyID).emit("playerToCanvas");
-                    numPlayersInWaitRoom=0
+                    games[i].numPlayersInWaitRoom=0
                     break;
                 }
                 else{
@@ -167,14 +164,14 @@ io.on('connection', function(socket){
     });
 
     socket.on('canvasEntered', function(username, lobbyID){
-        numPlayersInWaitRoom++
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
+                games[i].numPlayersInWaitRoom++
                 // 2 is minPlayers placeholder
-                if (numPlayersInWaitRoom == 2){
+                if (games[i].numPlayersInWaitRoom == 2){
                     io.in(lobbyID).emit("playerToPrompt");
-                    numPlayersInWaitRoom=0
+                    games[i].numPlayersInWaitRoom=0
                     break;
                 }
                 else{
