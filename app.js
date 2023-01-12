@@ -55,9 +55,22 @@ Creates the new Book object for the given player */
 function createBook(game, player){
     let currBook = new Book();
     player.setStartBook(currBook);
+    player.setCurrentBook(currBook);
     game.addBook(currBook);
 
     createPages(currBook);
+}
+
+/* Helper Function:
+Swaps Book objects among players */
+function swapBooks(game){
+    newBook = game.getPlayerByName(game.players[0].username).getCurrentBook()
+    for (let i = 1; i < game.numPlayers; i++){
+        oldBook = game.getPlayerByName(game.players[i].username).getCurrentBook()
+        game.getPlayerByName(game.players[i].username).setCurrentBook(newBook)
+        newBook = oldBook
+    }
+    game.getPlayerByName(game.players[0].username).setCurrentBook(newBook)
 }
 
 
@@ -131,6 +144,7 @@ io.on('connection', function(socket){
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
                 if (games[i].host.getReadyToStart()) {
+                    games[i].setCurrRound(1)
                     socket.broadcast.emit("playerToPrompt");
                     break;
                 }
@@ -147,8 +161,11 @@ io.on('connection', function(socket){
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++
-                // 2 is minPlayers placeholder
-                if (games[i].numPlayersInWaitRoom == 2){
+                games[i].getPlayerByName(username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt)
+                games[i].getPlayerByName(username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username)
+                if (games[i].numPlayersInWaitRoom == games[i].numPlayers){
+                    swapBooks(games[i])
+                    games[i].setCurrRound(games[i].getCurrRound+1)
                     io.in(lobbyID).emit("playerToCanvas");
                     games[i].numPlayersInWaitRoom=0
                     break;
@@ -167,8 +184,8 @@ io.on('connection', function(socket){
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++
-                // 2 is minPlayers placeholder
-                if (games[i].numPlayersInWaitRoom == 2){
+                if (games[i].numPlayersInWaitRoom == games[i].numPlayers){
+                    games[i].setCurrRound(games[i].getCurrRound+1)
                     io.in(lobbyID).emit("playerToPrompt");
                     games[i].numPlayersInWaitRoom=0
                     break;

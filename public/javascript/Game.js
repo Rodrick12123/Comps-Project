@@ -12,6 +12,7 @@ class Game {
         this.drawTime = 60;
         this.guessTime = 30;
         this.host = host;
+        this.numPlayersInWaitRoom = 0;
     }
 
 
@@ -32,6 +33,11 @@ class Game {
     Used to check if the game is started and when it should finish */
     getCurrRound(){
         return this.currRound;
+    }
+
+    /* get function for the current round */
+    setCurrRound(round){
+        return this.currRound = round;
     }
 
     getPlayerByName(name){

@@ -7,6 +7,26 @@ class Page {
         this.drawingInput; //IDK what goes here yet
     }
 
+    /* Sets who inputted the page */
+    setWhoInputted(username) {
+        this.whoInputted = username;
+    }
+
+    /* Gets who inputted the page */
+    getWhoInputted() {
+        return this.whoInputted;
+    }
+
+    /* Sets string input */
+    setStringInput(stringInput) {
+        this.stringInput = stringInput;
+    }
+
+    /* Gets string input */
+    getStringInput() {
+        return this.stringInput;
+    }
+
     //Probably want get functions for these variables
 
     //Method to set the instance variables
