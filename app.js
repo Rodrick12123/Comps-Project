@@ -64,17 +64,17 @@ function createBook(game, player){
 /* Helper Function:
 Creates the new Player object with the given username */
 function createPlayer(game, username, lobbyID){
-    if (game.numPlayers >= 2) {
-        game.host.setReadyToStart(true);
-    }
-    
     if (username == ''){
-        username = "Player " + game.numPlayers;
+        username = "Player " + game.numPlayers++;
     }
     //need a new player object for the username and assign their book
     
     let currPlayer = new Player(game.numPlayers, username, lobbyID);
     game.addPlayer(currPlayer);
+
+    if (game.numPlayers >= 2) {
+        game.host.setReadyToStart(true);
+    }
 
     createBook(game, currPlayer);
 }
@@ -148,14 +148,16 @@ io.on('connection', function(socket){
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++
                 // 2 is minPlayers placeholder
-                if (games[i].numPlayersInWaitRoom == 2){
+                if (games[i].numPlayersInWaitRoom >= games[i].numPlayers){
                     io.in(lobbyID).emit("playerToCanvas");
-                    games[i].numPlayersInWaitRoom=0
+                    games[i].numPlayersInWaitRoom = 0;
+                    games[i].finishedPlayers = [];
                     break;
                 }
                 else{
-                    io.emit('addPlayerToFinishedList', games[i].players); // All the players are already in this list so it tries to display them all
-                    socket.emit('playerToWaitingNextRound', games[i].players);
+                    games[i].addPlayerToFinishedPlayers(username)
+                    io.emit('addPlayerToFinishedList', games[i].finishedPlayers); // All the players are already in this list so it tries to display them all
+                    io.to(socket.id).emit('playerToWaitingNextRound');
                     break;
                 }
             }

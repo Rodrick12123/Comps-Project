@@ -198,13 +198,13 @@
 
         <!--Waiting for next round screen-->
         <div id="waitingNextRoundPage" style="display:none">
-            <svg class="promptTimer"  viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <!-- <svg class="promptTimer"  viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <g class="promptTimerCircle">
                   <circle class="promptTimepath" cx="50" cy="50" r="45" />
                 </g>
             </svg>
             <span class="timerLablel" onload="TimeLeft()" align = "center">
-            </span>
+            </span> -->
             
 
             <div align="center">
@@ -336,6 +336,7 @@
 
             // The start game button was clicked
             function startGameButtonClicked() {
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
                 socket.emit("startGameClicked", socket.id);
             }
 
@@ -376,9 +377,8 @@
             });
 
 
-            socket.on("addPlayerToFinishedList", function(players){
-                playerUsernames = players.map((player) => player.username);
-                finishedPlayers.innerHTML = playerUsernames.join('<br>'); //Might want to change this to appending a child, otherwise it will replace
+            socket.on("addPlayerToFinishedList", function(usernames){
+                finishedPlayers.innerHTML = usernames.join('<br>'); //Might want to change this to appending a child, otherwise it will replace
             });
 
 

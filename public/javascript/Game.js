@@ -6,6 +6,7 @@ class Game {
         this.socketID = socketID;
         this.currRound = 0;
         this.numPlayers = 0;
+        this.numPlayersInWaitRoom = 0;
         this.players = [];
         this.finishedPlayers = [];
         this.books = [];
@@ -20,6 +21,13 @@ class Game {
         this.players.push(player);
         this.numPlayers++
     }
+
+
+    /* Appends the player to the list of players */
+    addPlayerToFinishedPlayers(username) {
+        this.finishedPlayers.push(username);
+    }
+
 
     /* Appends the book to the list of books */
     addBook(book) {
