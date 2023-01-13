@@ -178,7 +178,7 @@ io.on('connection', function(socket){
                             break;
                         }
                     }
-                    io.emit('addPlayerToFinishedList', games[i].finishedPlayers); // All the players are already in this list so it tries to display them all
+                    io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames); // All the players are already in this list so it tries to display them all
                     io.to(socket.id).emit('playerToWaitingNextRound');
                     break;
                 }
@@ -208,7 +208,7 @@ io.on('connection', function(socket){
                             break;
                         }
                     }
-                    io.emit('addPlayerToFinishedList', games[i].finishedPlayers); // All the players are already in this list so it tries to display them all
+                    io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames); // All the players are already in this list so it tries to display them all
                     io.to(socket.id).emit('playerToWaitingNextRound');
                     break;
                 }

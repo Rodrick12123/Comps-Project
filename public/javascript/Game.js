@@ -8,6 +8,7 @@ class Game {
         this.numPlayers = 0;
         this.numPlayersInWaitRoom = 0;
         this.players = [];
+        this.usernames = [];
         this.finishedPlayers = [];
         this.books = [];
         this.drawTime = 60;
@@ -20,7 +21,8 @@ class Game {
     /* Appends the player to the list of players */
     addPlayer(player) {
         this.players.push(player);
-        this.numPlayers++
+        this.numPlayers++;
+        this.usernames.push(player.username);
     }
 
 

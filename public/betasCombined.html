@@ -218,6 +218,9 @@
     
             <div align = "center">
     
+                <p>
+                    Finished Players
+                </p>
                 <div class="lobbybox" id="finishedPlayers">
                     Names from the server that are already done
                 </div>
@@ -226,8 +229,11 @@
             <br>
             </br>
             <div align = "center">
-    
-                <div class="lobbybox">
+
+                <p>
+                    Unfinished Players
+                </p>
+                <div class="lobbybox" id="unfinishedPlayers">
                     Names from the server are not done
                 </div>
     
@@ -298,6 +304,7 @@
             const playerList = document.getElementById("playerList");
             const playerListPlayer = document.getElementById("playerListPlayer");
             const finishedPlayers = document.getElementById("finishedPlayers");
+            const unfinishedPlayers = document.getElementById("unfinishedPlayers");
             const promptValue = document.getElementById("prompt").value;
             //const canvasDrawing = document.getElementById('canvas');
             //const savedCanvas = new fabric.Image(canvasDrawing);
@@ -383,8 +390,15 @@
             });
 
 
-            socket.on("addPlayerToFinishedList", function(usernames){
-                finishedPlayers.innerHTML = usernames.join('<br>'); //Might want to change this to appending a child, otherwise it will replace
+            socket.on("addPlayerToFinishedList", function(finishedUsernames, allUsernames){
+                finishedPlayers.innerHTML = finishedUsernames.join('<br>'); //Might want to change this to appending a child, otherwise it will replace
+                unfinishedUsernames = allUsernames.filter(
+                function(i) {
+                    return this.indexOf(i) < 0;
+                },
+                finishedUsernames
+                );
+                unfinishedPlayers.innerHTML = unfinishedUsernames.join('<br>');
             });
 
 
