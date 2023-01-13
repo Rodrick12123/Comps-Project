@@ -161,8 +161,15 @@ io.on('connection', function(socket){
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++;
-                games[i].getPlayerByName(username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
-                games[i].getPlayerByName(username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
+                for(let j = 0; j < games[i].numPlayers; j++){
+                    if (games[i].players[j].socketID == socket.id){
+                        games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
+                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
+                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
+                        break;
+                    }
+                }
+                
                 if (games[i].numPlayersInWaitRoom == games[i].numPlayers){
                     swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound+1);
@@ -172,12 +179,6 @@ io.on('connection', function(socket){
                     break;
                 }
                 else{
-                    for(let j = 0; j < games[i].numPlayers; j++){
-                        if (games[i].players[j].socketID == socket.id){
-                            games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
-                            break;
-                        }
-                    }
                     io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames); // All the players are already in this list so it tries to display them all
                     io.to(socket.id).emit('playerToWaitingNextRound');
                     break;
@@ -191,8 +192,15 @@ io.on('connection', function(socket){
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++;
-                //games[i].getPlayerByName(username).getCurrentBook().pages[games[i].getCurrRound()].setDrawingInput(drawing);
-               // games[i].getPlayerByName(username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);              
+                for(let j = 0; j < games[i].numPlayers; j++){
+                        if (games[i].players[j].socketID == socket.id){
+                            games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
+                            //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setDrawingInput(drawing);
+                            // games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
+                            break;
+                        }
+                    }
+                              
                 if (games[i].numPlayersInWaitRoom >= games[i].numPlayers){
                    // swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound+1);
@@ -202,12 +210,7 @@ io.on('connection', function(socket){
                     break;
                 }
                 else{
-                    for(let j = 0; j < games[i].numPlayers; j++){
-                        if (games[i].players[j].socketID == socket.id){
-                            games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
-                            break;
-                        }
-                    }
+                    
                     io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames); // All the players are already in this list so it tries to display them all
                     io.to(socket.id).emit('playerToWaitingNextRound');
                     break;
