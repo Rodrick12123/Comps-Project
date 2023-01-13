@@ -27,6 +27,16 @@ class Page {
         return this.stringInput;
     }
 
+    /* Sets string input */
+    setDrawingInput(drawingInput) {
+        this.stringInput = drawingInput;
+    }
+
+    /* Gets string input */
+    getDrawingInput() {
+        return this.drawingInput;
+    }
+
     //Probably want get functions for these variables
 
     //Method to set the instance variables

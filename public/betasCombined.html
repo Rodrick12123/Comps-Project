@@ -291,6 +291,7 @@
               canvasPage: document.getElementById("canvasPage")
             };
 
+            //Do we need these?
             const lobbyIDInput = document.getElementById("lobbyIDInput");
             const usernameInput = document.getElementById("usernameInput");
             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
@@ -298,6 +299,8 @@
             const playerListPlayer = document.getElementById("playerListPlayer");
             const finishedPlayers = document.getElementById("finishedPlayers");
             const promptValue = document.getElementById("prompt").value;
+            //const canvasDrawing = document.getElementById('canvas');
+            //const savedCanvas = new fabric.Image(canvasDrawing);
             
             
             /* Utility Functions */
@@ -353,7 +356,9 @@
             function enterCanvasButtonClicked() {
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
-                socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value); //add canvas data
+                //const canvasDrawing = document.getElementById('canvas');
+                //const savedCanvas = new fabric.Image(canvasDrawing);
+                socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value);//, savedCanvas);
             }
 
 
@@ -384,9 +389,9 @@
 
 
             socket.on("playerToPrompt", function() {
-                if(document.getElementById("canvas")) {
+                /*if(document.getElementById("canvas")) {
                     document.getElementById("canvas").clear();
-                }
+                }*/
                 switchView("promptPage");
             });
 

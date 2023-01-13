@@ -144,7 +144,7 @@ io.on('connection', function(socket){
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
                 if (games[i].host.getReadyToStart()) {
-                    games[i].setCurrRound(1)
+                    games[i].setCurrRound(0)
                     socket.broadcast.emit("playerToPrompt");
                     break;
                 }
@@ -186,12 +186,15 @@ io.on('connection', function(socket){
         }
     });
 
-    socket.on('canvasEntered', function(username, lobbyID){
+    socket.on('canvasEntered', function(username, lobbyID){//, drawing){
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++;
+                //games[i].getPlayerByName(username).getCurrentBook().pages[games[i].getCurrRound()].setDrawingInput(drawing);
+               // games[i].getPlayerByName(username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);              
                 if (games[i].numPlayersInWaitRoom >= games[i].numPlayers){
+                   // swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound+1);
                     io.in(lobbyID).emit("playerToPrompt");
                     games[i].numPlayersInWaitRoom = 0;
