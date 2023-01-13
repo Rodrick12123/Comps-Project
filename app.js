@@ -64,13 +64,13 @@ function createBook(game, player){
 /* Helper Function:
 Swaps Book objects among players */
 function swapBooks(game){
-    newBook = game.getPlayerByName(game.players[0].username).getCurrentBook()
+    newBook = game.getPlayerByName(game.players[0].username).getCurrentBook();
     for (let i = 1; i < game.numPlayers; i++){
-        oldBook = game.getPlayerByName(game.players[i].username).getCurrentBook()
-        game.getPlayerByName(game.players[i].username).setCurrentBook(newBook)
-        newBook = oldBook
+        oldBook = game.getPlayerByName(game.players[i].username).getCurrentBook();
+        game.getPlayerByName(game.players[i].username).setCurrentBook(newBook);
+        newBook = oldBook;
     }
-    game.getPlayerByName(game.players[0].username).setCurrentBook(newBook)
+    game.getPlayerByName(game.players[0].username).setCurrentBook(newBook);
 }
 
 
@@ -160,9 +160,11 @@ io.on('connection', function(socket){
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
-                games[i].numPlayersInWaitRoom++
-                // 2 is minPlayers placeholder
-                if (games[i].numPlayersInWaitRoom >= games[i].numPlayers){
+                games[i].numPlayersInWaitRoom++;
+                games[i].getPlayerByName(username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
+                games[i].getPlayerByName(username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
+                if (games[i].numPlayersInWaitRoom == games[i].numPlayers){
+                    swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound+1);
                     io.in(lobbyID).emit("playerToCanvas");
                     games[i].numPlayersInWaitRoom = 0;

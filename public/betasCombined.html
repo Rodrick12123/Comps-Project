@@ -384,6 +384,9 @@
 
 
             socket.on("playerToPrompt", function() {
+                if(document.getElementById("canvas")) {
+                    document.getElementById("canvas").clear();
+                }
                 switchView("promptPage");
             });
 
