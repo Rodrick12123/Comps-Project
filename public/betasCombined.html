@@ -25,7 +25,7 @@
                     Start a new game?
                 </h2>
         
-                <button class="new_button">
+                <button class="new_button" onclick="createButtonClicked()">
                     Make new game!
                 </button>
     
@@ -37,7 +37,7 @@
                     Join an existing game?
                 </h2>
     
-                <button class="join_button">
+                <button class="join_button" id="mainJoinButton" onclick="mainJoinButtonClicked()">
                     Join existing game!
                 </button>
         
@@ -83,7 +83,7 @@
                     Enter game code:
                 </h2>
         
-                <input type="text" name="gamecode" size = 20 maxlength=35 value="">
+                <input type="text" id="lobbyIDInput" size = 20 maxlength=35 value="">
     
     
             </div>
@@ -94,14 +94,14 @@
                     Enter your name:
                 </h2>
     
-                <input type="text" name="username" size = 20 maxlength=35 value="">
+                <input type="text" id="usernameInput" size = 20 maxlength=35 value="">
         
             </div>
             <br></br>
         
             <div align="center">
     
-                <button class="join_button">
+                <button class="join_button" id="joinJoinButton" onclick="joinJoinButtonClicked()">
                     Join!
                 </button>
             
@@ -127,14 +127,14 @@
     
             <div class = "gamecodebox">
     
-                <div class="boxed">
+                <div class="boxed" id="lobbyIDDisplay">
                     Insert Game Code Here from Server
                   </div>
     
                 
             </div>
     
-            <div class = "start_button_location">
+            <div class = "start_button_location"  onclick="startGameButtonClicked()">
                 
                 <button class="start_button">
                     Start Game!
@@ -152,7 +152,7 @@
             
             
     
-            <div class="waitingbox">
+            <div class="waitingbox" id="playerList">
                     Names from the server that are already in the game
             </div>
         </div>

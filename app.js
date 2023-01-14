@@ -182,12 +182,6 @@ io.on('connection', function(socket){
                     break;
                 }
                 else{
-                    for(let j = 0; j < games[i].numPlayers; j++){
-                        if (games[i].players[j].socketID == socket.id){
-                            games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
-                            break;
-                        }
-                    }
                     io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames); // All the players are already in this list so it tries to display them all
                     io.emit('setPage', games[i].getPlayerByName(games[i].players[playerNum].username).username);
                     io.to(socket.id).emit('playerToWaitingNextRound');
