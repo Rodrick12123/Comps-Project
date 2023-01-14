@@ -257,7 +257,9 @@
 
             <div align="center">
                 <h2>
-                    PROMPT
+                    <div class="text" id="promptToDraw">
+                        Prompt
+                    </div>
                 </h2>
             </div>
 
@@ -306,7 +308,9 @@
             const finishedPlayers = document.getElementById("finishedPlayers");
             const unfinishedPlayers = document.getElementById("unfinishedPlayers");
             const promptValue = document.getElementById("prompt").value;
+            const promptToDraw = document.getElementById("promptToDraw");
             //const canvasDrawing = document.getElementById('canvas');
+            //const savedCanvas = canvasDrawing.toObject();
             //const savedCanvas = new fabric.Image(canvasDrawing);
             
             
@@ -363,9 +367,13 @@
             function enterCanvasButtonClicked() {
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
-                //const canvasDrawing = document.getElementById('canvas');
+                const canvasDrawing = document.getElementById('canvas');
+                //const savedCanvas = JSON.stringify(canvasDrawing.toDataURL('png'));
+                //const savedCanvas = JSON.stringify(canvasDrawing);
+                const savedCanvas = canvasDrawing.toDataURL('png');
+                //const savedCanvas = canvasDrawing.getObject();
                 //const savedCanvas = new fabric.Image(canvasDrawing);
-                socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value);//, savedCanvas);
+                socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value, savedCanvas);
             }
 
 
@@ -403,9 +411,10 @@
 
 
             socket.on("playerToPrompt", function() {
-                /*if(document.getElementById("canvas")) {
-                    document.getElementById("canvas").clear();
-                }*/
+                //if(document.getElementById("canvas")) {
+                    //document.getElementById("canvas").clear();
+                //}
+                document.getElementById("prompt").value = "";
                 switchView("promptPage");
             });
 
@@ -414,9 +423,20 @@
                 switchView("waitingNextRoundPage");
             });
             
+            socket.on("setPage", function(page) {
+                const promptToDraw = document.getElementById("promptToDraw");
+                promptToDraw.innerHTML = page;
+                //const promptToDraw = document.getElementById("promptToDraw").value;
+                /*while( promptToDraw.firstChild )
+                    promptToDraw.removeChild( promptToDraw.firstChild );
+                promptToDraw.appendChild( document.createTextNode(page) );*/
+                //promptToDraw = page;
+                //document.getElementById("promptToDraw").value = page;
+            });
 
-            socket.on("playerToCanvas", function() {
-                document.getElementById("prompt").value = "";
+            socket.on("playerToCanvas", function(page) {
+                clearCanvas();
+                //promptToDraw.innerHTML = page;//page.getStringInput();
                 switchView("canvasPage");
             });
 

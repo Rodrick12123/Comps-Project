@@ -27,14 +27,14 @@ class Page {
         return this.stringInput;
     }
 
-    /* Sets string input */
+    /* Sets drawing input */
     setDrawingInput(drawingInput) {
-        this.stringInput = drawingInput;
+        //this.drawingInput = new Drawing(drawingInput);
     }
 
-    /* Gets string input */
+    /* Gets drawing input */
     getDrawingInput() {
-        return this.drawingInput;
+        //return this.drawingInput;
     }
 
     //Probably want get functions for these variables
