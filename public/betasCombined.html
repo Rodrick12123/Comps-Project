@@ -20,35 +20,35 @@
         
             </div>
             <div align="center">
-
+    
                 <h2>
                     Start a new game?
                 </h2>
         
-                <button class="new_button" onclick="createButtonClicked()">
+                <button class="new_button">
                     Make new game!
                 </button>
-
+    
             </div>
-
+    
             <div align="center">
-
+    
                 <h2>
                     Join an existing game?
                 </h2>
-
-                <button class="join_button" id="mainJoinButton" onclick="mainJoinButtonClicked()">
+    
+                <button class="join_button">
                     Join existing game!
                 </button>
         
             </div>
-
+    
             <div class="gamedescrip">
                
                 <h2 align="center">
                     Description:
                 </h2>
-
+    
                 <p class="description">
                     Welcome to ...  ...is a drawing version of the classic game, Telephone. 
                     The game will consist of multiple rounds that are either prompt rounds or 
@@ -61,6 +61,7 @@
                     guess what the initial prompt was. This process repeats until all the rounds
                     have concluded. Then, there will be a time at the end to collectively view the
                     journey that each prompt went through 
+    
                 </p>
         
             </div>
@@ -76,14 +77,13 @@
         
                 
             </div>
-
             <div align="center">
     
                 <h2>
                     Enter game code:
                 </h2>
         
-                <input type="text" id="lobbyIDInput" size = 20 maxlength=35 value="">
+                <input type="text" name="gamecode" size = 20 maxlength=35 value="">
     
     
             </div>
@@ -94,14 +94,14 @@
                     Enter your name:
                 </h2>
     
-                <input type="text" id="usernameInput" size = 20 maxlength=35 value="">
+                <input type="text" name="username" size = 20 maxlength=35 value="">
         
             </div>
             <br></br>
         
             <div align="center">
     
-                <button class="join_button" id="joinJoinButton" onclick="joinJoinButtonClicked()">
+                <button class="join_button">
                     Join!
                 </button>
             
@@ -127,13 +127,16 @@
     
             <div class = "gamecodebox">
     
-                <div class="boxed" id="lobbyIDDisplay"></div>
+                <div class="boxed">
+                    Insert Game Code Here from Server
+                  </div>
     
+                
             </div>
     
             <div class = "start_button_location">
                 
-                <button class="start_button" onclick="startGameButtonClicked()">
+                <button class="start_button">
                     Start Game!
                 </button>
     
@@ -148,9 +151,9 @@
             </div>
             
             
-            <div class="lobbybox" id="playerList">
-                    Names from the server that are already in the game
     
+            <div class="waitingbox">
+                    Names from the server that are already in the game
             </div>
         </div>
 
@@ -180,13 +183,7 @@
 
         <!--Prompt screen-->
         <div id="promptPage" style="display:none" onload="startTimer()">
-            <svg class="promptTimer"  viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <g class="promptTimerCircle">
-                  <circle class="promptTimepath" cx="50" cy="50" r="45" />
-                </g>
-            </svg>
-            <span class="timerLablel" onload="TimeLeft()">
-            </span>
+         
             <p>
                 Text for giving prompt inspiration
             </p>
@@ -279,6 +276,101 @@
                 <button class="enter_button" onclick="enterCanvasButtonClicked()">I'm done drawing!</button>
             </div>
         </div>
+
+        
+        <!--Main canvas page-->
+        <div id="mainCanvasPage">
+            <div align="center">
+
+                <h1>
+                    Do you draw like Picasso or a 4-year old???
+                </h1>
+        
+                
+            </div>
+    
+           
+    
+            <div align = "center">
+    
+                <h2>
+    
+                    Time Remaining: 
+    
+                    
+    
+                </h2> 
+    
+    
+                
+            </div>
+            <br>
+            </br>
+            <div align = "center">
+    
+                <div class="lobbybox">
+                    Cool People with beautiful drawings:
+                </div>
+    
+            </div>
+            <br>
+            </br>
+            <div align = "center">
+    
+                <div class="lobbybox">
+                    People who draw slow:
+                </div>
+    
+            </div> 
+        </div>
+
+              
+        <!--Main prompt page-->
+        <div id="mainPromptPage">
+            <div align="center">
+
+                <h1>
+                    Who is going to come up with the best prompt???
+                </h1>
+        
+                
+            </div>
+    
+           
+    
+            <div align = "center">
+    
+                <h2>
+    
+                    Time Remaining: 
+    
+                    
+    
+                </h2> 
+    
+    
+                
+            </div>
+            <br>
+            </br>
+            <div align = "center">
+    
+                <div class="lobbybox">
+                    Cool People with great prompts:
+                </div>
+    
+            </div>
+            <br>
+            </br>
+            <div align = "center">
+    
+                <div class="lobbybox">
+                    People who don't know what a prompt is:
+                </div>
+    
+            </div>
+        </div>
+
 
 
 
