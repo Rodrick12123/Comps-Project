@@ -54,6 +54,58 @@ height: relative; /* 100% of the viewport height */
 margin: 0; /* recommended */
 }
 
+.box {
+  width: 150px; /* adjust as needed */
+  height: 200px; /* adjust as needed */
+  background-color: white;
+  border: 1px solid black; /* optional */
+}
+
+.box1 {
+  width: 250px; /* adjust as needed */
+  height: 200px; /* adjust as needed */
+  background-color: white;
+  border: 1px solid black; /* optional */
+}
+
+.container {
+  display: flex;
+  justify-content: center; /* center the items horizontally */
+  align-items: center; /* center the items vertically */
+  height: 100vh; /* set the height of the container to the full height of the viewport */
+  position: relative;
+}
+
+.box2 {
+  width: 60%; /* adjust the width as needed */
+  height: 60%; /* adjust the height as needed */
+  background-color: #fff; /* set the background color as desired */
+  border: 1px solid #000; /* optional */
+  margin: 0 20px; /* create space between the box and the arrow buttons */
+}
+
+.arrow-button {
+  font-size: 30px; /* adjust the font size as needed */
+  background-color: #fff; /* set the background color as desired */
+  border: none; /* remove the default border */
+  padding: 10px; /* adjust the padding as needed */
+  cursor: pointer; /* make the button look like a link */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.left {
+  left: 0;
+}
+
+.right {
+  right: 0;
+}
+
+
+
+
 .new_button {
 top:20%;
 background-color:#bb54f2;
