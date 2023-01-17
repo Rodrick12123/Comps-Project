@@ -6,20 +6,31 @@ class Game {
         this.socketID = socketID;
         this.currRound = 0;
         this.numPlayers = 0;
+        this.numPlayersInWaitRoom = 0;
         this.players = [];
+        this.usernames = [];
         this.finishedPlayers = [];
         this.books = [];
         this.drawTime = 60;
         this.guessTime = 30;
         this.host = host;
+        this.numPlayersInWaitRoom = 0;
     }
 
 
     /* Appends the player to the list of players */
     addPlayer(player) {
         this.players.push(player);
-        this.numPlayers++
+        this.numPlayers++;
+        this.usernames.push(player.username);
     }
+
+
+    /* Appends the player to the list of players */
+    addPlayerToFinishedPlayers(username) {
+        this.finishedPlayers.push(username);
+    }
+
 
     /* Appends the book to the list of books */
     addBook(book) {
@@ -32,6 +43,11 @@ class Game {
     Used to check if the game is started and when it should finish */
     getCurrRound(){
         return this.currRound;
+    }
+
+    /* get function for the current round */
+    setCurrRound(round){
+        return this.currRound = round;
     }
 
     getPlayerByName(name){

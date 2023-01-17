@@ -4,6 +4,15 @@ const canvas = new fabric.Canvas("canvas")
   canvas.freeDrawingBrush.color = 'blue';
   canvas.freeDrawingBrush.width = 5;
   canvas.backgroundColor = "white";
+  canvas.renderAll();
+
+function rebuildCanvas() {
+  canvas.isDrawingMode = true;
+  canvas.freeDrawingBrush.color = 'blue';
+  canvas.freeDrawingBrush.width = 5;
+  canvas.backgroundColor = "white";
+  canvas.renderAll();
+}
 
 //changes brush color
 function changeColor() {
@@ -16,7 +25,18 @@ function changeSize() {
 }
 
 function saveCanvas() {
-  var canvasInput = canvas.toJSON();
-  alert(canvas.loadFromJSON(canvasInput))
+  //var canvasInput = canvas.toDataURL('png')//JSON.stringify(canvas.toJSON());
+  //canvas.innerHTML = canvasInput
+  //enterCanvasButtonClicked()
+  //alert(canvas.loadFromJSON(canvasInput))
 }
 
+function getObject() {
+  //canvas.toObject()
+  //return canvasObject
+}
+
+function clearCanvas() {
+  canvas.clear();
+  rebuildCanvas();
+}

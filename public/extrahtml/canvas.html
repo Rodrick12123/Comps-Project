@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <script src="Canvas.js"></script>
     <title>Drawing Page</title>
     <!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='cups.css') }}" />
     <script type="text/javascript" src="{{ url_for('static', filename='cups.js') }}" ></script> -->
@@ -21,8 +22,6 @@
 
   <label for="sizepicker">Change Brush Size:</label>
   <input type="number" id="sizepicker" min="1" value="5" oninput="changeSize()">
-
-  <script src="Canvas.js"></script>
     
   <button class="enter_button" onclick="saveCanvas()">Enter</button>
 

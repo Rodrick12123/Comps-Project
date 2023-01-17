@@ -20,7 +20,7 @@
         
             </div>
             <div align="center">
-
+    
                 <h2>
                     Start a new game?
                 </h2>
@@ -28,27 +28,27 @@
                 <button class="new_button" onclick="createButtonClicked()">
                     Make new game!
                 </button>
-
+    
             </div>
-
+    
             <div align="center">
-
+    
                 <h2>
                     Join an existing game?
                 </h2>
-
+    
                 <button class="join_button" id="mainJoinButton" onclick="mainJoinButtonClicked()">
                     Join existing game!
                 </button>
         
             </div>
-
+    
             <div class="gamedescrip">
                
                 <h2 align="center">
                     Description:
                 </h2>
-
+    
                 <p class="description">
                     Welcome to ...  ...is a drawing version of the classic game, Telephone. 
                     The game will consist of multiple rounds that are either prompt rounds or 
@@ -61,6 +61,7 @@
                     guess what the initial prompt was. This process repeats until all the rounds
                     have concluded. Then, there will be a time at the end to collectively view the
                     journey that each prompt went through 
+    
                 </p>
         
             </div>
@@ -76,7 +77,6 @@
         
                 
             </div>
-
             <div align="center">
     
                 <h2>
@@ -135,13 +135,16 @@
     
             <div class = "gamecodebox">
     
-                <div class="boxed" id="lobbyIDDisplay"></div>
+                <div class="boxed" id="lobbyIDDisplay">
+                    Insert Game Code Here from Server
+                  </div>
     
+                
             </div>
     
-            <div class = "start_button_location">
+            <div class = "start_button_location"  onclick="startGameButtonClicked()">
                 
-                <button class="start_button" onclick="startGameButtonClicked()">
+                <button class="start_button">
                     Start Game!
                 </button>
     
@@ -156,9 +159,9 @@
             </div>
             
             
-            <div class="lobbybox" id="playerList">
-                    Names from the server that are already in the game
     
+            <div class="waitingbox" id="playerList">
+                    Names from the server that are already in the game
             </div>
         </div>
 
@@ -188,13 +191,7 @@
 
         <!--Prompt screen-->
         <div id="promptPage" style="display:none" onload="startTimer()">
-            <svg class="promptTimer"  viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <g class="promptTimerCircle">
-                  <circle class="promptTimepath" cx="50" cy="50" r="45" />
-                </g>
-            </svg>
-            <span class="timerLablel" onload="TimeLeft()">
-            </span>
+         
             <p>
                 Text for giving prompt inspiration
             </p>
@@ -206,7 +203,13 @@
 
         <!--Waiting for next round screen-->
         <div id="waitingNextRoundPage" style="display:none">
-            
+            <svg class="promptTimer"  viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <g class="promptTimerCircle">
+                  <circle class="promptTimepath" cx="50" cy="50" r="45" />
+                </g>
+            </svg>
+            <span class="timerLablel" onload="TimeLeft()" align = "center">
+            </span>
             
 
             <div align="center">
@@ -220,6 +223,9 @@
     
             <div align = "center">
     
+                <p>
+                    Finished Players
+                </p>
                 <div class="lobbybox" id="finishedPlayers">
                     Names from the server that are already done
                 </div>
@@ -228,8 +234,11 @@
             <br>
             </br>
             <div align = "center">
-    
-                <div class="lobbybox">
+
+                <p>
+                    Unfinished Players
+                </p>
+                <div class="lobbybox" id="unfinishedPlayers">
                     Names from the server are not done
                 </div>
     
@@ -253,7 +262,9 @@
 
             <div align="center">
                 <h2>
-                    PROMPT
+                    <div class="text" id="promptToDraw">
+                        Prompt
+                    </div>
                 </h2>
             </div>
 
@@ -274,6 +285,101 @@
             </div>
         </div>
 
+        
+        <!--Main canvas page-->
+        <div id="mainCanvasPage">
+            <div align="center">
+
+                <h1>
+                    Do you draw like Picasso or a 4-year old???
+                </h1>
+        
+                
+            </div>
+    
+           
+    
+            <div align = "center">
+    
+                <h2>
+    
+                    Time Remaining: 
+    
+                    
+    
+                </h2> 
+    
+    
+                
+            </div>
+            <br>
+            </br>
+            <div align = "center">
+    
+                <div class="lobbybox">
+                    Cool People with beautiful drawings:
+                </div>
+    
+            </div>
+            <br>
+            </br>
+            <div align = "center">
+    
+                <div class="lobbybox">
+                    People who draw slow:
+                </div>
+    
+            </div> 
+        </div>
+
+              
+        <!--Main prompt page-->
+        <div id="mainPromptPage">
+            <div align="center">
+
+                <h1>
+                    Who is going to come up with the best prompt???
+                </h1>
+        
+                
+            </div>
+    
+           
+    
+            <div align = "center">
+    
+                <h2>
+    
+                    Time Remaining: 
+    
+                    
+    
+                </h2> 
+    
+    
+                
+            </div>
+            <br>
+            </br>
+            <div align = "center">
+    
+                <div class="lobbybox">
+                    Cool People with great prompts:
+                </div>
+    
+            </div>
+            <br>
+            </br>
+            <div align = "center">
+    
+                <div class="lobbybox">
+                    People who don't know what a prompt is:
+                </div>
+    
+            </div>
+        </div>
+
+
 
 
 
@@ -293,13 +399,19 @@
               canvasPage: document.getElementById("canvasPage")
             };
 
+            //Do we need these?
             const lobbyIDInput = document.getElementById("lobbyIDInput");
             const usernameInput = document.getElementById("usernameInput");
             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
             const playerList = document.getElementById("playerList");
             const playerListPlayer = document.getElementById("playerListPlayer");
             const finishedPlayers = document.getElementById("finishedPlayers");
+            const unfinishedPlayers = document.getElementById("unfinishedPlayers");
             const promptValue = document.getElementById("prompt").value;
+            const promptToDraw = document.getElementById("promptToDraw");
+            //const canvasDrawing = document.getElementById('canvas');
+            //const savedCanvas = canvasDrawing.toObject();
+            //const savedCanvas = new fabric.Image(canvasDrawing);
             
             
             /* Utility Functions */
@@ -333,11 +445,13 @@
             function joinJoinButtonClicked() {
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
+                
                 socket.emit("joinClicked", usernameInput.value, lobbyIDInput.value);
             }
 
             // The start game button was clicked
             function startGameButtonClicked() {
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
                 socket.emit("startGameClicked", socket.id);
             }
 
@@ -353,7 +467,13 @@
             function enterCanvasButtonClicked() {
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
-                socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value); //add canvas data
+                const canvasDrawing = document.getElementById('canvas');
+                //const savedCanvas = JSON.stringify(canvasDrawing.toDataURL('png'));
+                //const savedCanvas = JSON.stringify(canvasDrawing);
+                const savedCanvas = canvasDrawing.toDataURL('png');
+                //const savedCanvas = canvasDrawing.getObject();
+                //const savedCanvas = new fabric.Image(canvasDrawing);
+                socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value, savedCanvas);
             }
 
 
@@ -378,13 +498,23 @@
             });
 
 
-            socket.on("addPlayerToFinishedList", function(players){
-                playerUsernames = players.map((player) => player.username);
-                finishedPlayers.innerHTML = playerUsernames.join('<br>'); //Might want to change this to appending a child, otherwise it will replace
+            socket.on("addPlayerToFinishedList", function(finishedUsernames, allUsernames){
+                finishedPlayers.innerHTML = finishedUsernames.join('<br>'); //Might want to change this to appending a child, otherwise it will replace
+                unfinishedUsernames = allUsernames.filter(
+                function(i) {
+                    return this.indexOf(i) < 0;
+                },
+                finishedUsernames
+                );
+                unfinishedPlayers.innerHTML = unfinishedUsernames.join('<br>');
             });
 
 
             socket.on("playerToPrompt", function() {
+                //if(document.getElementById("canvas")) {
+                    //document.getElementById("canvas").clear();
+                //}
+                document.getElementById("prompt").value = "";
                 switchView("promptPage");
             });
 
@@ -393,8 +523,20 @@
                 switchView("waitingNextRoundPage");
             });
             
+            socket.on("setPage", function(page) {
+                const promptToDraw = document.getElementById("promptToDraw");
+                promptToDraw.innerHTML = page;
+                //const promptToDraw = document.getElementById("promptToDraw").value;
+                /*while( promptToDraw.firstChild )
+                    promptToDraw.removeChild( promptToDraw.firstChild );
+                promptToDraw.appendChild( document.createTextNode(page) );*/
+                //promptToDraw = page;
+                //document.getElementById("promptToDraw").value = page;
+            });
 
-            socket.on("playerToCanvas", function() {
+            socket.on("playerToCanvas", function(page) {
+                clearCanvas();
+                //promptToDraw.innerHTML = page;//page.getStringInput();
                 switchView("canvasPage");
             });
 
