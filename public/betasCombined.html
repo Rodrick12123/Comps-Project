@@ -110,6 +110,14 @@
 
         <!--Main Screen Lobby screen-->
         <div id="lobbyPage" style="display:none">
+            <svg class="promptTimer"  viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <g class="promptTimerCircle">
+                  <circle class="promptTimepath" cx="50" cy="50" r="45" />
+                </g>
+            </svg>
+            <span id="timerLablel" onload="TimeLeft()" align = "center">
+            </span>
+            
             <div align="center">
 
                 <h1>
@@ -198,13 +206,7 @@
 
         <!--Waiting for next round screen-->
         <div id="waitingNextRoundPage" style="display:none">
-            <svg class="promptTimer"  viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <g class="promptTimerCircle">
-                  <circle class="promptTimepath" cx="50" cy="50" r="45" />
-                </g>
-            </svg>
-            <span class="timerLablel" onload="TimeLeft()" align = "center">
-            </span>
+            
             
 
             <div align="center">
@@ -395,6 +397,38 @@
             socket.on("playerToCanvas", function() {
                 switchView("canvasPage");
             });
+
+            // Set the date we're counting down to
+            // var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
+            
+            var startDate = new Date().getTime();
+            startDate.setSeconds(startDate.getSeconds() + 60);
+            // var startSec = Math.floor((distance % (1000 * 60)) / 1000);
+            // var start = startSec + 60;
+            
+            var x = setInterval(function() {
+
+                // today's date and time
+                var nowDate = new Date().getTime();
+                
+                // timeleft
+                var timeLeft = startDate - nowDate;
+
+                // calculate time in minutes and secounds
+                // var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                // var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                // display the results
+                document.getElementById("timerLablel").innerHTML = minutes + "m " + seconds + "s ";
+
+                
+                if (timeLeft < 0) {
+                    clearInterval(x);
+                    document.getElementById("timerLablel").innerHTML = "EXPIRED";
+                }
+            }, 1000);
 
         </script>
     </body>
