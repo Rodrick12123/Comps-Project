@@ -146,6 +146,7 @@ io.on('connection', function(socket){
                 if (games[i].host.getReadyToStart()) {
                     games[i].setCurrRound(0)
                     socket.broadcast.emit("playerToPrompt");
+                    socket.emit("mainToPrompt");
                     break;
                 }
                 else {
@@ -177,6 +178,7 @@ io.on('connection', function(socket){
                     games[i].setCurrRound(games[i].getCurrRound()+1);
                     io.emit('setPage', games[i].getPlayerByName(games[i].players[playerNum].username).username);
                     io.in(lobbyID).emit("playerToCanvas");
+                    socket.emit("mainToCanvas");
                     games[i].numPlayersInWaitRoom = 0;
                     games[i].finishedPlayers = [];
                     break;

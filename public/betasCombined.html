@@ -287,7 +287,7 @@
 
         
         <!--Main canvas page-->
-        <div id="mainCanvasPage">
+        <div id="mainCanvasPage" style="display:none">
             <div align="center">
 
                 <h1>
@@ -334,7 +334,7 @@
 
               
         <!--Main prompt page-->
-        <div id="mainPromptPage">
+        <div id="mainPromptPage" style="display:none">
             <div align="center">
 
                 <h1>
@@ -396,7 +396,9 @@
               playerLobbyPage: document.getElementById("playerLobbyPage"),
               promptPage: document.getElementById("promptPage"),
               waitingNextRoundPage: document.getElementById("waitingNextRoundPage"),
-              canvasPage: document.getElementById("canvasPage")
+              canvasPage: document.getElementById("canvasPage"),
+              mainCanvasPage: document.getElementById("mainCanvasPage"),
+              mainPromptPage: document.getElementById("mainPromptPage")
             };
 
             //Do we need these?
@@ -519,6 +521,11 @@
             });
 
 
+            socket.on("mainToPrompt", function() {
+                switchView("mainPromptPage");
+            });
+
+
             socket.on("playerToWaitingNextRound", function() {
                 switchView("waitingNextRoundPage");
             });
@@ -538,6 +545,11 @@
                 clearCanvas();
                 //promptToDraw.innerHTML = page;//page.getStringInput();
                 switchView("canvasPage");
+            });
+
+
+            socket.on("mainToCanvas", function() {
+                switchView("mainCanvasPage");
             });
 
             // Set the date we're counting down to
