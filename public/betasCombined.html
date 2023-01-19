@@ -316,7 +316,7 @@
             </br>
             <div align = "center">
     
-                <div class="lobbybox">
+                <div class="lobbybox" id="mainCanvasFinishedPlayers">
                     Cool People with beautiful drawings:
                 </div>
     
@@ -325,7 +325,7 @@
             </br>
             <div align = "center">
     
-                <div class="lobbybox">
+                <div class="lobbybox" id="mainCanvasUnfinishedPlayers">
                     People who draw slow:
                 </div>
     
@@ -363,8 +363,8 @@
             </br>
             <div align = "center">
     
-                <div class="lobbybox">
-                    Cool People with great prompts:
+                <div class="lobbybox" id="mainPromptFinishedPlayers">
+                    Cool People with great prompts:<br>
                 </div>
     
             </div>
@@ -372,8 +372,8 @@
             </br>
             <div align = "center">
     
-                <div class="lobbybox">
-                    People who don't know what a prompt is:
+                <div class="lobbybox" id="mainPromptUnfinishedPlayers">
+                    People who don't know what a prompt is:<br>
                 </div>
     
             </div>
@@ -409,6 +409,10 @@
             const playerListPlayer = document.getElementById("playerListPlayer");
             const finishedPlayers = document.getElementById("finishedPlayers");
             const unfinishedPlayers = document.getElementById("unfinishedPlayers");
+            const mainPromptFinishedPlayers = document.getElementById("mainPromptFinishedPlayers");
+            const mainPromptUnfinishedPlayers = document.getElementById("mainPromptUnfinishedPlayers");
+            const mainCanvasFinishedPlayers = document.getElementById("mainCanvasFinishedPlayers");
+            const mainCanvasUnfinishedPlayers = document.getElementById("mainCanvasUnfinishedPlayers");
             const promptValue = document.getElementById("prompt").value;
             const promptToDraw = document.getElementById("promptToDraw");
             //const canvasDrawing = document.getElementById('canvas');
@@ -512,6 +516,30 @@
             });
 
 
+            socket.on("mainPromptFinishedList", function(finishedUsernames, allUsernames){
+                mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>" + finishedUsernames.join('<br>');
+                unfinishedUsernames = allUsernames.filter(
+                function(i) {
+                    return this.indexOf(i) < 0;
+                },
+                finishedUsernames
+                );
+                mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>" + unfinishedUsernames.join('<br>');
+            });
+
+
+            socket.on("mainCanvasFinishedList", function(finishedUsernames, allUsernames){
+                mainCanvasFinishedPlayers.innerHTML = "Cool People with beautiful drawings:<br>" + finishedUsernames.join('<br>');
+                unfinishedUsernames = allUsernames.filter(
+                function(i) {
+                    return this.indexOf(i) < 0;
+                },
+                finishedUsernames
+                );
+                mainCanvasUnfinishedPlayers.innerHTML = "People who draw slow:<br>" + unfinishedUsernames.join('<br>');
+            });
+
+
             socket.on("playerToPrompt", function() {
                 //if(document.getElementById("canvas")) {
                     //document.getElementById("canvas").clear();
@@ -522,6 +550,8 @@
 
 
             socket.on("mainToPrompt", function() {
+                mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>";
+                mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>";
                 switchView("mainPromptPage");
             });
 
@@ -549,6 +579,8 @@
 
 
             socket.on("mainToCanvas", function() {
+                mainCanvasFinishedPlayers.innerHTML = "Cool People with beautiful drawings:<br>";
+                mainCanvasUnfinishedPlayers.innerHTML = "People who draw slow:<br>";
                 switchView("mainCanvasPage");
             });
 
