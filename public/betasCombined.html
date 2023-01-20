@@ -643,24 +643,6 @@
             socket.on("playerToWaitingNextRound", function() {
                 switchView("waitingNextRoundPage");
             });
-            
-            socket.on("setPage", function(page) {
-                promptsQueue.push(page);
-                //alert(promptsQueue);
-                
-                //promptToDraw.innerText = page;
-               
-                //setPage(page);
-                //const promptToDraw = document.getElementById("promptToDraw");
-                //promptToDraw.innerHTML = page;
-                //const promptToDraw = document.getElementById("promptToDraw").value;
-                //while( promptToDraw.firstChild )
-                    //promptToDraw.removeChild( promptToDraw.firstChild );
-                //promptToDraw.appendChild( document.createTextNode(page) );
-                //promptToDraw = page;
-                //document.getElementById("promptToDraw").value = page;
-            });
-            
 
             socket.on("playerToCanvas", function(page) {
                 //promptToDraw.innerText = page;
