@@ -6,18 +6,6 @@
         <title>Hometown</title>
         <script src="./javascript/canvas.js" defer></script>
         <script src="./javascript/prompt.js" defer></script>
-        <script> const promptsQueue = []; </script>
-        <script> 
-        /*function setPage() {
-            promptsQueue.push(page);
-        } */
-        </script>
-        <script type="text/javascript">
-        function savedPrompt() {
-            alert(promptsQueue);
-            document.write(promptsQueue.shift());
-        }
-        </script>
     </head>
 
     <body>
@@ -275,9 +263,7 @@
             <div align="center">
                 <h2>
                     <div class="text" id="promptToDraw">
-                        <script>
-                            savedPrompt();
-                        </script>
+                        Prompt
                     </div>
                 </h2>
             </div>
@@ -457,6 +443,7 @@
 
 
         <script src="/socket.io/socket.io.js"></script>
+
         <script>
             const socket = io();
             
@@ -474,7 +461,6 @@
               mainPromptPage: document.getElementById("mainPromptPage")
             };
 
-            //Do we need these?
             const lobbyIDInput = document.getElementById("lobbyIDInput");
             const usernameInput = document.getElementById("usernameInput");
             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
@@ -556,17 +542,6 @@
                 socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value, savedCanvas);
             }
 
-            /*function setPage(page) {
-                const promptToDraw = document.getElementById("promptToDraw");
-                promptToDraw.innerHTML = page;
-            };*/
-
-            /*function savedPrompt() {
-                document.write(promptsQueue.shift());
-                //alert(promptsQueue.shift());
-            }*/
-
-
             /* Socket Functionality */
 
             socket.on("roomCreated", function(lobbyID) {
@@ -625,9 +600,6 @@
 
 
             socket.on("playerToPrompt", function() {
-                //if(document.getElementById("canvas")) {
-                    //document.getElementById("canvas").clear();
-                //}
                 document.getElementById("prompt").value = "";
                 switchView("promptPage");
             });
@@ -639,19 +611,23 @@
                 switchView("mainPromptPage");
             });
 
+            socket.on("setPage", function(game) {
+                for(let j = 0; j < game.numPlayers; j++){
+                    if (game.players[j].socketID == socket.id){
+                        promptToDraw.innerHTML = game.players[j].currentBook.pages[game.currRound-1].stringInput;
+                        break;
+                    }
+                }
+            });
 
             socket.on("playerToWaitingNextRound", function() {
                 switchView("waitingNextRoundPage");
             });
 
-            socket.on("playerToCanvas", function(page) {
-                //promptToDraw.innerText = page;
+            socket.on("playerToCanvas", function() {
                 clearCanvas();
-                //promptToDraw.innerHTML = page;//page.getStringInput();
                 switchView("canvasPage");
-                //setPage(page);
             });
-
 
             socket.on("mainToCanvas", function() {
                 mainCanvasFinishedPlayers.innerHTML = "Cool People with beautiful drawings:<br>";
