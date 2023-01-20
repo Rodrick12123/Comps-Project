@@ -146,6 +146,7 @@ io.on('connection', function(socket){
                 if (games[i].host.getReadyToStart()) {
                     games[i].setCurrRound(0)
                     socket.broadcast.emit("playerToPrompt");
+                    socket.emit("mainToPrompt");
                     break;
                 }
                 else {
@@ -175,17 +176,17 @@ io.on('connection', function(socket){
                 if (games[i].numPlayersInWaitRoom == games[i].numPlayers){
                     swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound()+1);
-                    console.log(games[i].getPlayerByName(games[i].players[playerNum].username).username)
-                    io.emit('setPage', games[i].getPlayerByName(games[i].players[playerNum].username).username);
-                    io.in(lobbyID).emit("playerToCanvas", games[i].getPlayerByName(games[i].players[playerNum].username).username);
+                    socket.emit('setPage', games[i].getPlayerByName(games[i].players[playerNum].username).username);
+                    io.in(lobbyID).emit("playerToCanvas");
+                    io.to(games[i].socketID).emit("mainToCanvas");
                     games[i].numPlayersInWaitRoom = 0;
                     games[i].finishedPlayers = [];
                     break;
                 }
                 else{
-                    console.log(games[i].getPlayerByName(games[i].players[playerNum].username).username)
-                    io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames); // All the players are already in this list so it tries to display them all
-                    io.emit('setPage', games[i].getPlayerByName(games[i].players[playerNum].username).username);
+                    io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames);
+                    io.to(games[i].socketID).emit("mainPromptFinishedList", games[i].finishedPlayers, games[i].usernames);
+                    socket.emit('setPage', games[i].getPlayerByName(games[i].players[playerNum].username).username);
                     io.to(socket.id).emit('playerToWaitingNextRound');
                     break;
                 }
@@ -210,12 +211,14 @@ io.on('connection', function(socket){
                     swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound()+1);
                     io.in(lobbyID).emit("playerToPrompt");
+                    io.to(games[i].socketID).emit("mainToPrompt");
                     games[i].numPlayersInWaitRoom = 0;
                     games[i].finishedPlayers = [];
                     break;
                 }
                 else{
                     io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames); // All the players are already in this list so it tries to display them all
+                    io.to(games[i].socketID).emit("mainCanvasFinishedList", games[i].finishedPlayers, games[i].usernames);
                     io.to(socket.id).emit('playerToWaitingNextRound');
                     break;
                 }

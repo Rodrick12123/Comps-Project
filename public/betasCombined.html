@@ -122,6 +122,14 @@
 
         <!--Main Screen Lobby screen-->
         <div id="lobbyPage" style="display:none">
+            <svg class="promptTimer"  viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <g class="promptTimerCircle">
+                  <circle class="promptTimepath" cx="50" cy="50" r="45" />
+                </g>
+            </svg>
+            <span id="timerLablel" onload="TimeLeft()" align = "center">
+            </span>
+            
             <div align="center">
 
                 <h1>
@@ -207,13 +215,13 @@
 
         <!--Waiting for next round screen-->
         <div id="waitingNextRoundPage" style="display:none">
-            <!-- <svg class="promptTimer"  viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <svg class="promptTimer"  viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <g class="promptTimerCircle">
                   <circle class="promptTimepath" cx="50" cy="50" r="45" />
                 </g>
             </svg>
             <span class="timerLablel" onload="TimeLeft()" align = "center">
-            </span> -->
+            </span>
             
 
             <div align="center">
@@ -293,7 +301,7 @@
 
         
         <!--Main canvas page-->
-        <div id="mainCanvasPage">
+        <div id="mainCanvasPage" style="display:none">
             <div align="center">
 
                 <h1>
@@ -322,7 +330,7 @@
             </br>
             <div align = "center">
     
-                <div class="lobbybox">
+                <div class="lobbybox" id="mainCanvasFinishedPlayers">
                     Cool People with beautiful drawings:
                 </div>
     
@@ -331,7 +339,7 @@
             </br>
             <div align = "center">
     
-                <div class="lobbybox">
+                <div class="lobbybox" id="mainCanvasUnfinishedPlayers">
                     People who draw slow:
                 </div>
     
@@ -340,7 +348,7 @@
 
               
         <!--Main prompt page-->
-        <div id="mainPromptPage">
+        <div id="mainPromptPage" style="display:none">
             <div align="center">
 
                 <h1>
@@ -369,8 +377,8 @@
             </br>
             <div align = "center">
     
-                <div class="lobbybox">
-                    Cool People with great prompts:
+                <div class="lobbybox" id="mainPromptFinishedPlayers">
+                    Cool People with great prompts:<br>
                 </div>
     
             </div>
@@ -378,13 +386,72 @@
             </br>
             <div align = "center">
     
-                <div class="lobbybox">
-                    People who don't know what a prompt is:
+                <div class="lobbybox" id="mainPromptUnfinishedPlayers">
+                    People who don't know what a prompt is:<br>
                 </div>
     
             </div>
         </div>
 
+
+        <!--End Game Choose Book-->
+        <div id="endgamechoose" style="display:none">
+            <div align="center">
+
+                <h1>
+                    Congratulations! Here are the results
+                </h1>
+                
+                <h2>
+                    Click on a book to view the contents
+                </h2>
+        
+            </div>
+           
+            <table align="center">
+                <tr>
+                  <td style="padding: 20px;"><div class="box" id="book1"></div></td>
+                  <td style="padding: 20px;"><div class="box" id="book2"></div></td>
+                  <td style="padding: 20px;"><div class="box" id="book3"></div></td>
+                </tr>
+                <tr>
+                  <td style="padding: 20px;"><div class="box" id="book4"></div></td>
+                  <td style="padding: 20px;"><div class="box" id="book5"></div></td>
+                  <td style="padding: 20px;"><div class="box" id="book6"></div></td>
+                </tr>
+                <tr>
+                  <td style="padding: 20px;"><div class="box" id="book7"></div></td>
+                  <td style="padding: 20px;"><div class="box" id="book8"></div></td>
+                  <td style="padding: 20px;"><div class="box" id="book9"></div></td>
+                </tr>
+              </table>
+              
+        </div>
+
+
+         <!--End Game results-->
+         <div id="endgameresults" style="display:none">
+            <div align="center">
+
+                <h1>
+                    Here are the contents from this book
+                </h1>
+                
+                <h2>
+                    Did the prompt stay the same? Or is is completely wrong?
+                </h2>
+        
+            </div>
+           
+            <div class="container">
+                <button class="arrow-button left">&lt;</button>
+                <div class="box2">
+                  <!-- content for the big box goes here -->
+                </div>
+                <button class="arrow-button right">&gt;</button>
+              </div>
+              
+        </div>
 
 
 
@@ -402,7 +469,9 @@
               playerLobbyPage: document.getElementById("playerLobbyPage"),
               promptPage: document.getElementById("promptPage"),
               waitingNextRoundPage: document.getElementById("waitingNextRoundPage"),
-              canvasPage: document.getElementById("canvasPage")
+              canvasPage: document.getElementById("canvasPage"),
+              mainCanvasPage: document.getElementById("mainCanvasPage"),
+              mainPromptPage: document.getElementById("mainPromptPage")
             };
 
             //Do we need these?
@@ -413,6 +482,10 @@
             const playerListPlayer = document.getElementById("playerListPlayer");
             const finishedPlayers = document.getElementById("finishedPlayers");
             const unfinishedPlayers = document.getElementById("unfinishedPlayers");
+            const mainPromptFinishedPlayers = document.getElementById("mainPromptFinishedPlayers");
+            const mainPromptUnfinishedPlayers = document.getElementById("mainPromptUnfinishedPlayers");
+            const mainCanvasFinishedPlayers = document.getElementById("mainCanvasFinishedPlayers");
+            const mainCanvasUnfinishedPlayers = document.getElementById("mainCanvasUnfinishedPlayers");
             const promptValue = document.getElementById("prompt").value;
             const promptToDraw = document.getElementById("promptToDraw");
             //const canvasDrawing = document.getElementById('canvas');
@@ -527,12 +600,43 @@
             });
 
 
+            socket.on("mainPromptFinishedList", function(finishedUsernames, allUsernames){
+                mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>" + finishedUsernames.join('<br>');
+                unfinishedUsernames = allUsernames.filter(
+                function(i) {
+                    return this.indexOf(i) < 0;
+                },
+                finishedUsernames
+                );
+                mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>" + unfinishedUsernames.join('<br>');
+            });
+
+
+            socket.on("mainCanvasFinishedList", function(finishedUsernames, allUsernames){
+                mainCanvasFinishedPlayers.innerHTML = "Cool People with beautiful drawings:<br>" + finishedUsernames.join('<br>');
+                unfinishedUsernames = allUsernames.filter(
+                function(i) {
+                    return this.indexOf(i) < 0;
+                },
+                finishedUsernames
+                );
+                mainCanvasUnfinishedPlayers.innerHTML = "People who draw slow:<br>" + unfinishedUsernames.join('<br>');
+            });
+
+
             socket.on("playerToPrompt", function() {
                 //if(document.getElementById("canvas")) {
                     //document.getElementById("canvas").clear();
                 //}
                 document.getElementById("prompt").value = "";
                 switchView("promptPage");
+            });
+
+
+            socket.on("mainToPrompt", function() {
+                mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>";
+                mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>";
+                switchView("mainPromptPage");
             });
 
 
@@ -565,6 +669,45 @@
                 switchView("canvasPage");
                 //setPage(page);
             });
+
+
+            socket.on("mainToCanvas", function() {
+                mainCanvasFinishedPlayers.innerHTML = "Cool People with beautiful drawings:<br>";
+                mainCanvasUnfinishedPlayers.innerHTML = "People who draw slow:<br>";
+                switchView("mainCanvasPage");
+            });
+
+            // Set the date we're counting down to
+            // var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
+            
+            var startDate = new Date();
+            startDate.setSeconds(startDate.getSeconds() + 60);
+            // var startSec = Math.floor((distance % (1000 * 60)) / 1000);
+            // var start = startSec + 60;
+            
+            var x = setInterval(function() {
+
+                // today's date and time
+                var nowDate = new Date().getTime();
+                
+                // timeleft
+                var timeLeft = startDate - nowDate;
+
+                // calculate time in minutes and secounds
+                // var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                // var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                // display the results
+                document.getElementById("timerLablel").innerHTML = minutes + "m " + seconds + "s ";
+
+                
+                if (timeLeft < 0) {
+                    clearInterval(x);
+                    document.getElementById("timerLablel").innerHTML = "EXPIRED";
+                }
+            }, 1000);
 
         </script>
     </body>
