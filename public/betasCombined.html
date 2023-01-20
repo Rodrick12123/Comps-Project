@@ -6,6 +6,18 @@
         <title>Hometown</title>
         <script src="./javascript/canvas.js" defer></script>
         <script src="./javascript/prompt.js" defer></script>
+        <script> const promptsQueue = []; </script>
+        <script> 
+        /*function setPage() {
+            promptsQueue.push(page);
+        } */
+        </script>
+        <script type="text/javascript">
+        function savedPrompt() {
+            alert(promptsQueue);
+            document.write(promptsQueue.shift());
+        }
+        </script>
     </head>
 
     <body>
@@ -255,7 +267,9 @@
             <div align="center">
                 <h2>
                     <div class="text" id="promptToDraw">
-                        Prompt
+                        <script>
+                            savedPrompt();
+                        </script>
                     </div>
                 </h2>
             </div>
@@ -404,6 +418,7 @@
             //const canvasDrawing = document.getElementById('canvas');
             //const savedCanvas = canvasDrawing.toObject();
             //const savedCanvas = new fabric.Image(canvasDrawing);
+            //const promptsQueue = [];
             
             
             /* Utility Functions */
@@ -468,6 +483,16 @@
                 socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value, savedCanvas);
             }
 
+            /*function setPage(page) {
+                const promptToDraw = document.getElementById("promptToDraw");
+                promptToDraw.innerHTML = page;
+            };*/
+
+            /*function savedPrompt() {
+                document.write(promptsQueue.shift());
+                //alert(promptsQueue.shift());
+            }*/
+
 
             /* Socket Functionality */
 
@@ -516,20 +541,29 @@
             });
             
             socket.on("setPage", function(page) {
-                const promptToDraw = document.getElementById("promptToDraw");
-                promptToDraw.innerHTML = page;
+                promptsQueue.push(page);
+                //alert(promptsQueue);
+                
+                //promptToDraw.innerText = page;
+               
+                //setPage(page);
+                //const promptToDraw = document.getElementById("promptToDraw");
+                //promptToDraw.innerHTML = page;
                 //const promptToDraw = document.getElementById("promptToDraw").value;
-                /*while( promptToDraw.firstChild )
-                    promptToDraw.removeChild( promptToDraw.firstChild );
-                promptToDraw.appendChild( document.createTextNode(page) );*/
+                //while( promptToDraw.firstChild )
+                    //promptToDraw.removeChild( promptToDraw.firstChild );
+                //promptToDraw.appendChild( document.createTextNode(page) );
                 //promptToDraw = page;
                 //document.getElementById("promptToDraw").value = page;
             });
+            
 
             socket.on("playerToCanvas", function(page) {
+                //promptToDraw.innerText = page;
                 clearCanvas();
                 //promptToDraw.innerHTML = page;//page.getStringInput();
                 switchView("canvasPage");
+                //setPage(page);
             });
 
         </script>

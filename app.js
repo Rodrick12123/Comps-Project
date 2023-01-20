@@ -175,13 +175,15 @@ io.on('connection', function(socket){
                 if (games[i].numPlayersInWaitRoom == games[i].numPlayers){
                     swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound()+1);
+                    console.log(games[i].getPlayerByName(games[i].players[playerNum].username).username)
                     io.emit('setPage', games[i].getPlayerByName(games[i].players[playerNum].username).username);
-                    io.in(lobbyID).emit("playerToCanvas");
+                    io.in(lobbyID).emit("playerToCanvas", games[i].getPlayerByName(games[i].players[playerNum].username).username);
                     games[i].numPlayersInWaitRoom = 0;
                     games[i].finishedPlayers = [];
                     break;
                 }
                 else{
+                    console.log(games[i].getPlayerByName(games[i].players[playerNum].username).username)
                     io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames); // All the players are already in this list so it tries to display them all
                     io.emit('setPage', games[i].getPlayerByName(games[i].players[playerNum].username).username);
                     io.to(socket.id).emit('playerToWaitingNextRound');
