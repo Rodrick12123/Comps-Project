@@ -195,9 +195,14 @@
         <!--Prompt screen-->
         <div id="promptPage" style="display:none" onload="startTimer()">
          
-            <p>
-                Text for giving prompt inspiration
-            </p>
+            <div align="center">
+                <h2>
+                    <img id="canvasForPrompt" alt="Text for giving prompt inspiration"
+                    width="1000" height="500">
+                    </img>
+                </h2>
+            </div>
+
             <textarea name="text" id="prompt" rows="5"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
             <!-- <input type="text" class="input_prompt" placeholder="Enter Prompt Here" /> -->
             <button class="enter_button" onclick="enterPromptButtonClicked()">Enter</button>
@@ -290,7 +295,7 @@
 
         
         <!--Main canvas page-->
-        <div id="mainCanvasPage">
+        <div id="mainCanvasPage" style="display:none">
             <div align="center">
 
                 <h1>
@@ -319,7 +324,7 @@
             </br>
             <div align = "center">
     
-                <div class="lobbybox">
+                <div class="lobbybox" id="mainCanvasFinishedPlayers">
                     Cool People with beautiful drawings:
                 </div>
     
@@ -328,7 +333,7 @@
             </br>
             <div align = "center">
     
-                <div class="lobbybox">
+                <div class="lobbybox" id="mainCanvasUnfinishedPlayers">
                     People who draw slow:
                 </div>
     
@@ -337,7 +342,7 @@
 
               
         <!--Main prompt page-->
-        <div id="mainPromptPage">
+        <div id="mainPromptPage" style="display:none">
             <div align="center">
 
                 <h1>
@@ -366,8 +371,8 @@
             </br>
             <div align = "center">
     
-                <div class="lobbybox">
-                    Cool People with great prompts:
+                <div class="lobbybox" id="mainPromptFinishedPlayers">
+                    Cool People with great prompts:<br>
                 </div>
     
             </div>
@@ -375,18 +380,78 @@
             </br>
             <div align = "center">
     
-                <div class="lobbybox">
-                    People who don't know what a prompt is:
+                <div class="lobbybox" id="mainPromptUnfinishedPlayers">
+                    People who don't know what a prompt is:<br>
                 </div>
     
             </div>
         </div>
 
 
+        <!--End Game Choose Book-->
+        <div id="endgamechoose" style="display:none">
+            <div align="center">
+
+                <h1>
+                    Congratulations! Here are the results
+                </h1>
+                
+                <h2>
+                    Click on a book to view the contents
+                </h2>
+        
+            </div>
+           
+            <table align="center">
+                <tr>
+                  <td style="padding: 20px;"><div class="box" id="book1"></div></td>
+                  <td style="padding: 20px;"><div class="box" id="book2"></div></td>
+                  <td style="padding: 20px;"><div class="box" id="book3"></div></td>
+                </tr>
+                <tr>
+                  <td style="padding: 20px;"><div class="box" id="book4"></div></td>
+                  <td style="padding: 20px;"><div class="box" id="book5"></div></td>
+                  <td style="padding: 20px;"><div class="box" id="book6"></div></td>
+                </tr>
+                <tr>
+                  <td style="padding: 20px;"><div class="box" id="book7"></div></td>
+                  <td style="padding: 20px;"><div class="box" id="book8"></div></td>
+                  <td style="padding: 20px;"><div class="box" id="book9"></div></td>
+                </tr>
+              </table>
+              
+        </div>
+
+
+         <!--End Game results-->
+         <div id="endgameresults" style="display:none">
+            <div align="center">
+
+                <h1>
+                    Here are the contents from this book
+                </h1>
+                
+                <h2>
+                    Did the prompt stay the same? Or is is completely wrong?
+                </h2>
+        
+            </div>
+           
+            <div class="container">
+                <button class="arrow-button left">&lt;</button>
+                <div class="box2">
+                  <!-- content for the big box goes here -->
+                </div>
+                <button class="arrow-button right">&gt;</button>
+              </div>
+              
+        </div>
+
 
 
 
         <script src="/socket.io/socket.io.js"></script>
+
         <script>
             const socket = io();
             
@@ -399,10 +464,11 @@
               playerLobbyPage: document.getElementById("playerLobbyPage"),
               promptPage: document.getElementById("promptPage"),
               waitingNextRoundPage: document.getElementById("waitingNextRoundPage"),
-              canvasPage: document.getElementById("canvasPage")
+              canvasPage: document.getElementById("canvasPage"),
+              mainCanvasPage: document.getElementById("mainCanvasPage"),
+              mainPromptPage: document.getElementById("mainPromptPage")
             };
 
-            //Do we need these?
             const lobbyIDInput = document.getElementById("lobbyIDInput");
             const usernameInput = document.getElementById("usernameInput");
             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
@@ -410,11 +476,17 @@
             const playerListPlayer = document.getElementById("playerListPlayer");
             const finishedPlayers = document.getElementById("finishedPlayers");
             const unfinishedPlayers = document.getElementById("unfinishedPlayers");
+            const mainPromptFinishedPlayers = document.getElementById("mainPromptFinishedPlayers");
+            const mainPromptUnfinishedPlayers = document.getElementById("mainPromptUnfinishedPlayers");
+            const mainCanvasFinishedPlayers = document.getElementById("mainCanvasFinishedPlayers");
+            const mainCanvasUnfinishedPlayers = document.getElementById("mainCanvasUnfinishedPlayers");
             const promptValue = document.getElementById("prompt").value;
             const promptToDraw = document.getElementById("promptToDraw");
-            //const canvasDrawing = document.getElementById('canvas');
+            const canvasDrawing = document.getElementById('canvas');
+            const canvasForPrompt = document.getElementById('canvasForPrompt');
             //const savedCanvas = canvasDrawing.toObject();
             //const savedCanvas = new fabric.Image(canvasDrawing);
+            //const promptsQueue = [];
             
             
             /* Utility Functions */
@@ -479,7 +551,6 @@
                 socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value, savedCanvas);
             }
 
-
             /* Socket Functionality */
 
             socket.on("roomCreated", function(lobbyID) {
@@ -513,34 +584,73 @@
             });
 
 
+            socket.on("mainPromptFinishedList", function(finishedUsernames, allUsernames){
+                mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>" + finishedUsernames.join('<br>');
+                unfinishedUsernames = allUsernames.filter(
+                function(i) {
+                    return this.indexOf(i) < 0;
+                },
+                finishedUsernames
+                );
+                mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>" + unfinishedUsernames.join('<br>');
+            });
+
+
+            socket.on("mainCanvasFinishedList", function(finishedUsernames, allUsernames){
+                mainCanvasFinishedPlayers.innerHTML = "Cool People with beautiful drawings:<br>" + finishedUsernames.join('<br>');
+                unfinishedUsernames = allUsernames.filter(
+                function(i) {
+                    return this.indexOf(i) < 0;
+                },
+                finishedUsernames
+                );
+                mainCanvasUnfinishedPlayers.innerHTML = "People who draw slow:<br>" + unfinishedUsernames.join('<br>');
+            });
+
+
             socket.on("playerToPrompt", function() {
-                //if(document.getElementById("canvas")) {
-                    //document.getElementById("canvas").clear();
-                //}
                 document.getElementById("prompt").value = "";
                 switchView("promptPage");
             });
 
 
+            socket.on("mainToPrompt", function() {
+                mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>";
+                mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>";
+                switchView("mainPromptPage");
+            });
+
+            socket.on("displayPrompt", function(game) {
+                for(let j = 0; j < game.numPlayers; j++){
+                    if (game.players[j].socketID == socket.id){
+                        promptToDraw.innerHTML = game.players[j].currentBook.pages[game.currRound-1].stringInput;
+                        break;
+                    }
+                }
+            });
+
+            socket.on("displayCanvas", function(game) {
+                for(let j = 0; j < game.numPlayers; j++){
+                    if (game.players[j].socketID == socket.id){
+                        canvasForPrompt.src = game.players[j].currentBook.pages[game.currRound-1].stringInput;
+                        break;
+                    }
+                }
+            });
+
             socket.on("playerToWaitingNextRound", function() {
                 switchView("waitingNextRoundPage");
             });
-            
-            socket.on("setPage", function(page) {
-                const promptToDraw = document.getElementById("promptToDraw");
-                promptToDraw.innerHTML = page;
-                //const promptToDraw = document.getElementById("promptToDraw").value;
-                /*while( promptToDraw.firstChild )
-                    promptToDraw.removeChild( promptToDraw.firstChild );
-                promptToDraw.appendChild( document.createTextNode(page) );*/
-                //promptToDraw = page;
-                //document.getElementById("promptToDraw").value = page;
+
+            socket.on("playerToCanvas", function() {
+                clearCanvas();
+                switchView("canvasPage");
             });
 
-            socket.on("playerToCanvas", function(page) {
-                clearCanvas();
-                //promptToDraw.innerHTML = page;//page.getStringInput();
-                switchView("canvasPage");
+            socket.on("mainToCanvas", function() {
+                mainCanvasFinishedPlayers.innerHTML = "Cool People with beautiful drawings:<br>";
+                mainCanvasUnfinishedPlayers.innerHTML = "People who draw slow:<br>";
+                switchView("mainCanvasPage");
             });
 
             // Set the date we're counting down to
