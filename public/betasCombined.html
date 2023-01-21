@@ -192,9 +192,14 @@
         <!--Prompt screen-->
         <div id="promptPage" style="display:none" onload="startTimer()">
          
-            <p>
-                Text for giving prompt inspiration
-            </p>
+            <div align="center">
+                <h2>
+                    <img id="canvasForPrompt" alt="Text for giving prompt inspiration"
+                    width="1000" height="500">
+                    </img>
+                </h2>
+            </div>
+
             <textarea name="text" id="prompt" rows="5"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
             <!-- <input type="text" class="input_prompt" placeholder="Enter Prompt Here" /> -->
             <button class="enter_button" onclick="enterPromptButtonClicked()">Enter</button>
@@ -474,7 +479,8 @@
             const mainCanvasUnfinishedPlayers = document.getElementById("mainCanvasUnfinishedPlayers");
             const promptValue = document.getElementById("prompt").value;
             const promptToDraw = document.getElementById("promptToDraw");
-            //const canvasDrawing = document.getElementById('canvas');
+            const canvasDrawing = document.getElementById('canvas');
+            const canvasForPrompt = document.getElementById('canvasForPrompt');
             //const savedCanvas = canvasDrawing.toObject();
             //const savedCanvas = new fabric.Image(canvasDrawing);
             //const promptsQueue = [];
@@ -611,10 +617,19 @@
                 switchView("mainPromptPage");
             });
 
-            socket.on("setPage", function(game) {
+            socket.on("displayPrompt", function(game) {
                 for(let j = 0; j < game.numPlayers; j++){
                     if (game.players[j].socketID == socket.id){
                         promptToDraw.innerHTML = game.players[j].currentBook.pages[game.currRound-1].stringInput;
+                        break;
+                    }
+                }
+            });
+
+            socket.on("displayCanvas", function(game) {
+                for(let j = 0; j < game.numPlayers; j++){
+                    if (game.players[j].socketID == socket.id){
+                        canvasForPrompt.src = game.players[j].currentBook.pages[game.currRound-1].stringInput;
                         break;
                     }
                 }
