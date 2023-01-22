@@ -115,10 +115,10 @@
                   <circle  class="promptTimepath" cx="50" cy="50" r="45" />
                 </g>
             </svg> -->
-            <!-- <div class="timerBox" align="center"> -->
-            <div class="timerLabel" id="timerLablel" >
+            <div class="timerBox">
+                <span id="timerLablel" align = "center">
+                </span>
             </div>
-            <!-- </div> -->
             
             
             <div align="center">
@@ -128,9 +128,6 @@
                 </h1>
         
             </div>
-            <div>
-                
-            
             <div class = "gamecodetext">
     
                 <h2>
@@ -196,7 +193,7 @@
     
 
         <!--Prompt screen-->
-        <div id="promptPage" style="display:none" >
+        <div id="promptPage" style="display:none" onload="startTimer()">
          
             <div align="center">
                 <h2>
@@ -457,7 +454,7 @@
 
         <script>
             const socket = io();
-            var startTimer = false;
+            
             /* HTML elements */
             
             const screenViews = {
@@ -529,10 +526,8 @@
 
             // The start game button was clicked
             function startGameButtonClicked() {
-                startTimer= true;
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 socket.emit("startGameClicked", socket.id);
-                
             }
 
             // The enter prompt button was clicked
@@ -541,7 +536,6 @@
                 const usernameInput = document.getElementById("usernameInput");
                 const promptValue = document.getElementById("prompt").value;
                 socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, promptValue);
-                
             }
 
             // The enter canvas button was clicked
@@ -649,7 +643,6 @@
             });
 
             socket.on("playerToCanvas", function() {
-                startTimer = true;
                 clearCanvas();
                 switchView("canvasPage");
             });
@@ -660,53 +653,37 @@
                 switchView("mainCanvasPage");
             });
 
-            // change the status of the timer
-            socket.on("timeStatus", function(game) {
-                startTimer = game.timerStatus;
-                
-            });
-
+            // Set the date we're counting down to
+            // var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
             
             var startDate = new Date();
-            document.getElementById("timerLablel").innerHTML = 1 + "m " + 0 + "s ";
-            if (startTimer == true){
-                startDate = new Date();
-                startDate.setMinutes(startDate.getMinutes() + 1);
-                var x = setInterval(function() {
+            startDate.setSeconds(startDate.getSeconds() + 60);
+            // var startSec = Math.floor((distance % (1000 * 60)) / 1000);
+            // var start = startSec + 60;
+            
+            var x = setInterval(function() {
 
-                    // today's date and time
-                    var nowDate = new Date().getTime();
-                    
-                    // timeleft
-                    var timeLeft = startDate - nowDate;
+                // today's date and time
+                var nowDate = new Date().getTime();
+                
+                // timeleft
+                var timeLeft = startDate - nowDate;
 
-                    // calculate time in minutes and secounds
-                    // var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                    // var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                // calculate time in minutes and secounds
+                // var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                // var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-                    // display the results
-                    document.getElementById("timerLablel").innerHTML = minutes + "m " + seconds + "s ";
+                // display the results
+                document.getElementById("timerLablel").innerHTML = minutes + "m " + seconds + "s ";
 
-                    //All entries are subimited when time =0
-                    if (timeLeft < 0) {
-                        clearInterval(x);
-                        document.getElementById("timerLablel").innerHTML = "EXPIRED";
-                        if (promptPage.style.display == 'block'){
-                            enterPromptButtonClicked();
-                        }
-                        if (canvasPage.style.display == 'block'){
-                            enterCanvasButtonClicked();
-                        }   
-                        
-                    }
-                }, 1000);
-            } else {
-                //startDate = new Date();
-                //startDate.setSeconds(startDate.getSeconds() + 60);
-                document.getElementById("timerLablel").innerHTML = 1 + "m " + 0 + "s ";
-            }
+                
+                if (timeLeft < 0) {
+                    clearInterval(x);
+                    document.getElementById("timerLablel").innerHTML = "EXPIRED";
+                }
+            }, 1000);
 
         </script>
     </body>
