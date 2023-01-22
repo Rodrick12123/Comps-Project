@@ -13,6 +13,7 @@ class Game {
         this.books = [];
         this.drawTime = 60;
         this.guessTime = 30;
+        this.timerStatus = false;
         this.host = host;
         this.numPlayersInWaitRoom = 0;
     }
@@ -35,6 +36,12 @@ class Game {
     /* Appends the book to the list of books */
     addBook(book) {
         this.books.push(book);
+    }
+
+
+    // Gets timer status
+    getTimer(){
+        return this.timerStatus;
     }
 
 
