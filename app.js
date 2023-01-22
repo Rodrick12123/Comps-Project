@@ -131,7 +131,7 @@ io.on('connection', function(socket){
                 createPlayer(games[i], username, lobbyID, socket.id);
                 
                 socket.join(lobbyID);
-                
+
                 console.log(games[i].players);
                 io.emit('addPlayerToWaitingList', games[i].players);
                 io.to(socket.id).emit('playerToWaitingRoom');
@@ -144,7 +144,7 @@ io.on('connection', function(socket){
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
                 if (games[i].host.getReadyToStart()) {
-                    games[i].setCurrRound(1)
+                    games[i].setCurrRound(0)
                     socket.broadcast.emit("playerToPrompt");
                     socket.emit("mainToPrompt");
                     break;
@@ -214,10 +214,6 @@ io.on('connection', function(socket){
                     swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound()+1);
                     io.emit('displayCanvas', games[i]);
-                    if (games[i].getCurrRound() >= games[i].maxRounds) {
-                        io.in(lobbyID).emit("playersToEndgame");
-                        io.to(games[i].socketID).emit("mainToEndgame");
-                    }
                     io.in(lobbyID).emit("playerToPrompt");
                     io.to(games[i].socketID).emit("mainToPrompt");
                     games[i].numPlayersInWaitRoom = 0;
