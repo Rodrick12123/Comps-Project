@@ -12,9 +12,10 @@ class Game {
         this.finishedPlayers = [];
         this.books = [];
         this.drawTime = 60;
-        this.guessTime = 30;
+        this.guessTime = 30;//
         this.host = host;
         this.numPlayersInWaitRoom = 0;
+        this.timerStatus = false;
     }
 
 
@@ -37,6 +38,10 @@ class Game {
         this.books.push(book);
     }
 
+    // Gets timer status
+    getTimer(){
+        return this.timerStatus;
+    }
 
     //Probably want get functions for these variables
     /* get function for the current round 

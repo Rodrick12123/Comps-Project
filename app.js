@@ -174,6 +174,8 @@ io.on('connection', function(socket){
                 }
                 
                 if (games[i].numPlayersInWaitRoom == games[i].numPlayers){
+                    games[i].timerStatus = false;
+                    io.emit('timeStatus', games[i]);
                     swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound()+1);
                     io.emit('displayPrompt', games[i]);
@@ -207,6 +209,8 @@ io.on('connection', function(socket){
                     }
                 }
                 if (games[i].numPlayersInWaitRoom >= games[i].numPlayers){
+                    games[i].timerStatus = false;
+                    io.emit('timeStatus', games[i]);
                     swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound()+1);
                     io.emit('displayCanvas', games[i]);
