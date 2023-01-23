@@ -233,6 +233,7 @@ io.on('connection', function(socket){
                     if (games[i].getCurrRound() >= games[i].maxRounds) {
                         io.in(lobbyID).emit("playersToEndgame");
                         io.to(games[i].socketID).emit("mainToEndgame");
+                        break;
                     }
                     io.in(lobbyID).emit("playerToPrompt");
                     io.to(games[i].socketID).emit("mainToPrompt");

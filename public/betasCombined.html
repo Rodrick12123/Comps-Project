@@ -350,11 +350,8 @@
                 <h1>
                     Who is going to come up with the best prompt???
                 </h1>
-        
                 
             </div>
-    
-           
     
             <div align = "center">
     
@@ -362,14 +359,11 @@
     
                     Time Remaining: 
     
-                    
-    
                 </h2> 
                 <div class="timerLabel2" id="timerLabel2" >
                     here
                 </div>
-    
-                
+       
             </div>
             <br>
             </br>
@@ -393,7 +387,7 @@
 
 
         <!--End Game Choose Book-->
-        <div id="endgamechoose" style="display:none">
+        <div id="endGameChoose" style="display:none">
             <div align="center">
 
                 <h1>
@@ -413,22 +407,22 @@
                     <td style="padding: 20px;"><div class="box" id="book3" onclick="book3Clicked()"></div></td>
                 </tr>
                 <tr>
-                  <td style="padding: 20px;"><div class="box" id="book4" onclick="book4Clicked()"></div></td>
-                  <td style="padding: 20px;"><div class="box" id="book5" onclick="book5Clicked()"></div></td>
-                  <td style="padding: 20px;"><div class="box" id="book6" onclick="book6Clicked()"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book4" onclick="book4Clicked()"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book5" onclick="book5Clicked()"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book6" onclick="book6Clicked()"></div></td>
                 </tr>
                 <tr>
-                  <td style="padding: 20px;"><div class="box" id="book7" onclick="book7Clicked()"></div></td>
-                  <td style="padding: 20px;"><div class="box" id="book8" onclick="book8Clicked()"></div></td>
-                  <td style="padding: 20px;"><div class="box" id="book9" onclick="book9Clicked()"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book7" onclick="book7Clicked()"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book8" onclick="book8Clicked()"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book9" onclick="book9Clicked()"></div></td>
                 </tr>
-              </table>
+            </table>
               
         </div>
 
 
          <!--End Game results-->
-         <div id="endgameresults" style="display:none">
+        <div id="endGameResults" style="display:none">
             <div align="center">
 
                 <h1>
@@ -478,8 +472,8 @@
               canvasPage: document.getElementById("canvasPage"),
               mainCanvasPage: document.getElementById("mainCanvasPage"),
               mainPromptPage: document.getElementById("mainPromptPage"),
-              endgamechoose: document.getElementById("endgamechoose"),
-              endgameresults: document.getElementById("endgameresults")
+              endGameChoose: document.getElementById("endGameChoose"),
+              endGameResults: document.getElementById("endGameResults")
             };
 
             const lobbyIDInput = document.getElementById("lobbyIDInput");
@@ -500,6 +494,7 @@
             const promptToDraw = document.getElementById("promptToDraw");
             const canvasDrawing = document.getElementById('canvas');
             const canvasForPrompt = document.getElementById('canvasForPrompt');
+
             const endGameCanvas = document.getElementById('endGameCanvas');
             
             
@@ -566,39 +561,39 @@
             /* End Game Book Buttons */
 
             function book1Clicked(){
-                switchView("endgameresults");
+                switchView("endGameResults");
             }
 
             function book2Clicked(){
-                switchView("endgameresults");
+                switchView("endGameResults");
             }
 
             function book3Clicked(){
-                switchView("endgameresults");
+                switchView("endGameResults");
             }
 
             function book4Clicked(){
-                switchView("endgameresults");
+                switchView("endGameResults");
             }
 
             function book5Clicked(){
-                switchView("endgameresults");
+                switchView("endGameResults");
             }
 
             function book6Clicked(){
-                switchView("endgameresults");
+                switchView("endGameResults");
             }
 
             function book7Clicked(){
-                switchView("endgameresults");
+                switchView("endGameResults");
             }
 
             function book8Clicked(){
-                switchView("endgameresults");
+                switchView("endGameResults");
             }
 
             function book9Clicked(){
-                switchView("endgameresults");
+                switchView("endGameResults");
             }
 
 
@@ -666,7 +661,6 @@
 
 
             socket.on("mainToPrompt", function() {
-                console.log("hh");
                 mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>";
                 mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>";
                 switchView("mainPromptPage");
@@ -717,11 +711,11 @@
             });
 
             socket.on("playersToEndgame", function() {
-                switchView("mainPage")
+                switchView("mainPage");
             });
 
             socket.on("mainToEndgame", function() {
-                switchView("endGameChoose")
+                switchView("endGameChoose");
             });
 
             // change the status of the timer
