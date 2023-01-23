@@ -145,8 +145,15 @@ io.on('connection', function(socket){
             if (games[i].socketID == socketID){
                 if (games[i].host.getReadyToStart()) {
                     games[i].setCurrRound(1)
+                    games[i].timerStatus = true;
+                    // console.log(games[i].timerStatus);
+                    // console.log('games[i].timerStatus');
+                    io.emit('timeStatus', games[i]);
                     socket.broadcast.emit("playerToPrompt");
                     socket.emit("mainToPrompt");
+                    //change
+                    socket.emit("timerStart", games[i]);
+
                     break;
                 }
                 else {
@@ -155,6 +162,7 @@ io.on('connection', function(socket){
             }
         }
     });
+
 
     socket.on('promptEntered', function(username, lobbyID, prompt){
         console.log(prompt)
@@ -175,14 +183,22 @@ io.on('connection', function(socket){
                 
                 if (games[i].numPlayersInWaitRoom == games[i].numPlayers){
                     games[i].timerStatus = false;
+                    socket.emit("timerStart", games[i]);
+                    
                     io.emit('timeStatus', games[i]);
                     swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound()+1);
                     io.emit('displayPrompt', games[i]);
                     io.in(lobbyID).emit("playerToCanvas");
                     io.to(games[i].socketID).emit("mainToCanvas");
+                    
+
+                    games[i].timerStatus = true;
+                    
+                    io.emit('timeStatus', games[i]);
                     games[i].numPlayersInWaitRoom = 0;
                     games[i].finishedPlayers = [];
+                    socket.emit("timerStart", games[i]);
                     break;
                 }
                 else{
@@ -222,6 +238,7 @@ io.on('connection', function(socket){
                     io.to(games[i].socketID).emit("mainToPrompt");
                     games[i].numPlayersInWaitRoom = 0;
                     games[i].finishedPlayers = [];
+                    socket.emit("timerStart", games[i]);
                     break;
                 }
                 else{
