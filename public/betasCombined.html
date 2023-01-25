@@ -434,7 +434,11 @@
                 <h1>
                     Here are the contents from this book
                 </h1>
-                
+
+                <img id="endGameCanvas"
+                    width="1000" height="500">
+                    </img>
+
                 <h2>
                     Did the prompt stay the same? Or is is completely wrong?
                 </h2>
@@ -491,9 +495,7 @@
             const promptToDraw = document.getElementById("promptToDraw");
             const canvasDrawing = document.getElementById('canvas');
             const canvasForPrompt = document.getElementById('canvasForPrompt');
-            //const savedCanvas = canvasDrawing.toObject();
-            //const savedCanvas = new fabric.Image(canvasDrawing);
-            //const promptsQueue = [];
+            const endGameCanvas = document.getElementById('endGameCanvas');
             
             
             /* Utility Functions */
@@ -551,11 +553,7 @@
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
                 const canvasDrawing = document.getElementById('canvas');
-                //const savedCanvas = JSON.stringify(canvasDrawing.toDataURL('png'));
-                //const savedCanvas = JSON.stringify(canvasDrawing);
                 const savedCanvas = canvasDrawing.toDataURL('png');
-                //const savedCanvas = canvasDrawing.getObject();
-                //const savedCanvas = new fabric.Image(canvasDrawing);
                 socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value, savedCanvas);
             }
 
@@ -642,6 +640,16 @@
                 for(let j = 0; j < game.numPlayers; j++){
                     if (game.players[j].socketID == socket.id){
                         canvasForPrompt.src = game.players[j].currentBook.pages[game.currRound-1].stringInput;
+                        break;
+                    }
+                }
+            });
+
+            //how do we want to call this?
+            socket.on("displayEndGameCanvas", function(game) {
+                for(let j = 0; j < game.numPlayers; j++){
+                    if (game.players[j].socketID == socket.id){
+                        endGameCanvas.src = game.players[j].currentBook.pages[game.currRound-1].stringInput;
                         break;
                     }
                 }
