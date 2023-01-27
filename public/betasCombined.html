@@ -15,8 +15,16 @@
             <div align="center">
 
                 <h1>
-                    Welcome to ... (game name)
+                    Welcome to Pictionary Telephone
                 </h1>
+        
+            </div>
+
+            <div align="center">
+
+                <h2>
+                    If you are on a smartphone, please tilt your phone horizontally for the best results
+                </h2>
         
             </div>
             <div align="center">
@@ -50,7 +58,7 @@
                 </h2>
     
                 <p class="description">
-                    Welcome to ...  ...is a drawing version of the classic game, Telephone. 
+                    Welcome to Pictionary Telephone. Pictionary Telephone is a drawing version of the classic game, Telephone. 
                     The game will consist of multiple rounds that are either prompt rounds or 
                     drawing rounds. In the 
                     initial prompt round, players will have to come up with a prompt. Then it will be a drawing round
@@ -349,11 +357,8 @@
                 <h1>
                     Who is going to come up with the best prompt???
                 </h1>
-        
                 
             </div>
-    
-           
     
             <div align = "center">
     
@@ -361,14 +366,11 @@
     
                     Time Remaining: 
     
-                    
-    
                 </h2> 
                 <div class="timerLabel2" id="timerLabel2" >
                     here
                 </div>
-    
-                
+       
             </div>
             <br>
             </br>
@@ -392,7 +394,7 @@
 
 
         <!--End Game Choose Book-->
-        <div id="endgamechoose" style="display:none">
+        <div id="endGameChoose" style="display:none">
             <div align="center">
 
                 <h1>
@@ -407,33 +409,37 @@
            
             <table align="center">
                 <tr>
-                  <td style="padding: 20px;"><div class="box" id="book1"></div></td>
-                  <td style="padding: 20px;"><div class="box" id="book2"></div></td>
-                  <td style="padding: 20px;"><div class="box" id="book3"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book1" onclick="book1Clicked()"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book2" onclick="book2Clicked()"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book3" onclick="book3Clicked()"></div></td>
                 </tr>
                 <tr>
-                  <td style="padding: 20px;"><div class="box" id="book4"></div></td>
-                  <td style="padding: 20px;"><div class="box" id="book5"></div></td>
-                  <td style="padding: 20px;"><div class="box" id="book6"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book4" onclick="book4Clicked()"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book5" onclick="book5Clicked()"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book6" onclick="book6Clicked()"></div></td>
                 </tr>
                 <tr>
-                  <td style="padding: 20px;"><div class="box" id="book7"></div></td>
-                  <td style="padding: 20px;"><div class="box" id="book8"></div></td>
-                  <td style="padding: 20px;"><div class="box" id="book9"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book7" onclick="book7Clicked()"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book8" onclick="book8Clicked()"></div></td>
+                    <td style="padding: 20px;"><div class="box" id="book9" onclick="book9Clicked()"></div></td>
                 </tr>
-              </table>
+            </table>
               
         </div>
 
 
          <!--End Game results-->
-         <div id="endgameresults" style="display:none">
+        <div id="endGameResults" style="display:none">
             <div align="center">
 
                 <h1>
                     Here are the contents from this book
                 </h1>
-                
+
+                <img id="endGameCanvas"
+                    width="1000" height="500">
+                    </img>
+
                 <h2>
                     Did the prompt stay the same? Or is is completely wrong?
                 </h2>
@@ -472,27 +478,31 @@
               waitingNextRoundPage: document.getElementById("waitingNextRoundPage"),
               canvasPage: document.getElementById("canvasPage"),
               mainCanvasPage: document.getElementById("mainCanvasPage"),
-              mainPromptPage: document.getElementById("mainPromptPage")
+              mainPromptPage: document.getElementById("mainPromptPage"),
+              endGameChoose: document.getElementById("endGameChoose"),
+              endGameResults: document.getElementById("endGameResults")
             };
 
             const lobbyIDInput = document.getElementById("lobbyIDInput");
             const usernameInput = document.getElementById("usernameInput");
             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
+
             const playerList = document.getElementById("playerList");
             const playerListPlayer = document.getElementById("playerListPlayer");
             const finishedPlayers = document.getElementById("finishedPlayers");
             const unfinishedPlayers = document.getElementById("unfinishedPlayers");
+
             const mainPromptFinishedPlayers = document.getElementById("mainPromptFinishedPlayers");
             const mainPromptUnfinishedPlayers = document.getElementById("mainPromptUnfinishedPlayers");
             const mainCanvasFinishedPlayers = document.getElementById("mainCanvasFinishedPlayers");
             const mainCanvasUnfinishedPlayers = document.getElementById("mainCanvasUnfinishedPlayers");
+
             const promptValue = document.getElementById("prompt").value;
             const promptToDraw = document.getElementById("promptToDraw");
             const canvasDrawing = document.getElementById('canvas');
             const canvasForPrompt = document.getElementById('canvasForPrompt');
-            //const savedCanvas = canvasDrawing.toObject();
-            //const savedCanvas = new fabric.Image(canvasDrawing);
-            //const promptsQueue = [];
+
+            const endGameCanvas = document.getElementById('endGameCanvas');
             
             
             /* Utility Functions */
@@ -551,13 +561,49 @@
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
                 const canvasDrawing = document.getElementById('canvas');
-                //const savedCanvas = JSON.stringify(canvasDrawing.toDataURL('png'));
-                //const savedCanvas = JSON.stringify(canvasDrawing);
                 const savedCanvas = canvasDrawing.toDataURL('png');
-                //const savedCanvas = canvasDrawing.getObject();
-                //const savedCanvas = new fabric.Image(canvasDrawing);
                 socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value, savedCanvas);
             }
+            
+
+            /* End Game Book Buttons */
+
+            function book1Clicked(){
+                switchView("endGameResults");
+            }
+
+            function book2Clicked(){
+                switchView("endGameResults");
+            }
+
+            function book3Clicked(){
+                switchView("endGameResults");
+            }
+
+            function book4Clicked(){
+                switchView("endGameResults");
+            }
+
+            function book5Clicked(){
+                switchView("endGameResults");
+            }
+
+            function book6Clicked(){
+                switchView("endGameResults");
+            }
+
+            function book7Clicked(){
+                switchView("endGameResults");
+            }
+
+            function book8Clicked(){
+                switchView("endGameResults");
+            }
+
+            function book9Clicked(){
+                switchView("endGameResults");
+            }
+
 
             /* Socket Functionality */
 
@@ -646,6 +692,16 @@
                 }
             });
 
+            //how do we want to call this?
+            socket.on("displayEndGameCanvas", function(game) {
+                for(let j = 0; j < game.numPlayers; j++){
+                    if (game.players[j].socketID == socket.id){
+                        endGameCanvas.src = game.players[j].currentBook.pages[game.currRound-1].stringInput;
+                        break;
+                    }
+                }
+            });
+
             socket.on("playerToWaitingNextRound", function() {
                 switchView("waitingNextRoundPage");
             });
@@ -660,6 +716,14 @@
                 mainCanvasFinishedPlayers.innerHTML = "Cool People with beautiful drawings:<br>";
                 mainCanvasUnfinishedPlayers.innerHTML = "People who draw slow:<br>";
                 switchView("mainCanvasPage");
+            });
+
+            socket.on("playersToEndgame", function() {
+                switchView("mainPage");
+            });
+
+            socket.on("mainToEndgame", function() {
+                switchView("endGameChoose");
             });
 
             // change the status of the timer
