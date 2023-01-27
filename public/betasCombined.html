@@ -203,8 +203,7 @@
             </div>
 
             <textarea name="text" id="prompt" rows="5"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
-            <!-- <input type="text" class="input_prompt" placeholder="Enter Prompt Here" /> -->
-            <button class="enter_button" onclick="enterPromptButtonClicked()">Enter</button>
+            <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked()">Enter</button>
         </div>
 
 
@@ -288,7 +287,7 @@
             <script src="javascript/canvas.js"></script>
 
             <div align="center">
-                <button class="enter_button" onclick="enterCanvasButtonClicked()">I'm done drawing!</button>
+                <button class="enter_button" id="submitCanvas" onclick="enterCanvasButtonClicked()">I'm done drawing!</button>
             </div>
         </div>
 
@@ -316,7 +315,7 @@
     
                 </h2> 
                 <div class="timerLabel3" id="timerLabel3" >
-                    here
+                    1m:0s
                 </div>
     
                 
@@ -540,6 +539,7 @@
 
             // The enter prompt button was clicked
             function enterPromptButtonClicked() {
+                console.log("ptrue");
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
                 const promptValue = document.getElementById("prompt").value;
@@ -623,7 +623,6 @@
 
 
             socket.on("mainToPrompt", function() {
-                console.log("hh");
                 mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>";
                 mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>";
                 switchView("mainPromptPage");
@@ -704,12 +703,12 @@
                             document.getElementById("timerLabel3").innerHTML = "EXPIRED";
                             //figure out how to find what pages are displaying
                             //figure out how to subimt all responses forcefully
-                            if (promptPage.style.display == 'block'){
-                                console.log("ptrue");
+                            if (promptPage.style.display == 'none'){
+                                //document.getElementById('submitPrompt').click();
                                 enterPromptButtonClicked();
                             }
-                            if (canvasPage.style.display == 'block'){
-                                console.log("ctrue");
+                            if (canvasPage.style.display == 'none'){
+                                //document.getElementById('submitCanvas').click();
                                 enterCanvasButtonClicked();
                             }   
 
