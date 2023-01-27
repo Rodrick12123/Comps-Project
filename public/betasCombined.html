@@ -283,16 +283,21 @@
             </div>
 
           <!--Set up canvas & quick version of setting up fabric-->
-            <canvas id="canvas" width="600%" height="400%" style="border:1px solid #000000;"></canvas>
-            <script src="https://cdn.jsdelivr.net/npm/fabric"></script>
-          
-            <label for="colorpicker" style="color:white">Change Color:</label>
-            <input type="color" id="colorpicker" value="#0000ff" oninput="changeColor()">
-          
-            <label for="sizepicker" style="color:white">Change Brush Size:</label>
-            <input type="number" id="sizepicker" min="1" value="5" oninput="changeSize()">
-          
-            <script src="javascript/canvas.js"></script>
+            <div align="center">
+
+                <canvas id="canvas" width="600%" height="400%" style="border:1px solid #000000;"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/fabric"></script>
+                
+                <label for="colorpicker" style="color:white">Change Color:</label>
+                <input type="color" id="colorpicker" value="#0000ff" oninput="changeColor()">
+                
+                <label for="sizepicker" style="color:white">Change Brush Size:</label>
+                <input type="number" id="sizepicker" min="1" value="5" oninput="changeSize()">
+                
+                <script src="javascript/canvas.js"></script>
+
+            </div>  
+                    
 
             <div align="center">
                 <button class="enter_button" id="submitCanvas" onclick="enterCanvasButtonClicked()">I'm done drawing!</button>
