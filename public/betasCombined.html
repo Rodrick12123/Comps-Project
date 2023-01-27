@@ -368,7 +368,7 @@
     
                 </h2> 
                 <div class="timerLabel2" id="timerLabel2" >
-                    here
+                    1m:0s
                 </div>
        
             </div>
@@ -739,7 +739,7 @@
                 document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
                 
                 if (game.timerStatus == true){
-                    startDate = new Date();
+                    //startDate = new Date();
                     startDate.setMinutes(startDate.getMinutes() + 1);
                     var x = setInterval(function() {
 
@@ -779,8 +779,8 @@
                         }
                     }, 1000);
                 } else {
-                    //startDate = new Date();
-                    //startDate.setSeconds(startDate.getSeconds() + 60);
+                    startDate = new Date();
+                    startDate.setMinutes(startDate.getMinutes() + 1);
                     document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
                     document.getElementById("timerLabel2").innerHTML = 1 + "m " + 0 + "s ";
                     document.getElementById("timerLabel3").innerHTML = 1 + "m " + 0 + "s ";

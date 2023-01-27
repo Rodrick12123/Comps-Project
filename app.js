@@ -183,22 +183,22 @@ io.on('connection', function(socket){
                 
                 if (games[i].numPlayersInWaitRoom == games[i].numPlayers){
                     games[i].timerStatus = false;
+                    io.emit('timeStatus', games[i]);
                     socket.emit("timerStart", games[i]);
                     
-                    io.emit('timeStatus', games[i]);
                     swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound()+1);
                     io.emit('displayPrompt', games[i]);
                     io.in(lobbyID).emit("playerToCanvas");
                     io.to(games[i].socketID).emit("mainToCanvas");
-                    
 
                     games[i].timerStatus = true;
                     
                     io.emit('timeStatus', games[i]);
+                    socket.emit("timerStart", games[i]);
                     games[i].numPlayersInWaitRoom = 0;
                     games[i].finishedPlayers = [];
-                    socket.emit("timerStart", games[i]);
+                    
                     break;
                 }
                 else{
