@@ -252,6 +252,11 @@ io.on('connection', function(socket){
         }
     });
 
+    socket.on("timerFinished", function() {
+        //for players who haven't entered canvas/prompt
+            //emit canvasEntered/promptEntered for those players
+    });
+
     socket.on("getPlayerNames", function(players) {
         //could maybe have player array at the top of the class
         var playerNames = [];
