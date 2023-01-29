@@ -269,6 +269,18 @@ io.on('connection', function(socket){
         io.in(players[0].gameLobbyID).emit("showPlayerNames", playerNames);
     });
 
+    socket.on("bookClicked", function(playerNum, lobbyID) {
+        lobbyID = lobbyID.trim();
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].lobbyID == lobbyID){
+                currPlayer = games[i].players[playerNum-1];
+                initialPrompt = currPlayer.startBook.pages[0].getStringInput();
+                socket.emit("mainToBookResults");
+                socket.emit("displayEndGamePrompt", initialPrompt);
+            }
+        }
+    });
+
 });
 
 

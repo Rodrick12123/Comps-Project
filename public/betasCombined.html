@@ -574,39 +574,48 @@
             /* End Game Book Buttons */
 
             function book1Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 1, lobbyIDInput);
             }
 
             function book2Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 2, lobbyIDInput);
             }
 
             function book3Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 3, lobbyIDInput);
             }
 
             function book4Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 4, lobbyIDInput);
             }
 
             function book5Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 5, lobbyIDInput);
             }
 
             function book6Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 6, lobbyIDInput);
             }
 
             function book7Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 7, lobbyIDInput);
             }
 
             function book8Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 8, lobbyIDInput);
             }
 
             function book9Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 9, lobbyIDInput);
             }
 
 
@@ -729,6 +738,14 @@
 
             socket.on("mainToEndgame", function() {
                 switchView("endGameChoose");
+            });
+
+            socket.on("mainToBookResults", function() {
+                switchView("endGameResults")
+            });
+
+            socket.on("displayEndGamePrompt", function(prompt) {
+                // Don't have a prompt display page yet.
             });
 
             // change the status of the timer
