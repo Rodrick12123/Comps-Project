@@ -183,19 +183,17 @@
                 <h1>
                     Welcome to the Game Lobby!
                 </h1>
-        
-            </div>
-    
-            <div class = "playerWaitingText">
-               
-                <h2>Waiting Room:</h2>
-            
-            </div>
-            
-    
-            <div class="lobbybox" id="playerListPlayer">
+
+                <div class = "playerWaitingText">
                 
+                    <h2>Waiting Room:</h2>
+                
+                
+                </div>
+
+                <div class="lobbybox" id="playerListPlayer"></div>
             </div>
+            
         </div>
     
 
@@ -205,13 +203,16 @@
             <div align="center">
                 <h2>
                     <img id="canvasForPrompt" alt="Text for giving prompt inspiration"
-                    width="1000" height="500">
+                    width="600%" height="400%">
                     </img>
                 </h2>
             </div>
 
-            <textarea name="text" id="prompt" rows="5"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
-            <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked()">Enter</button>
+            <div align="center">
+                <textarea name="text" id="prompt" rows="10"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
+                <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked()">Enter</button>
+            </div>
+            
         </div>
 
 
