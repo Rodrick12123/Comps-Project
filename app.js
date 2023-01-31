@@ -317,8 +317,6 @@ io.on('connection', function(socket){
     });
 
     socket.on("timerFinishedPrompt", function(lobbyID) {
-        console.log(prompt)
-        lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++;
