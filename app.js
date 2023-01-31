@@ -144,7 +144,7 @@ io.on('connection', function(socket){
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
                 if (games[i].host.getReadyToStart()) {
-                    games[i].setCurrRound(1)
+                    games[i].setCurrRound(0)
                     games[i].timerStatus = true;
                     // console.log(games[i].timerStatus);
                     // console.log('games[i].timerStatus');
@@ -244,7 +244,7 @@ io.on('connection', function(socket){
                         io.to(games[i].socketID).emit("mainToEndgame");
                         break;
                     }
-                    io.in(lobbyID).emit("playerToPrompt");
+                    io.in(lobbyID).emit("playerToPromptWithCanvas");
                     io.to(games[i].socketID).emit("mainToPrompt");
                     games[i].numPlayersInWaitRoom = 0;
                     games[i].finishedPlayers = [];
@@ -294,7 +294,7 @@ io.on('connection', function(socket){
                         io.to(games[i].socketID).emit("mainToEndgame");
                         break;
                     }
-                    io.in(lobbyID).emit("playerToPrompt");
+                    io.in(lobbyID).emit("playerToPromptWithCanvas");
                     io.to(games[i].socketID).emit("mainToPrompt");
                     games[i].numPlayersInWaitRoom = 0;
                     games[i].finishedPlayers = [];
@@ -379,13 +379,38 @@ io.on('connection', function(socket){
     });
 
     socket.on("bookClicked", function(playerNum, lobbyID) {
-        lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 currPlayer = games[i].players[playerNum-1];
                 initialPrompt = currPlayer.startBook.pages[0].getStringInput();
                 socket.emit("mainToBookResults");
-                socket.emit("displayEndGamePrompt", initialPrompt);
+                socket.emit("displayEndGamePrompt", initialPrompt, currPlayer.username);
+            }
+        }
+    });
+
+    socket.on("promptRightArrowClicked", function(lobbyID, playerUsername) {
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].lobbyID == lobbyID){
+                for (let j = 0; j < games[i].players.length; j++){
+                    if (games[i].players[j].username == playerUsername){
+                        currPlayer = games[i].players[j];
+                    }
+                }
+                socket.emit("displayEndGameCanvas", games[i], currPlayer.username);
+            }
+        }
+    });
+
+    socket.on("canvasRightArrowClicked", function(lobbyID, playerUsername) {
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].lobbyID == lobbyID){
+                for (let j = 0; j < games[i].players.length; j++){
+                    if (games[i].players[j].username == playerUsername){
+                        currPlayer = games[i].players[j];
+                    }
+                }
+                socket.emit("displayEndGamePrompt", games[i], currPlayer.username);
             }
         }
     });
