@@ -383,35 +383,39 @@ io.on('connection', function(socket){
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
                 currPlayer = games[i].players[playerNum-1];
-                games[i].host.currResultPage += 1;
+                games[i].host.currResultPage += 1; 
+                console.log("page " + games[i].host.currResultPage);
+                games[i].host.currPlayerBook = playerNum;
                 initialPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].stringInput;
                 socket.emit("displayEndGamePrompt", currPlayer, initialPrompt);
             }
         }
     });
 
-    socket.on("promptRightArrowClicked", function(lobbyID, playerUsername) {
+    socket.on("promptRightArrowClicked", function(socketID) {
         for (let i = 0; i < games.length; i++) {
-            if (games[i].lobbyID == lobbyID){
-                for (let j = 0; j < games[i].players.length; j++){
-                    if (games[i].players[j].username == playerUsername){
-                        currPlayer = games[i].players[j];
-                    }
-                }
-                socket.emit("displayEndGameCanvas", games[i], currPlayer.username);
+            if (games[i].socketID == socketID){
+                currPlayer = games[i].players[games[i].host.currPlayerBook-1];
+                games[i].host.currResultPage += 1;
+                console.log("page " + games[i].host.currResultPage);
+                socket.emit("displayEndGameCanvas", games[i], currPlayer);
             }
         }
     });
 
-    socket.on("canvasRightArrowClicked", function(lobbyID, playerUsername) {
+    socket.on("canvasRightArrowClicked", function(socketID) {
         for (let i = 0; i < games.length; i++) {
-            if (games[i].lobbyID == lobbyID){
-                for (let j = 0; j < games[i].players.length; j++){
-                    if (games[i].players[j].username == playerUsername){
-                        currPlayer = games[i].players[j];
-                    }
+            if (games[i].socketID == socketID){
+                currPlayer = games[i].players[games[i].host.currPlayerBook-1];
+                games[i].host.currResultPage += 1;
+                if (games[i].host.currResultPage >= games[i].maxRounds) {
+                    games[i].host.currResultPage = 0;
+                    socket.emit("mainToEndgame");
+                    break;
                 }
-                socket.emit("displayEndGamePrompt", games[i], currPlayer.username);
+                console.log("page " + games[i].host.currResultPage);
+                currPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].stringInput;
+                socket.emit("displayEndGamePrompt", currPlayer, currPrompt);
             }
         }
     });

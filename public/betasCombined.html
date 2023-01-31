@@ -460,10 +460,12 @@
             <div align="center">
 
                 <h1>
-                    <div class="text" id="playerBookCanvas">
-                        
-                    </div>
+                    <div class="text" id="playerBookCanvas"></div>
                 </h1>
+
+                <!-- <h2>
+                    <div class="text" id="drawnBy"></div>
+                </h2> -->
         
             </div>
            
@@ -483,10 +485,12 @@
             <div align="center">
 
                 <h1>
-                    <div class="text" id="playerBookPrompt">
-                        
-                    </div>
+                    <div class="text" id="playerBookPrompt"></div>
                 </h1>
+
+                <!-- <h2>
+                    <div class="text" id="writtenBy"></div>
+                </h2> -->
         
             </div>
            
@@ -566,7 +570,6 @@
             const canvasDrawing = document.getElementById('canvas');
             const canvasForPrompt = document.getElementById('canvasForPrompt');
 
-            const playerBookCanvas = document.getElementById("playerBookCanvas");
             const endGameCanvas = document.getElementById('endGameCanvas');
             const resultsPrompt = document.getElementById("resultsPrompt");
             const promptRightArrow = document.getElementById("promptRightArrow");
@@ -684,13 +687,11 @@
             /* Results Page Navigation */
 
             function promptRightArrowClicked() {
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("promptRightArrowClicked", lobbyIDInput, playerBook);
+                socket.emit("promptRightArrowClicked", socket.id);
             }
 
             function canvasRightArrowClicked() {
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("canvasRightArrowClicked", lobbyIDInput, playerBook);
+                socket.emit("canvasRightArrowClicked", socket.id);
             }
 
 
@@ -812,15 +813,11 @@
             });
 
             //how do we want to call this?
-            socket.on("displayEndGameCanvas", function(game, username) {
+            socket.on("displayEndGameCanvas", function(game, player) {
                 switchView("endGameCanvasResults");
-                for(let j = 0; j < game.numPlayers; j++){
-                    if (game.players[j].socketID == socket.id){
-                        endGameCanvas.src = game.players[j].currentBook.pages[game.currRound-1].stringInput;
-                        break;
-                    }
-                }
-                playerBookCanvas.textContent = username;
+                const playerBookCanvas = document.getElementById("playerBookCanvas");
+                playerBookCanvas.innerHTML = player.username + '\'s Book';
+                endGameCanvas.src = player.currentBook.pages[game.host.currResultPage].stringInput;
             });
 
             socket.on("displayEndGamePrompt", function(player, prompt) {
