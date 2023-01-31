@@ -149,9 +149,9 @@ min-width: 80px;
 
 .gamedescrip {
 
-margin-left: 25%;
+margin-left: 10%;
 word-wrap: break-word;
-width: 50%;
+width: 85%;
 
 
 }
@@ -162,6 +162,9 @@ font-family: 'Times New Roman', Times, serif;
 font-size: 14pt;
 font-weight: bolder;
 color: rgb(255, 251, 251);
+margin:0;
+padding:0;
+
 }
 
 .serverlobby {
