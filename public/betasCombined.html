@@ -451,50 +451,34 @@
         </div>
 
 
-         <!--End Game cancvas results-->
-        <div id="endGameResults" style="display:none">
+         <!--End Game canvas results-->
+        <div id="endGameCanvasResults" style="display:none">
             <div align="center">
 
                 <h1>
-                    Here are the contents from this book
+                    Here is the drawing from <span id="playerBook"></span>'s book
                 </h1>
-
-                <img id="endGameCanvas"
-                    width="1000" height="500">
-                    </img>
-
-                <h2>
-                    Did the prompt stay the same? Or is is completely wrong?
-                </h2>
         
             </div>
            
             <div class="container">
                 <button class="arrow-button left">&lt;</button>
-                <div class="box2">
-                  <!-- content for the big box goes here -->
-                </div>
-                <button class="arrow-button right">&gt;</button>
+                <img id="endGameCanvas"
+                    width="1000" height="500">
+                </img>
+                <button class="arrow-button right" id="canvasRightArrow" onclick="canvasRightArrowClicked()">&gt;</button>
               </div>
               
         </div>
 
 
          <!--End Game prompt results-->
-        <div id="endGameResults" style="display:none">
+        <div id="endGamePromptResults" style="display:none">
             <div align="center">
 
                 <h1>
-                    Here are the contents from this book
+                    Here are the contents from <span id="playerBook"></span>'s book
                 </h1>
-
-                <img id="endGameCanvas"
-                    width="1000" height="500">
-                    </img>
-
-                <h2>
-                    Did the prompt stay the same? Or is is completely wrong?
-                </h2>
         
             </div>
            
@@ -502,18 +486,18 @@
                 <button class="arrow-button left">&lt;</button>
                 <div align="center">
                     <h2>
-                        <div class="text" id="promptToDraw">
+                        <div class="text" id="resultsPrompt">
                             Prompt
                         </div>
                     </h2>
                 </div>
-                <button class="arrow-button right">&gt;</button>
+                <button class="arrow-button right" id="promptRightArrow" onclick="promptRightArrowClicked()">&gt;</button>
               </div>
               
         </div>
 
          <!--End Game PLAYER PAGE-->
-        <div id="endGameResults" style="display:none">   
+        <div id="playerEndGameResults" style="display:none">   
             <div align="center">
 
                 <h1>
@@ -544,12 +528,15 @@
               lobbyPage: document.getElementById("lobbyPage"),
               playerLobbyPage: document.getElementById("playerLobbyPage"),
               promptPage: document.getElementById("promptPage"),
+              promptPageWithCanvas: document.getElementById("promptPageWithCanvas"),
               waitingNextRoundPage: document.getElementById("waitingNextRoundPage"),
               canvasPage: document.getElementById("canvasPage"),
               mainCanvasPage: document.getElementById("mainCanvasPage"),
               mainPromptPage: document.getElementById("mainPromptPage"),
               endGameChoose: document.getElementById("endGameChoose"),
-              endGameResults: document.getElementById("endGameResults")
+              endGamePromptResults: document.getElementById("endGamePromptResults"),
+              endGameCanvasResults: document.getElementById("endGameCanvasResults"),
+              playerEndGameResults: document.getElementById("playerEndGameResults")
             };
 
             const lobbyIDInput = document.getElementById("lobbyIDInput");
@@ -571,7 +558,11 @@
             const canvasDrawing = document.getElementById('canvas');
             const canvasForPrompt = document.getElementById('canvasForPrompt');
 
+            const playerBook = document.getElementById("playerBook");
             const endGameCanvas = document.getElementById('endGameCanvas');
+            const resultsPrompt = document.getElementById("resultsPrompt");
+            const promptRightArrow = document.getElementById("promptRightArrow");
+            const canvasRightArrow = document.getElementById("canvasRightArrow");
             
             
             /* Utility Functions */
@@ -682,6 +673,18 @@
                 socket.emit("bookClicked", 9, lobbyIDInput);
             }
 
+            /* Results Page Navigation */
+
+            function promptRightArrowClicked() {
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("promptRightArrowClicked", lobbyIDInput, playerBook);
+            }
+
+            function canvasRightArrowClicked() {
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("canvasRightArrowClicked", lobbyIDInput, playerBook);
+            }
+
 
             /* Socket Functionality */
 
@@ -746,6 +749,12 @@
             });
 
 
+            socket.on("playerToPromptWithCanvas", function() {
+                document.getElementById("prompt").value = "";
+                switchView("promptPageWithCanvas");
+            });
+
+
             socket.on("mainToPrompt", function() {
                 mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>";
                 mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>";
@@ -770,16 +779,6 @@
                 }
             });
 
-            //how do we want to call this?
-            socket.on("displayEndGameCanvas", function(game) {
-                for(let j = 0; j < game.numPlayers; j++){
-                    if (game.players[j].socketID == socket.id){
-                        endGameCanvas.src = game.players[j].currentBook.pages[game.currRound-1].stringInput;
-                        break;
-                    }
-                }
-            });
-
             socket.on("playerToWaitingNextRound", function() {
                 switchView("waitingNextRoundPage");
             });
@@ -797,14 +796,31 @@
             });
 
             socket.on("playersToEndgame", function() {
-                switchView("mainPage");
+                switchView("playerEndGameResults");
             });
 
             socket.on("mainToEndgame", function() {
                 switchView("endGameChoose");
             });
 
-            
+            //how do we want to call this?
+            socket.on("displayEndGameCanvas", function(game, username) {
+                switchView("endGameCanvasResults");
+                for(let j = 0; j < game.numPlayers; j++){
+                    if (game.players[j].socketID == socket.id){
+                        endGameCanvas.src = game.players[j].currentBook.pages[game.currRound-1].stringInput;
+                        break;
+                    }
+                }
+                playerBook.textContent = username;
+            });
+
+            socket.on("displayEndGamePrompt", function(prompt, username) {
+                switchView("endGamePromptResults");
+                playerBook.textContent = username;
+                resultsPrompt.innerHTML = prompt;
+            });
+
             socket.on("timerStart", function(game, page, start) {
                 //console.log("here");
                 //var startDate = new Date();
