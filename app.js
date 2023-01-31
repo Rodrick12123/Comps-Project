@@ -154,7 +154,7 @@ io.on('connection', function(socket){
                     //change
                     var startDate = new Date();
                     //io.to(games[i].socketID).emit("timerStart", games[i], "start", startDate);
-                    socket.emit("timerStart", games[i], "start", startDate);
+                    io.to(games[i].socketID).emit("timerStart", games[i], "start", startDate);
                     //io.in(lobbyID).emit("timerStart", games[i], "start", startDate);
                     break;
                 }
@@ -167,7 +167,7 @@ io.on('connection', function(socket){
 
 
     socket.on('promptEntered', function(username, lobbyID, prompt){
-        console.log(prompt)
+        
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
@@ -266,12 +266,12 @@ io.on('connection', function(socket){
     });
 
     socket.on("timerFinishedCanvas", function(lobbyID) {
-        lobbyID = lobbyID.trim();
+        //lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 
                 for(let j = 0; j < games[i].numPlayers; j++){
-                    if (!(games[i].finishedPlayers.includes(games[i].players[j].socketID, 0))){
+                    if (!(games[i].finishedPlayers.includes(games[i].players[j].socketID))){
                         games[i].numPlayersInWaitRoom++;
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
                         //what should the drawing be?
@@ -317,14 +317,16 @@ io.on('connection', function(socket){
     });
 
     socket.on("timerFinishedPrompt", function(lobbyID) {
-        console.log(prompt)
-        lobbyID = lobbyID.trim();
+        
+        //lobbyID = lobbyID.trim();
+        console.log('here');
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++;
                 playerNum = 0;
                 for(let j = 0; j < games[i].numPlayers; j++){
-                    if (!(games[i].finishedPlayers.includes(games[i].players[j].socketID, 0))){
+                    console.log(games[i].players[j].socketID, games[i].finishedPlayers);
+                    if (!(games[i].finishedPlayers.includes(games[i].players[j].socketID))){
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
                         games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
                         games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
