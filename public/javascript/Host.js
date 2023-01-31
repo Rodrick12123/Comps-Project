@@ -3,6 +3,7 @@
 class Host {
     constructor() {
         this.readyToStart = false;
+        this.currResultPage = 0;
     }
 
     setReadyToStart(trueOrFalse) {

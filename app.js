@@ -383,8 +383,8 @@ io.on('connection', function(socket){
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
                 currPlayer = games[i].players[playerNum-1];
-                initialPrompt = currPlayer.startBook.pages[1].stringInput;
-                console.log(initialPrompt + "x");
+                games[i].host.currResultPage += 1;
+                initialPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].stringInput;
                 socket.emit("displayEndGamePrompt", currPlayer, initialPrompt);
             }
         }
