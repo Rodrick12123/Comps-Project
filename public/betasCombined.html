@@ -183,19 +183,17 @@
                 <h1>
                     Welcome to the Game Lobby!
                 </h1>
-        
-            </div>
-    
-            <div class = "playerWaitingText">
-               
-                <h2>Waiting Room:</h2>
-            
-            </div>
-            
-    
-            <div class="lobbybox" id="playerListPlayer">
+
+                <div class = "playerWaitingText">
                 
+                    <h2>Waiting Room:</h2>
+                
+                
+                </div>
+
+                <div class="lobbybox" id="playerListPlayer"></div>
             </div>
+            
         </div>
     
 
@@ -205,13 +203,16 @@
             <div align="center">
                 <h2>
                     <img id="canvasForPrompt" alt="Text for giving prompt inspiration"
-                    width="1000" height="500">
+                    width="600%" height="400%">
                     </img>
                 </h2>
             </div>
 
-            <textarea name="text" id="prompt" rows="5"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
-            <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked()">Enter</button>
+            <div align="center">
+                <textarea name="text" id="prompt" rows="10"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
+                <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked()">Enter</button>
+            </div>
+            
         </div>
 
 
@@ -283,16 +284,21 @@
             </div>
 
           <!--Set up canvas & quick version of setting up fabric-->
-            <canvas id="canvas" width="1000" height="500" style="border:1px solid #000000;"></canvas>
-            <script src="https://cdn.jsdelivr.net/npm/fabric"></script>
-          
-            <label for="colorpicker" style="color:white">Change Color:</label>
-            <input type="color" id="colorpicker" value="#0000ff" oninput="changeColor()">
-          
-            <label for="sizepicker" style="color:white">Change Brush Size:</label>
-            <input type="number" id="sizepicker" min="1" value="5" oninput="changeSize()">
-          
-            <script src="javascript/canvas.js"></script>
+            <div align="center">
+
+                <canvas id="canvas" width="600%" height="400%" style="border:1px solid #000000;"></canvas>
+                <script src="https://cdn.jsdelivr.net/npm/fabric"></script>
+                
+                <label for="colorpicker" style="color:white">Change Color:</label>
+                <input type="color" id="colorpicker" value="#0000ff" oninput="changeColor()">
+                
+                <label for="sizepicker" style="color:white">Change Brush Size:</label>
+                <input type="number" id="sizepicker" min="1" value="5" oninput="changeSize()">
+                
+                <script src="javascript/canvas.js"></script>
+
+            </div>  
+                    
 
             <div align="center">
                 <button class="enter_button" id="submitCanvas" onclick="enterCanvasButtonClicked()">I'm done drawing!</button>
@@ -569,39 +575,48 @@
             /* End Game Book Buttons */
 
             function book1Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 1, lobbyIDInput);
             }
 
             function book2Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 2, lobbyIDInput);
             }
 
             function book3Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 3, lobbyIDInput);
             }
 
             function book4Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 4, lobbyIDInput);
             }
 
             function book5Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 5, lobbyIDInput);
             }
 
             function book6Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 6, lobbyIDInput);
             }
 
             function book7Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 7, lobbyIDInput);
             }
 
             function book8Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 8, lobbyIDInput);
             }
 
             function book9Clicked(){
-                switchView("endGameResults");
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                socket.emit("bookClicked", 9, lobbyIDInput);
             }
 
 
@@ -766,20 +781,31 @@
                             document.getElementById("timerLabel3").innerHTML = "EXPIRED";
                             //figure out how to find what pages are displaying
                             //figure out how to subimt all responses forcefully
+                            const lobbyIDInput = document.getElementById("lobbyIDInput");
                             if (page == 'prompt'){
                                 //document.getElementById('submitPrompt').click();
-                                enterPromptButtonClicked();
+                                socket.emit("timerFinishedPrompt", lobbyIDInput);
                             }
                             if (page == 'canvas'){
                                 //document.getElementById('submitCanvas').click();
-                                enterCanvasButtonClicked();
+                                socket.emit("timerFinishedCanvas", lobbyIDInput);
                             }   
 
                         }
                     } else{
                         //console.log('here');
                         clearInterval(x);
-                        
+                        const lobbyID = document.getElementById("lobbyIDInput");
+                        if (page == 'prompt'){
+                            //document.getElementById('submitPrompt').click();
+                            socket.emit("timerFinishedPrompt", lobbyID);
+                            //enterPromptButtonClicked();
+                        }
+                        if (page == 'canvas'){
+                            //document.getElementById('submitCanvas').click();
+                            socket.emit("timerFinishedCanvas", lobbyID);
+                            //enterCanvasButtonClicked();
+                        } 
                         //startDate = new Date();
                         //startDate.setMinutes(startDate.getMinutes() + 1);
                         //document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
@@ -788,8 +814,6 @@
                     }
                 }, 1000);
             });
-            
-            //original timer loc
             
 
         </script>

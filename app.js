@@ -265,9 +265,106 @@ io.on('connection', function(socket){
         }
     });
 
-    socket.on("timerFinished", function() {
-        //for players who haven't entered canvas/prompt
-            //emit canvasEntered/promptEntered for those players
+    socket.on("timerFinishedCanvas", function(lobbyID) {
+        lobbyID = lobbyID.trim();
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].lobbyID == lobbyID){
+                
+                for(let j = 0; j < games[i].numPlayers; j++){
+                    if (!(games[i].finishedPlayers.includes(games[i].players[j].socketID, 0))){
+                        games[i].numPlayersInWaitRoom++;
+                        games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
+                        //what should the drawing be?
+                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(drawing);//.toString());
+                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
+                        break;
+                    }
+                }
+                if (games[i].numPlayersInWaitRoom >= games[i].numPlayers){
+                    //games[i].timerStatus = false;
+                    
+                    //var startDate = new Date();
+                    //figure out what page dis add parameter
+                    //io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);
+                    swapBooks(games[i]);
+                    games[i].setCurrRound(games[i].getCurrRound()+1);
+                    io.emit('displayCanvas', games[i]);
+                    if (games[i].getCurrRound() >= games[i].maxRounds) {
+                        io.in(lobbyID).emit("playersToEndgame");
+                        io.to(games[i].socketID).emit("mainToEndgame");
+                        break;
+                    }
+                    io.in(lobbyID).emit("playerToPrompt");
+                    io.to(games[i].socketID).emit("mainToPrompt");
+                    games[i].numPlayersInWaitRoom = 0;
+                    games[i].finishedPlayers = [];
+                    //games[i].timerStatus = true;
+                    
+                    //startDate = new Date();
+                    //console.log(startDate, 'out');
+                    //io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);
+                    break;
+                }
+                else{
+                    io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames); // All the players are already in this list so it tries to display them all
+                    io.to(games[i].socketID).emit("mainCanvasFinishedList", games[i].finishedPlayers, games[i].usernames);
+                    io.to(socket.id).emit('playerToWaitingNextRound');
+                    break;
+                }
+            }
+        }
+
+    });
+
+    socket.on("timerFinishedPrompt", function(lobbyID) {
+        console.log(prompt)
+        lobbyID = lobbyID.trim();
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].lobbyID == lobbyID){
+                games[i].numPlayersInWaitRoom++;
+                playerNum = 0;
+                for(let j = 0; j < games[i].numPlayers; j++){
+                    if (!(games[i].finishedPlayers.includes(games[i].players[j].socketID, 0))){
+                        games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
+                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
+                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
+                        playerNum = j;
+                        break;
+                    }
+                }
+                
+                if (games[i].numPlayersInWaitRoom == games[i].numPlayers){
+                    //games[i].timerStatus = false;
+                    //var startDate = new Date();
+                    //figure out what page dis add parameter
+                    //io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate);
+                    //io.emit("timerStart", games[i], "prompt", startDate);
+
+                    swapBooks(games[i]);
+                    games[i].setCurrRound(games[i].getCurrRound()+1);
+                    io.emit('displayPrompt', games[i]);
+                    //use this for timer
+                    io.in(lobbyID).emit("playerToCanvas");
+                    io.to(games[i].socketID).emit("mainToCanvas");
+
+                    //games[i].timerStatus = true;
+                    //startDate = new Date();
+                    //console.log(startDate, 'out');
+                    //io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate);
+                    //io.emit("timerStart", games[i], "prompt", startDate);
+                    games[i].numPlayersInWaitRoom = 0;
+                    games[i].finishedPlayers = [];
+                    
+                    break;
+                }
+                else{
+                    io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames);
+                    io.to(games[i].socketID).emit("mainPromptFinishedList", games[i].finishedPlayers, games[i].usernames);
+                    io.to(socket.id).emit('playerToWaitingNextRound');
+                    break;
+                }
+            }
+        }
     });
 
     socket.on("getPlayerNames", function(players) {
@@ -277,6 +374,18 @@ io.on('connection', function(socket){
             playerNames.push(players[i].username);
         }
         io.in(players[0].gameLobbyID).emit("showPlayerNames", playerNames);
+    });
+
+    socket.on("bookClicked", function(playerNum, lobbyID) {
+        lobbyID = lobbyID.trim();
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].lobbyID == lobbyID){
+                currPlayer = games[i].players[playerNum-1];
+                initialPrompt = currPlayer.startBook.pages[0].getStringInput();
+                socket.emit("mainToBookResults");
+                socket.emit("displayEndGamePrompt", initialPrompt);
+            }
+        }
     });
 
 });
