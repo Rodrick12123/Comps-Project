@@ -382,11 +382,10 @@ io.on('connection', function(socket){
     socket.on("bookClicked", function(playerNum, socketID) {
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
-                console.log("hello");
                 currPlayer = games[i].players[playerNum-1];
-                initialPrompt = currPlayer.startBook.pages[0].getStringInput();
-                socket.emit("mainToBookResults");
-                socket.emit("displayEndGamePrompt", initialPrompt, currPlayer.username);
+                initialPrompt = currPlayer.startBook.pages[1].stringInput;
+                console.log(initialPrompt + "x");
+                socket.emit("displayEndGamePrompt", currPlayer, initialPrompt);
             }
         }
     });

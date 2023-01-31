@@ -460,7 +460,9 @@
             <div align="center">
 
                 <h1>
-                    Here is the drawing from <span id="playerBook"></span>'s book
+                    <div class="text" id="playerBookCanvas">
+                        
+                    </div>
                 </h1>
         
             </div>
@@ -481,7 +483,9 @@
             <div align="center">
 
                 <h1>
-                    Here are the contents from <span id="playerBook"></span>'s book
+                    <div class="text" id="playerBookPrompt">
+                        
+                    </div>
                 </h1>
         
             </div>
@@ -562,7 +566,7 @@
             const canvasDrawing = document.getElementById('canvas');
             const canvasForPrompt = document.getElementById('canvasForPrompt');
 
-            const playerBook = document.getElementById("playerBook");
+            const playerBookCanvas = document.getElementById("playerBookCanvas");
             const endGameCanvas = document.getElementById('endGameCanvas');
             const resultsPrompt = document.getElementById("resultsPrompt");
             const promptRightArrow = document.getElementById("promptRightArrow");
@@ -816,12 +820,13 @@
                         break;
                     }
                 }
-                playerBook.textContent = username;
+                playerBookCanvas.textContent = username;
             });
 
-            socket.on("displayEndGamePrompt", function(prompt, username) {
+            socket.on("displayEndGamePrompt", function(player, prompt) {
                 switchView("endGamePromptResults");
-                playerBook.textContent = username;
+                const playerBookPrompt = document.getElementById("playerBookPrompt");
+                playerBookPrompt.innerHTML = player.username + '\'s Book';
                 resultsPrompt.innerHTML = prompt;
             });
 
