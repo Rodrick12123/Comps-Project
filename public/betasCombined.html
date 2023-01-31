@@ -812,7 +812,7 @@
                 document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
 
                 startDate.setMinutes(startDate.getMinutes() + 1);
-                console.log(startDate, 'in');
+                console.log(page, 'in');
                 var x = setInterval(function() {
                     console.log(game.timerStatus, 'stat');
                     if (game.timerStatus == true){
@@ -831,9 +831,17 @@
                         var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
                         // display the results
-                        document.getElementById("timerLabel1").innerHTML = minutes + "m " + seconds + "s ";
-                        document.getElementById("timerLabel2").innerHTML = minutes + "m " + seconds + "s ";
-                        document.getElementById("timerLabel3").innerHTML = minutes + "m " + seconds + "s ";
+                        page = page.trim();
+                        if(page == 'start'){
+                            document.getElementById("timerLabel1").innerHTML = minutes + "m " + seconds + "s ";
+                        } else if(page == 'prompt'){
+                            document.getElementById("timerLabel2").innerHTML = minutes + "m " + seconds + "s ";
+                        } else{
+                            document.getElementById("timerLabel3").innerHTML = minutes + "m " + seconds + "s ";
+                        }
+                        //document.getElementById("timerLabel1").innerHTML = minutes + "m " + seconds + "s ";
+                        //document.getElementById("timerLabel2").innerHTML = minutes + "m " + seconds + "s ";
+                        //document.getElementById("timerLabel3").innerHTML = minutes + "m " + seconds + "s ";
                         //All entries are subimited when time =0
                         if (timeLeft < 0) {
                             clearInterval(x);
@@ -845,6 +853,7 @@
                             //figure out how to find what pages are displaying
                             //figure out how to subimt all responses forcefully
                             const lobbyIDInput = document.getElementById("lobbyIDInput");
+                            page = page.trim();
                             if (page == 'prompt'){
                                 //document.getElementById('submitPrompt').click();
                                 socket.emit("timerFinishedPrompt", lobbyIDInput);
