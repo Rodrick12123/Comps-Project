@@ -796,6 +796,7 @@
                         //console.log('here');
                         clearInterval(x);
                         const lobbyID = document.getElementById("lobbyIDInput");
+                        page = page.trim();
                         if (page == 'prompt'){
                             //document.getElementById('submitPrompt').click();
                             socket.emit("timerFinishedPrompt", lobbyID);
