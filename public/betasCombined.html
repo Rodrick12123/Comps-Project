@@ -434,19 +434,19 @@
            
             <table align="center">
                 <tr>
-                    <td style="padding: 20px;"><div class="box" id="book1" onclick="book1Clicked()"></div></td>
-                    <td style="padding: 20px;"><div class="box" id="book2" onclick="book2Clicked()"></div></td>
-                    <td style="padding: 20px;"><div class="box" id="book3" onclick="book3Clicked()"></div></td>
+                    <td style="padding: 20px;"><button class="box" id="book1" onclick="book1Clicked()"></button></td>
+                    <td style="padding: 20px;"><button class="box" id="book2" onclick="book2Clicked()"></button></td>
+                    <td style="padding: 20px;"><button class="box" id="book3" onclick="book3Clicked()"></button></td>
                 </tr>
                 <tr>
-                    <td style="padding: 20px;"><div class="box" id="book4" onclick="book4Clicked()"></div></td>
-                    <td style="padding: 20px;"><div class="box" id="book5" onclick="book5Clicked()"></div></td>
-                    <td style="padding: 20px;"><div class="box" id="book6" onclick="book6Clicked()"></div></td>
+                    <td style="padding: 20px;"><button class="box" id="book4" onclick="book4Clicked()"></button></td>
+                    <td style="padding: 20px;"><button class="box" id="book5" onclick="book5Clicked()"></button></td>
+                    <td style="padding: 20px;"><button class="box" id="book6" onclick="book6Clicked()"></button></td>
                 </tr>
                 <tr>
-                    <td style="padding: 20px;"><div class="box" id="book7" onclick="book7Clicked()"></div></td>
-                    <td style="padding: 20px;"><div class="box" id="book8" onclick="book8Clicked()"></div></td>
-                    <td style="padding: 20px;"><div class="box" id="book9" onclick="book9Clicked()"></div></td>
+                    <td style="padding: 20px;"><button class="box" id="book7" onclick="book7Clicked()"></button></td>
+                    <td style="padding: 20px;"><button class="box" id="book8" onclick="book8Clicked()"></button></td>
+                    <td style="padding: 20px;"><button class="box" id="book9" onclick="book9Clicked()"></button></td>
                 </tr>
             </table>
               
@@ -640,48 +640,39 @@
             /* End Game Book Buttons */
 
             function book1Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 1, lobbyIDInput);
+                socket.emit("bookClicked", 1, socket.id);
             }
 
             function book2Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 2, lobbyIDInput);
+                socket.emit("bookClicked", 2, socket.id);
             }
 
             function book3Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 3, lobbyIDInput);
+                socket.emit("bookClicked", 3, socket.id);
             }
 
             function book4Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 4, lobbyIDInput);
+                socket.emit("bookClicked", 4, socket.id);
             }
 
             function book5Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 5, lobbyIDInput);
+                socket.emit("bookClicked", 5, socket.id);
             }
 
             function book6Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 6, lobbyIDInput);
+                socket.emit("bookClicked", 6, socket.id);
             }
 
             function book7Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 7, lobbyIDInput);
+                socket.emit("bookClicked", 7, socket.id);
             }
 
             function book8Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 8, lobbyIDInput);
+                socket.emit("bookClicked", 8, socket.id);
             }
 
             function book9Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 9, lobbyIDInput);
+                socket.emit("bookClicked", 9, socket.id);
             }
 
             /* Results Page Navigation */

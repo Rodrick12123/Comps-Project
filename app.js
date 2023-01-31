@@ -378,9 +378,10 @@ io.on('connection', function(socket){
         io.in(players[0].gameLobbyID).emit("showPlayerNames", playerNames);
     });
 
-    socket.on("bookClicked", function(playerNum, lobbyID) {
+    socket.on("bookClicked", function(playerNum, socketID) {
         for (let i = 0; i < games.length; i++) {
-            if (games[i].lobbyID == lobbyID){
+            if (games[i].socketID == socketID){
+                console.log("hello");
                 currPlayer = games[i].players[playerNum-1];
                 initialPrompt = currPlayer.startBook.pages[0].getStringInput();
                 socket.emit("mainToBookResults");
