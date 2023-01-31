@@ -226,8 +226,10 @@
             </div>
 
             <div align="center">
-                <textarea name="text" id="prompt" rows="8"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
-                <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked()">Enter</button>
+                <textarea name="text" id="prompt2" rows="8"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
+                <br>
+                </br>
+                <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked2()">Enter</button>
             </div>
             
         </div>
@@ -609,11 +611,20 @@
 
             // The enter prompt button was clicked
             function enterPromptButtonClicked() {
-                console.log("ptrue");
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
                 const promptValue = document.getElementById("prompt").value;
+                console.log(promptValue);
                 socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, promptValue);
+            }
+
+            // The enter prompt button was clicked
+            function enterPromptButtonClicked2() {
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                const usernameInput = document.getElementById("usernameInput");
+                const promptValue2 = document.getElementById("prompt2").value;
+                console.log(promptValue2);
+                socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, promptValue2);
             }
 
             // The enter canvas button was clicked

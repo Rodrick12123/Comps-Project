@@ -144,7 +144,7 @@ io.on('connection', function(socket){
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
                 if (games[i].host.getReadyToStart()) {
-                    games[i].setCurrRound(0)
+                    games[i].setCurrRound(1)
                     games[i].timerStatus = true;
                     // console.log(games[i].timerStatus);
                     // console.log('games[i].timerStatus');
