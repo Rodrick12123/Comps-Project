@@ -726,29 +726,26 @@
                 switchView("endGameChoose");
             });
 
-            // change the status of the timer
-            socket.on("timeStatus", function(game) {
-                //console.log("here2");
-                //startTimer = game.timerStatus;
-                
-            });
             
-            socket.on("timerStart", function(game) {
+            socket.on("timerStart", function(game, page, start) {
                 //console.log("here");
-                var startDate = new Date();
+                //var startDate = new Date();
+                var startDate = new Date(start);
                 document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
-                
-                if (game.timerStatus == true){
-                    //startDate = new Date();
-                    startDate.setMinutes(startDate.getMinutes() + 1);
-                    var x = setInterval(function() {
-
+                //add true here
+                startDate.setMinutes(startDate.getMinutes() + 1);
+                console.log(startDate, 'in');
+                var x = setInterval(function() {
+                    console.log(game.timerStatus, 'stat');
+                    if (game.timerStatus == true){
                         // today's date and time
                         var nowDate = new Date().getTime();
 
                         // timeleft
                         var timeLeft = startDate - nowDate;
-
+                        //if (left == 0){
+                        //    timeLeft = 0;
+                        //}
                         // calculate time in minutes and secounds
                         // var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                         // var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -762,32 +759,34 @@
                         //All entries are subimited when time =0
                         if (timeLeft < 0) {
                             clearInterval(x);
+                            //startDate = new Date();
+                            //startDate.setMinutes(startDate.getMinutes() + 1);
                             document.getElementById("timerLabel1").innerHTML = "EXPIRED";
                             document.getElementById("timerLabel2").innerHTML = "EXPIRED";
                             document.getElementById("timerLabel3").innerHTML = "EXPIRED";
-
-                            
-
                             //figure out how to find what pages are displaying
                             //figure out how to subimt all responses forcefully
-                            if (promptPage.style.display == 'none'){
+                            if (page == 'prompt'){
                                 //document.getElementById('submitPrompt').click();
                                 enterPromptButtonClicked();
                             }
-                            if (canvasPage.style.display == 'none'){
+                            if (page == 'canvas'){
                                 //document.getElementById('submitCanvas').click();
                                 enterCanvasButtonClicked();
                             }   
 
                         }
-                    }, 1000);
-                } else {
-                    startDate = new Date();
-                    startDate.setMinutes(startDate.getMinutes() + 1);
-                    document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
-                    document.getElementById("timerLabel2").innerHTML = 1 + "m " + 0 + "s ";
-                    document.getElementById("timerLabel3").innerHTML = 1 + "m " + 0 + "s ";
-                }
+                    } else{
+                        //console.log('here');
+                        clearInterval(x);
+                        
+                        //startDate = new Date();
+                        //startDate.setMinutes(startDate.getMinutes() + 1);
+                        //document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
+                        //document.getElementById("timerLabel2").innerHTML = 1 + "m " + 0 + "s ";
+                        //document.getElementById("timerLabel3").innerHTML = 1 + "m " + 0 + "s ";
+                    }
+                }, 1000);
             });
             
             //original timer loc

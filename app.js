@@ -148,12 +148,14 @@ io.on('connection', function(socket){
                     games[i].timerStatus = true;
                     // console.log(games[i].timerStatus);
                     // console.log('games[i].timerStatus');
-                    io.emit('timeStatus', games[i]);
+                    
                     socket.broadcast.emit("playerToPrompt");
                     socket.emit("mainToPrompt");
                     //change
-                    socket.emit("timerStart", games[i]);
-
+                    var startDate = new Date();
+                    //io.to(games[i].socketID).emit("timerStart", games[i], "start", startDate);
+                    socket.emit("timerStart", games[i], "start", startDate);
+                    //io.in(lobbyID).emit("timerStart", games[i], "start", startDate);
                     break;
                 }
                 else {
@@ -183,19 +185,23 @@ io.on('connection', function(socket){
                 
                 if (games[i].numPlayersInWaitRoom == games[i].numPlayers){
                     games[i].timerStatus = false;
-                    io.emit('timeStatus', games[i]);
-                    socket.emit("timerStart", games[i]);
-                    
+                    var startDate = new Date();
+                    //figure out what page dis add parameter
+                    io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate);
+                    //io.emit("timerStart", games[i], "prompt", startDate);
+
                     swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound()+1);
                     io.emit('displayPrompt', games[i]);
+                    //use this for timer
                     io.in(lobbyID).emit("playerToCanvas");
                     io.to(games[i].socketID).emit("mainToCanvas");
 
                     games[i].timerStatus = true;
-                    
-                    io.emit('timeStatus', games[i]);
-                    socket.emit("timerStart", games[i]);
+                    startDate = new Date();
+                    //console.log(startDate, 'out');
+                    io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate);
+                    //io.emit("timerStart", games[i], "prompt", startDate);
                     games[i].numPlayersInWaitRoom = 0;
                     games[i].finishedPlayers = [];
                     
@@ -226,8 +232,10 @@ io.on('connection', function(socket){
                 }
                 if (games[i].numPlayersInWaitRoom >= games[i].numPlayers){
                     games[i].timerStatus = false;
-                    io.emit('timeStatus', games[i]);
-                    socket.emit("timerStart", games[i]);
+                    
+                    var startDate = new Date();
+                    //figure out what page dis add parameter
+                    io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);
                     swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound()+1);
                     io.emit('displayCanvas', games[i]);
@@ -241,8 +249,10 @@ io.on('connection', function(socket){
                     games[i].numPlayersInWaitRoom = 0;
                     games[i].finishedPlayers = [];
                     games[i].timerStatus = true;
-                    io.emit('timeStatus', games[i]);
-                    socket.emit("timerStart", games[i]);
+                    
+                    startDate = new Date();
+                    //console.log(startDate, 'out');
+                    io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);
                     break;
                 }
                 else{
