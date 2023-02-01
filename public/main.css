@@ -162,6 +162,9 @@ font-family: 'Times New Roman', Times, serif;
 font-size: 14pt;
 font-weight: bolder;
 color: rgb(255, 251, 251);
+margin:0;
+padding:0;
+
 }
 
 .serverlobby {
