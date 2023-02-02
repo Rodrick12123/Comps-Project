@@ -276,7 +276,7 @@ io.on('connection', function(socket){
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
                         //what should the drawing be?
                         //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(drawing);//.toString());
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
+                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
                         break;
                     }
                 }
@@ -315,6 +315,7 @@ io.on('connection', function(socket){
         }
 
     });
+
 
     socket.on("timerFinishedPrompt", function(lobbyID) {
         

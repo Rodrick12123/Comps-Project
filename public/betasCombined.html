@@ -346,7 +346,7 @@
     
                 </h2> 
                 <div class="timerLabel3" id="timerLabel3" >
-                    1m:0s
+                    
                 </div>
     
                 
@@ -391,7 +391,7 @@
     
                 </h2> 
                 <div class="timerLabel2" id="timerLabel2" >
-                    1m:0s
+                    
                 </div>
        
             </div>
@@ -821,6 +821,34 @@
                 resultsPrompt.innerHTML = prompt;
             });
 
+            function isPageDisplaying(page)
+            {
+                let newViewName;
+                if(page === "canvas"){
+                    newViewName = "mainPromptPage";
+                }else if (page === "prompt"){
+                    newViewName = "mainCanvasPage";
+                }else{
+                    newViewName = "mainPromptPage"
+                }
+                //console.log("pageC", page, newViewName);
+                for (let [viewName, view] of Object.entries(screenViews)) {
+                    console.log(viewName, view.style.display);
+                    if (viewName === newViewName) {
+                        //console.log(newViewName, view.style.display);
+                        if(view.style.display === 'none'){
+                            //console.log("view", view.style.display);
+                            return false;
+                        }else{
+                            return true;
+                        }
+                    } 
+                    
+                }
+                
+                return true;
+            }
+
             socket.on("timerStart", function(game, page, start) {
                 //console.log("here");
                 //var startDate = new Date();
@@ -828,9 +856,8 @@
                 document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
 
                 startDate.setMinutes(startDate.getMinutes() + 1);
-                console.log(page, 'in');
+                //console.log(page, 'in');
                 var x = setInterval(function() {
-                    console.log(game.timerStatus, 'stat');
                     if (game.timerStatus == true){
                         // today's date and time
                         var nowDate = new Date().getTime();
@@ -848,18 +875,31 @@
 
                         // display the results
                         page = page.trim();
+                        
+                        
+
                         if(page == 'start'){
-                            document.getElementById("timerLabel1").innerHTML = minutes + "m " + seconds + "s ";
-                        } else if(page == 'prompt'){
                             document.getElementById("timerLabel2").innerHTML = minutes + "m " + seconds + "s ";
-                        } else{
+                        } else if(page == 'prompt'){
+                            
                             document.getElementById("timerLabel3").innerHTML = minutes + "m " + seconds + "s ";
+                        } else if (page == 'canvas'){
+                            document.getElementById("timerLabel2").innerHTML = minutes + "m " + seconds + "s ";
+                        }
+
+                        if(!isPageDisplaying(page)){
+                            console.log(page);
+
+                            timeLeft = -1;
+                            
                         }
                         //document.getElementById("timerLabel1").innerHTML = minutes + "m " + seconds + "s ";
                         //document.getElementById("timerLabel2").innerHTML = minutes + "m " + seconds + "s ";
                         //document.getElementById("timerLabel3").innerHTML = minutes + "m " + seconds + "s ";
                         //All entries are subimited when time =0
+                        
                         if (timeLeft < 0) {
+                            console.log(page, timeLeft)
                             clearInterval(x);
                             //startDate = new Date();
                             //startDate.setMinutes(startDate.getMinutes() + 1);
