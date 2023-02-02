@@ -6,8 +6,10 @@
         <title>Hometown</title>
         <script src="./javascript/canvas.js" defer></script>
         <script src="./javascript/prompt.js" defer></script>
+        <meta name="viewport" content="width=device-width, user-scalable=no, intial-scale=1">
+        
     </head>
-
+    
     <body>
         
         <!--Main Page screen-->
@@ -206,7 +208,7 @@
                     Give us your best prompt!
                 </h1>
 
-                <textarea name="text" id="prompt" rows="8"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
+                <textarea name="text" id="prompt" rows="6"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
                 <br>
                 </br>
                 <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked()">Enter</button>
@@ -220,14 +222,16 @@
             <div align="center">
                 <h2>
                     <img id="canvasForPrompt" alt="Text for giving prompt inspiration"
-                    width="600%" height="400%">
+                    width="45%" height="40%">
                     </img>
                 </h2>
             </div>
 
             <div align="center">
-                <textarea name="text" id="prompt" rows="8"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
-                <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked()">Enter</button>
+                <textarea name="text" id="prompt2" rows="6"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
+                <br>
+                </br>
+                <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked2()">Enter</button>
             </div>
             
         </div>
@@ -303,7 +307,7 @@
           <!--Set up canvas & quick version of setting up fabric-->
             <div align="center">
 
-                <canvas id="canvas" width="600%" height="400%" style="border:1px solid #000000;"></canvas>
+                <canvas id="canvas" width="400%" height="375%" style="border:1px solid #000000;"></canvas>
                 <script src="https://cdn.jsdelivr.net/npm/fabric"></script>
                 
                 <label for="colorpicker" style="color:white">Change Color:</label>
@@ -432,19 +436,19 @@
            
             <table align="center">
                 <tr>
-                    <td style="padding: 20px;"><div class="box" id="book1" onclick="book1Clicked()"></div></td>
-                    <td style="padding: 20px;"><div class="box" id="book2" onclick="book2Clicked()"></div></td>
-                    <td style="padding: 20px;"><div class="box" id="book3" onclick="book3Clicked()"></div></td>
+                    <td style="padding: 20px;"><button class="box" id="book1" onclick="book1Clicked()"></button></td>
+                    <td style="padding: 20px;"><button class="box" id="book2" onclick="book2Clicked()"></button></td>
+                    <td style="padding: 20px;"><button class="box" id="book3" onclick="book3Clicked()"></button></td>
                 </tr>
                 <tr>
-                    <td style="padding: 20px;"><div class="box" id="book4" onclick="book4Clicked()"></div></td>
-                    <td style="padding: 20px;"><div class="box" id="book5" onclick="book5Clicked()"></div></td>
-                    <td style="padding: 20px;"><div class="box" id="book6" onclick="book6Clicked()"></div></td>
+                    <td style="padding: 20px;"><button class="box" id="book4" onclick="book4Clicked()"></button></td>
+                    <td style="padding: 20px;"><button class="box" id="book5" onclick="book5Clicked()"></button></td>
+                    <td style="padding: 20px;"><button class="box" id="book6" onclick="book6Clicked()"></button></td>
                 </tr>
                 <tr>
-                    <td style="padding: 20px;"><div class="box" id="book7" onclick="book7Clicked()"></div></td>
-                    <td style="padding: 20px;"><div class="box" id="book8" onclick="book8Clicked()"></div></td>
-                    <td style="padding: 20px;"><div class="box" id="book9" onclick="book9Clicked()"></div></td>
+                    <td style="padding: 20px;"><button class="box" id="book7" onclick="book7Clicked()"></button></td>
+                    <td style="padding: 20px;"><button class="box" id="book8" onclick="book8Clicked()"></button></td>
+                    <td style="padding: 20px;"><button class="box" id="book9" onclick="book9Clicked()"></button></td>
                 </tr>
             </table>
               
@@ -609,11 +613,20 @@
 
             // The enter prompt button was clicked
             function enterPromptButtonClicked() {
-                console.log("ptrue");
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
                 const promptValue = document.getElementById("prompt").value;
+                console.log(promptValue);
                 socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, promptValue);
+            }
+
+            // The enter prompt button was clicked
+            function enterPromptButtonClicked2() {
+                const lobbyIDInput = document.getElementById("lobbyIDInput");
+                const usernameInput = document.getElementById("usernameInput");
+                const promptValue2 = document.getElementById("prompt2").value;
+                console.log(promptValue2);
+                socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, promptValue2);
             }
 
             // The enter canvas button was clicked
@@ -629,48 +642,39 @@
             /* End Game Book Buttons */
 
             function book1Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 1, lobbyIDInput);
+                socket.emit("bookClicked", 1, socket.id);
             }
 
             function book2Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 2, lobbyIDInput);
+                socket.emit("bookClicked", 2, socket.id);
             }
 
             function book3Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 3, lobbyIDInput);
+                socket.emit("bookClicked", 3, socket.id);
             }
 
             function book4Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 4, lobbyIDInput);
+                socket.emit("bookClicked", 4, socket.id);
             }
 
             function book5Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 5, lobbyIDInput);
+                socket.emit("bookClicked", 5, socket.id);
             }
 
             function book6Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 6, lobbyIDInput);
+                socket.emit("bookClicked", 6, socket.id);
             }
 
             function book7Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 7, lobbyIDInput);
+                socket.emit("bookClicked", 7, socket.id);
             }
 
             function book8Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 8, lobbyIDInput);
+                socket.emit("bookClicked", 8, socket.id);
             }
 
             function book9Clicked(){
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("bookClicked", 9, lobbyIDInput);
+                socket.emit("bookClicked", 9, socket.id);
             }
 
             /* Results Page Navigation */
