@@ -95,6 +95,15 @@ function createPlayer(game, username, lobbyID, socketID){
 
 io.on('connection', function(socket){
 
+    socket.on("disconnect", function() {
+        /* TODO List: 
+            remove from players list
+            be able to end the round (send players in waiting room on)
+            remove that player from the list of unfinished players HTML
+            What about their book????*/
+        console.log("player disconnected");
+    });
+
 	/* Create game server functionality 
     No new player is added to the lobby
     This is done on an outside device (Main Screen) */

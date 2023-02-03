@@ -103,7 +103,11 @@ margin: 0; /* recommended */
   right: 0;
 }
 
-
+.resultPrompt {
+  font-size: 250%;
+  color: black;
+  top: -30%;
+}
 
 
 .new_button {
