@@ -403,6 +403,22 @@ io.on('connection', function(socket){
         }
     });
 
+    socket.on("promptLeftArrowClicked", function(socketID) {
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].socketID == socketID){
+                currPlayer = games[i].players[games[i].host.currPlayerBook-1];
+                games[i].host.currResultPage -= 1;
+                if (games[i].host.currResultPage <= 0) {
+                    games[i].host.currResultPage = 0;
+                    socket.emit("mainToEndgame");
+                    break;
+                }
+                console.log("page " + games[i].host.currResultPage);
+                socket.emit("displayEndGameCanvas", games[i], currPlayer);
+            }
+        }
+    });
+
     socket.on("canvasRightArrowClicked", function(socketID) {
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
@@ -413,6 +429,18 @@ io.on('connection', function(socket){
                     socket.emit("mainToEndgame");
                     break;
                 }
+                console.log("page " + games[i].host.currResultPage);
+                currPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].stringInput;
+                socket.emit("displayEndGamePrompt", currPlayer, currPrompt);
+            }
+        }
+    });
+
+    socket.on("canvasLeftArrowClicked", function(socketID) {
+        for (let i = 0; i < games.length; i++) {
+            if (games[i].socketID == socketID){
+                currPlayer = games[i].players[games[i].host.currPlayerBook-1];
+                games[i].host.currResultPage -= 1;
                 console.log("page " + games[i].host.currResultPage);
                 currPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].stringInput;
                 socket.emit("displayEndGamePrompt", currPlayer, currPrompt);

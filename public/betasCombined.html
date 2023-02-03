@@ -470,7 +470,7 @@
             </div>
            
             <div class="container">
-                <button class="arrow-button left">&lt;</button>
+                <button class="arrow-button left" id="canvasLeftArrow" onclick="canvasLeftArrowClicked()">&lt;</button>
                 <img id="endGameCanvas"
                     width="1000" height="500">
                 </img>
@@ -495,7 +495,7 @@
             </div>
            
             <div class="container">
-                <button class="arrow-button left">&lt;</button>
+                <button class="arrow-button left" id="promptLeftArrow" onclick="promptLeftArrowClicked()">&lt;</button>
                 <div align="center">
                     <h2>
                         <div class="text" id="resultsPrompt">
@@ -574,6 +574,8 @@
             const resultsPrompt = document.getElementById("resultsPrompt");
             const promptRightArrow = document.getElementById("promptRightArrow");
             const canvasRightArrow = document.getElementById("canvasRightArrow");
+            const promptLeftArrow = document.getElementById("promptLeftArrow");
+            const canvasLeftArrow = document.getElementById("canvasLeftArrow");
             
             
             /* Utility Functions */
@@ -692,6 +694,14 @@
 
             function canvasRightArrowClicked() {
                 socket.emit("canvasRightArrowClicked", socket.id);
+            }
+
+            function promptLeftArrowClicked() {
+                socket.emit("promptLeftArrowClicked", socket.id);
+            }
+
+            function canvasLeftArrowClicked() {
+                socket.emit("canvasLeftArrowClicked", socket.id);
             }
 
 
