@@ -250,7 +250,8 @@ io.on('connection', function(socket){
                     io.emit('displayCanvas', games[i]);
                     if (games[i].getCurrRound() >= games[i].maxRounds) {
                         io.in(lobbyID).emit("playersToEndgame");
-                        io.to(games[i].socketID).emit("mainToEndgame", games[i]);
+                        io.to(games[i].socketID).emit("mainToEndgame");
+                        io.to(games[i].socketID).emit("putNamesOnBooks", games[i]);
                         break;
                     }
                     io.in(lobbyID).emit("playerToPromptWithCanvas");
@@ -300,7 +301,7 @@ io.on('connection', function(socket){
                     io.emit('displayCanvas', games[i]);
                     if (games[i].getCurrRound() >= games[i].maxRounds) {
                         io.in(lobbyID).emit("playersToEndgame");
-                        io.to(games[i].socketID).emit("mainToEndgame", games[i]);
+                        io.to(games[i].socketID).emit("mainToEndgame");
                         break;
                     }
                     io.in(lobbyID).emit("playerToPromptWithCanvas");
@@ -419,7 +420,7 @@ io.on('connection', function(socket){
                 games[i].host.currResultPage -= 1;
                 if (games[i].host.currResultPage <= 0) {
                     games[i].host.currResultPage = 0;
-                    socket.emit("mainToEndgame", games[i]);
+                    socket.emit("mainToEndgame");
                     break;
                 }
                 console.log("page " + games[i].host.currResultPage);
@@ -435,7 +436,7 @@ io.on('connection', function(socket){
                 games[i].host.currResultPage += 1;
                 if (games[i].host.currResultPage >= games[i].maxRounds) {
                     games[i].host.currResultPage = 0;
-                    socket.emit("mainToEndgame", games[i]);
+                    socket.emit("mainToEndgame");
                     break;
                 }
                 console.log("page " + games[i].host.currResultPage);
