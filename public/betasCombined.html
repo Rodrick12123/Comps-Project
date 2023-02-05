@@ -436,19 +436,19 @@
            
             <table align="center">
                 <tr>
-                    <td style="padding: 20px;"><button class="box" id="book1" onclick="book1Clicked()"></button></td>
-                    <td style="padding: 20px;"><button class="box" id="book2" onclick="book2Clicked()"></button></td>
-                    <td style="padding: 20px;"><button class="box" id="book3" onclick="book3Clicked()"></button></td>
+                    <td class="bookButton"><button class="box" id="book1" onclick="book1Clicked()"></button></td>
+                    <td class="bookButton"><button class="box" id="book2" onclick="book2Clicked()"></button></td>
+                    <td class="bookButton" id="book3" style="display:none;"><button class="box" id="book3Box" onclick="book3Clicked()"></button></td>
                 </tr>
                 <tr>
-                    <td style="padding: 20px;"><button class="box" id="book4" onclick="book4Clicked()"></button></td>
-                    <td style="padding: 20px;"><button class="box" id="book5" onclick="book5Clicked()"></button></td>
-                    <td style="padding: 20px;"><button class="box" id="book6" onclick="book6Clicked()"></button></td>
+                    <td class="bookButton" id="book4" style="display:none;"><button class="box" id="book4Box" onclick="book4Clicked()"></button></td>
+                    <td class="bookButton" id="book5" style="display:none;"><button class="box" id="book5Box" onclick="book5Clicked()"></button></td>
+                    <td class="bookButton" id="book6" style="display:none;"><button class="box" id="book6Box" onclick="book6Clicked()"></button></td>
                 </tr>
                 <tr>
-                    <td style="padding: 20px;"><button class="box" id="book7" onclick="book7Clicked()"></button></td>
-                    <td style="padding: 20px;"><button class="box" id="book8" onclick="book8Clicked()"></button></td>
-                    <td style="padding: 20px;"><button class="box" id="book9" onclick="book9Clicked()"></button></td>
+                    <td class="bookButton" id="book7" style="display:none;"><button class="box" id="book7Box" onclick="book7Clicked()"></button></td>
+                    <td class="bookButton" id="book7" style="display:none;"><button class="box" id="book8Box" onclick="book8Clicked()"></button></td>
+                    <td class="bookButton" id="book9" style="display:none;"><button class="box" id="book9Box" onclick="book9Clicked()"></button></td>
                 </tr>
             </table>
               
@@ -551,6 +551,16 @@
               playerEndGameResults: document.getElementById("playerEndGameResults")
             };
 
+            const bookViews = {
+              book3: document.getElementById("book3"),
+              book4: document.getElementById("book4"),
+              book5: document.getElementById("book5"),
+              book6: document.getElementById("book6"),
+              book7: document.getElementById("book7"),
+              book8: document.getElementById("book8"),
+              book9: document.getElementById("book9")
+            };
+
             const lobbyIDInput = document.getElementById("lobbyIDInput");
             const usernameInput = document.getElementById("usernameInput");
             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
@@ -590,7 +600,6 @@
                 }
               }
             }
-            
             
             /* Game Functionality */
             
@@ -818,10 +827,25 @@
                 switchView("playerEndGameResults");
             });
 
-            socket.on("mainToEndgame", function() {
+            socket.on("mainToEndgame", function(game) {
                 switchView("endGameChoose");
-            });
+                if (3 <= game.numPlayers) {
+                    document.getElementById("book3").style.display = 'block';
+                    if (4 <= game.numPlayers) {
+                        document.getElementById("book4").style.display = 'block';
+                        if (5 <= game.numPlayers) {
+                            document.getElementById("book5").style.display = 'block';
+                            if (6 <= game.numPlayers) {
+                                document.getElementById("book6").style.display = 'block';
+                                if (7 <= game.numPlayers) {
+                                    document.getElementById("book7").style.display = 'block';
+                                    if (8 <= game.numPlayers) {
+                                        document.getElementById("book8").style.display = 'block';
+                                        if (6 <= game.numPlayers) {
+                                            document.getElementById("book9").style.display = 'block';
+                                        }}}}}}}});
 
+                                        
             //how do we want to call this?
             socket.on("displayEndGameCanvas", function(game, player) {
                 switchView("endGameCanvasResults");

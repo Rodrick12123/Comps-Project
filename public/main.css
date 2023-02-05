@@ -109,6 +109,10 @@ margin: 0; /* recommended */
   top: -30%;
 }
 
+.bookButton {
+  padding: 20px;
+}
+
 
 .new_button {
 top:20%;
