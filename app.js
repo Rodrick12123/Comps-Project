@@ -176,7 +176,6 @@ io.on('connection', function(socket){
 
 
     socket.on('promptEntered', function(username, lobbyID, prompt){
-        
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
@@ -186,7 +185,7 @@ io.on('connection', function(socket){
                     if (games[i].players[j].socketID == socket.id){
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
                         games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
+                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                         playerNum = j;
                         break;
                     }
@@ -235,7 +234,7 @@ io.on('connection', function(socket){
                     if (games[i].players[j].socketID == socket.id){
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
                         games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(drawing);//.toString());
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
+                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                         break;
                     }
                 }
@@ -286,7 +285,7 @@ io.on('connection', function(socket){
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
                         //what should the drawing be?
                         //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(drawing);//.toString());
-                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
+                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                         break;
                     }
                 }
@@ -340,7 +339,7 @@ io.on('connection', function(socket){
                     if (!(games[i].finishedPlayers.includes(games[i].players[j].socketID))){
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
                         games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(username);
+                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                         playerNum = j;
                         break;
                     }
@@ -397,7 +396,9 @@ io.on('connection', function(socket){
                 console.log("page " + games[i].host.currResultPage);
                 games[i].host.currPlayerBook = playerNum;
                 initialPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].stringInput;
-                socket.emit("displayEndGamePrompt", currPlayer, initialPrompt);
+                whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
+                console.log(whoInputted + "x");
+                socket.emit("displayEndGamePrompt", currPlayer, initialPrompt, whoInputted);
             }
         }
     });
@@ -408,7 +409,9 @@ io.on('connection', function(socket){
                 currPlayer = games[i].players[games[i].host.currPlayerBook-1];
                 games[i].host.currResultPage += 1;
                 console.log("page " + games[i].host.currResultPage);
-                socket.emit("displayEndGameCanvas", games[i], currPlayer);
+                whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
+                console.log(whoInputted + "x");
+                socket.emit("displayEndGameCanvas", games[i], currPlayer, whoInputted);
             }
         }
     });
@@ -424,7 +427,8 @@ io.on('connection', function(socket){
                     break;
                 }
                 console.log("page " + games[i].host.currResultPage);
-                socket.emit("displayEndGameCanvas", games[i], currPlayer);
+                whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
+                socket.emit("displayEndGameCanvas", games[i], currPlayer, whoInputted);
             }
         }
     });
@@ -441,7 +445,8 @@ io.on('connection', function(socket){
                 }
                 console.log("page " + games[i].host.currResultPage);
                 currPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].stringInput;
-                socket.emit("displayEndGamePrompt", currPlayer, currPrompt);
+                whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
+                socket.emit("displayEndGamePrompt", currPlayer, currPrompt, whoInputted);
             }
         }
     });
@@ -453,7 +458,8 @@ io.on('connection', function(socket){
                 games[i].host.currResultPage -= 1;
                 console.log("page " + games[i].host.currResultPage);
                 currPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].stringInput;
-                socket.emit("displayEndGamePrompt", currPlayer, currPrompt);
+                whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
+                socket.emit("displayEndGamePrompt", currPlayer, currPrompt, whoInputted);
             }
         }
     });
