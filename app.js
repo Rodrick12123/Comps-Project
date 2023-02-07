@@ -132,7 +132,7 @@ io.on('connection', function(socket){
                 
                 socket.join(lobbyID);
 
-                console.log(games[i].players);
+                //console.log(games[i].players);
                 io.emit('addPlayerToWaitingList', games[i].players);
                 io.to(socket.id).emit('playerToWaitingRoom');
                 break;
@@ -154,7 +154,7 @@ io.on('connection', function(socket){
                     //change
                     var startDate = new Date();
                     //io.to(games[i].socketID).emit("timerStart", games[i], "start", startDate);
-                    io.to(games[i].socketID).emit("timerStart", games[i], "start", startDate);
+                    io.to(games[i].socketID).emit("timerStart", games[i], "start", startDate, lobbyID);
                     //io.in(lobbyID).emit("timerStart", games[i], "start", startDate);
                     break;
                 }
@@ -168,7 +168,12 @@ io.on('connection', function(socket){
 
     socket.on('promptEntered', function(username, lobbyID, prompt){
         
-        lobbyID = lobbyID.trim();
+        
+        if(prompt != null){
+            lobbyID = lobbyID.trim();
+        }else{
+            console.log(username);
+        }
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++;
@@ -187,7 +192,7 @@ io.on('connection', function(socket){
                     games[i].timerStatus = false;
                     var startDate = new Date();
                     //figure out what page dis add parameter
-                    io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate);
+                    io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate, lobbyID);
                     //io.emit("timerStart", games[i], "prompt", startDate);
 
                     swapBooks(games[i]);
@@ -200,7 +205,7 @@ io.on('connection', function(socket){
                     games[i].timerStatus = true;
                     startDate = new Date();
                     //console.log(startDate, 'out');
-                    io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate);
+                    io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate, lobbyID);
                     //io.emit("timerStart", games[i], "prompt", startDate);
                     games[i].numPlayersInWaitRoom = 0;
                     games[i].finishedPlayers = [];
@@ -218,7 +223,10 @@ io.on('connection', function(socket){
     });
 
     socket.on('canvasEntered', function(username, lobbyID, drawing){
-        lobbyID = lobbyID.trim();
+        if(drawing != null){
+            lobbyID = lobbyID.trim();
+        }
+        
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++;
@@ -235,7 +243,7 @@ io.on('connection', function(socket){
                     
                     var startDate = new Date();
                     //figure out what page dis add parameter
-                    io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);
+                    io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate, lobbyID);
                     swapBooks(games[i]);
                     games[i].setCurrRound(games[i].getCurrRound()+1);
                     io.emit('displayCanvas', games[i]);
@@ -252,7 +260,7 @@ io.on('connection', function(socket){
                     
                     startDate = new Date();
                     //console.log(startDate, 'out');
-                    io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);
+                    io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate, lobbyID);
                     break;
                 }
                 else{
@@ -269,8 +277,8 @@ io.on('connection', function(socket){
         //lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
-                
                 for(let j = 0; j < games[i].numPlayers; j++){
+                    
                     if (!(games[i].finishedPlayers.includes(games[i].players[j].socketID))){
                         games[i].numPlayersInWaitRoom++;
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
@@ -319,14 +327,17 @@ io.on('connection', function(socket){
 
     socket.on("timerFinishedPrompt", function(lobbyID) {
         
-        //lobbyID = lobbyID.trim();
-        console.log('here');
+        //why can't I use trim here?
+        lobbyID = lobbyID.trim();
+        
         for (let i = 0; i < games.length; i++) {
+            
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++;
                 playerNum = 0;
+                
                 for(let j = 0; j < games[i].numPlayers; j++){
-                    console.log(games[i].players[j].socketID, games[i].finishedPlayers);
+                    //console.log(games[i].players[j].socketID, games[i].finishedPlayers);
                     if (!(games[i].finishedPlayers.includes(games[i].players[j].socketID))){
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
                         games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
@@ -382,7 +393,7 @@ io.on('connection', function(socket){
     socket.on("bookClicked", function(playerNum, socketID) {
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
-                console.log("hello");
+                //console.log("hello");
                 currPlayer = games[i].players[playerNum-1];
                 initialPrompt = currPlayer.startBook.pages[0].getStringInput();
                 socket.emit("mainToBookResults");

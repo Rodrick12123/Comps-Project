@@ -835,13 +835,9 @@
                 }else{
                     newViewName = "mainPromptPage"
                 }
-                //console.log("pageC", page, newViewName);
                 for (let [viewName, view] of Object.entries(screenViews)) {
-                    console.log(viewName, view.style.display);
                     if (viewName === newViewName) {
-                        //console.log(newViewName, view.style.display);
                         if(view.style.display === 'none'){
-                            //console.log("view", view.style.display);
                             return false;
                         }else{
                             return true;
@@ -849,17 +845,29 @@
                     } 
                     
                 }
-                
                 return true;
             }
 
-            socket.on("timerStart", function(game, page, start) {
+            function allPlayersSubmit(lobbyID, games, page){
+                for(let j = 0; j < games.numPlayers; j++){
+                    if (!(games.finishedPlayers.includes(games.players[j].socketID))){
+                        if(page == 'prompt'){
+                            socket.emit("promptEntered", games.players[j].username, lobbyID, null);
+                        }else{
+                            socket.emit("canvasEntered", games.players[j].username, lobbyID, null);
+                        }
+                    }
+                }
+            }
+
+            socket.on("timerStart", function(game, page, start, lobbyID) {
                 //console.log("here");
                 //var startDate = new Date();
                 var startDate = new Date(start);
-                document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
+                document.getElementById("timerLabel2").innerHTML = 1 + "m " + 0 + "s ";
 
-                startDate.setMinutes(startDate.getMinutes() + 1);
+                //startDate.setMinutes(startDate.getMinutes() + 1);
+                startDate.setSeconds(startDate.getSeconds() + 10);
                 //console.log(page, 'in');
                 var x = setInterval(function() {
                     if (game.timerStatus == true){
@@ -868,10 +876,7 @@
 
                         // timeleft
                         var timeLeft = startDate - nowDate;
-                        //if (left == 0){
-                        //    timeLeft = 0;
-                        //}
-                        // calculate time in minutes and secounds
+                        
                         // var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
                         // var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                         var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
@@ -879,8 +884,6 @@
 
                         // display the results
                         page = page.trim();
-                        
-                        
 
                         if(page == 'start'){
                             document.getElementById("timerLabel2").innerHTML = minutes + "m " + seconds + "s ";
@@ -892,9 +895,7 @@
                         }
 
                         if(!isPageDisplaying(page)){
-                            console.log(page);
-
-                            timeLeft = -1;
+                            timeLeft = -5;
                             
                         }
                         //document.getElementById("timerLabel1").innerHTML = minutes + "m " + seconds + "s ";
@@ -903,42 +904,36 @@
                         //All entries are subimited when time =0
                         
                         if (timeLeft < 0) {
-                            console.log(page, timeLeft)
                             clearInterval(x);
-                            //startDate = new Date();
-                            //startDate.setMinutes(startDate.getMinutes() + 1);
-                            document.getElementById("timerLabel1").innerHTML = "EXPIRED";
-                            document.getElementById("timerLabel2").innerHTML = "EXPIRED";
-                            document.getElementById("timerLabel3").innerHTML = "EXPIRED";
-                            //figure out how to find what pages are displaying
-                            //figure out how to subimt all responses forcefully
-                            const lobbyIDInput = document.getElementById("lobbyIDInput");
-                            page = page.trim();
-                            if (page == 'prompt'){
-                                //document.getElementById('submitPrompt').click();
-                                socket.emit("timerFinishedPrompt", lobbyIDInput);
+                            if(timeLeft != -5){
+                                document.getElementById("timerLabel1").innerHTML = "EXPIRED";
+                                document.getElementById("timerLabel2").innerHTML = "EXPIRED";
+                                document.getElementById("timerLabel3").innerHTML = "EXPIRED";
                             }
-                            if (page == 'canvas'){
-                                //document.getElementById('submitCanvas').click();
-                                socket.emit("timerFinishedCanvas", lobbyIDInput);
-                            }   
+                        
+
+                            page = page.trim();
+                            //console.log(page, 'page');
+                            if (timeLeft != -5){
+                                if (page == 'prompt' || page == 'start'){
+
+                                    allPlayersSubmit(lobbyID, game, 'prompt');
+                                    
+                                }
+                                if (page == 'canvas'){
+                                    //allPlayersSubmit(lobbyID, game, 'canvas');
+
+                                }   
+                            }
+                            
 
                         }
                     } else{
                         //console.log('here');
                         clearInterval(x);
-                        const lobbyID = document.getElementById("lobbyIDInput");
+                        //const lobbyID = document.getElementById("lobbyIDInput");
                         page = page.trim();
-                        if (page == 'prompt'){
-                            //document.getElementById('submitPrompt').click();
-                            socket.emit("timerFinishedPrompt", lobbyID);
-                            //enterPromptButtonClicked();
-                        }
-                        if (page == 'canvas'){
-                            //document.getElementById('submitCanvas').click();
-                            socket.emit("timerFinishedCanvas", lobbyID);
-                            //enterCanvasButtonClicked();
-                        } 
+                        
                         //startDate = new Date();
                         //startDate.setMinutes(startDate.getMinutes() + 1);
                         //document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
