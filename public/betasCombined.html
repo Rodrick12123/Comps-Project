@@ -525,7 +525,7 @@
                 <h2>
                     Pay attention to the main screen to see the results!
                 </h2>
-                
+
                 <button class="new_button" onClick="window.location.reload()">
                     Return to homescreen
                 </button>
@@ -928,13 +928,12 @@
                 var startDate = new Date(start);
                 document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
 
-                startDate.setMinutes(startDate.getMinutes() + 1);
+                startDate.setSeconds(startDate.getSeconds() + 15);
                 //console.log(page, 'in');
                 var x = setInterval(function() {
                     if (game.timerStatus == true){
                         // today's date and time
                         var nowDate = new Date().getTime();
-
                         // timeleft
                         var timeLeft = startDate - nowDate;
                         //if (left == 0){
@@ -981,22 +980,22 @@
                             document.getElementById("timerLabel3").innerHTML = "EXPIRED";
                             //figure out how to find what pages are displaying
                             //figure out how to subimt all responses forcefully
-                            const lobbyIDInput = document.getElementById("lobbyIDInput");
+                            const lobbyIDDisplay = document.getElementById("lobbyIDDisplay").innerHTML;
                             page = page.trim();
-                            if (page == 'prompt'){
+                            if (page == 'canvas' || page == 'start'){
                                 //document.getElementById('submitPrompt').click();
-                                socket.emit("timerFinishedPrompt", lobbyIDInput);
+                                socket.emit("timerFinishedPrompt", lobbyIDDisplay);
                             }
-                            if (page == 'canvas'){
+                            if (page == 'prompt'){
                                 //document.getElementById('submitCanvas').click();
-                                socket.emit("timerFinishedCanvas", lobbyIDInput);
+                                socket.emit("timerFinishedCanvas", lobbyIDDisplay);
                             }   
 
                         }
-                    } else{
+                   // } else{
                         //console.log('here');
-                        clearInterval(x);
-                        const lobbyID = document.getElementById("lobbyIDInput");
+                        //clearInterval(x);
+                        /*const lobbyID = document.getElementById("lobbyIDDisplay").innerHTML;
                         page = page.trim();
                         if (page == 'prompt'){
                             //document.getElementById('submitPrompt').click();
@@ -1007,7 +1006,7 @@
                             //document.getElementById('submitCanvas').click();
                             socket.emit("timerFinishedCanvas", lobbyID);
                             //enterCanvasButtonClicked();
-                        } 
+                        } */
                         //startDate = new Date();
                         //startDate.setMinutes(startDate.getMinutes() + 1);
                         //document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
