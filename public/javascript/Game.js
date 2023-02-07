@@ -5,7 +5,7 @@ class Game {
         this.lobbyID = lobbyID;
         this.socketID = socketID;
         this.currRound = 0;
-        this.maxRounds = 5;
+        this.maxRounds = 1;
         this.numPlayers = 0;
         this.numPlayersInWaitRoom = 0;
         this.players = [];
