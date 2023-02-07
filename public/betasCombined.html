@@ -982,13 +982,15 @@
                             //figure out how to subimt all responses forcefully
                             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay").innerHTML;
                             page = page.trim();
-                            if (page == 'canvas' || page == 'start'){
-                                //document.getElementById('submitPrompt').click();
-                                socket.emit("timerFinishedPrompt", lobbyIDDisplay);
-                            }
-                            if (page == 'prompt'){
-                                //document.getElementById('submitCanvas').click();
-                                socket.emit("timerFinishedCanvas", lobbyIDDisplay);
+                            if(timeLeft != -5){
+                                if (page == 'canvas' || page == 'start'){
+                                    //document.getElementById('submitPrompt').click();
+                                    socket.emit("timerFinishedPrompt", lobbyIDDisplay);
+                                }
+                                if (page == 'prompt'){
+                                    //document.getElementById('submitCanvas').click();
+                                    socket.emit("timerFinishedCanvas", lobbyIDDisplay);
+                                }
                             }   
 
                         }
