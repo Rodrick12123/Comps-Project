@@ -3,6 +3,7 @@
 class Book {
     constructor(playerNum) {
         this.pages = [];
+        this.haveSeen = false;
     }
 
 

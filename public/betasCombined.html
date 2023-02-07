@@ -79,6 +79,13 @@
 
         <!--Transition join screen-->
         <div id="joinPage" style="display:none">
+            <div id="gameProgressStatus" align=""center>
+                <p></p>
+            </div>
+            <div id="gameFullStatus" align=""center>
+                <p></p>
+            </div>
+
             <div align="center">
 
                 <h1>
@@ -847,6 +854,14 @@
             /* Switches the main screen to where it chooses the book to view the results of. */
             socket.on("mainToEndgame", function() {
                 switchView("endGameChoose");
+            });
+
+            socket.on("gameInProgress", function() {
+                document.getElementById("gameProgressStatus").innerHTML = "Sorry, you cannot join a game that is already in progress!";
+            });
+
+            socket.on("tooManyPlayers", function() {
+                document.getElementById("gameFullStatus").innerHTML = "Sorry, the game you are trying to join is full!";
             });
 
             /* Makes visible the books based on the number of players, and
