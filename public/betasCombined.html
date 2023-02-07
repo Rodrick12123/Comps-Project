@@ -93,7 +93,7 @@
                     Enter game code:
                 </h2>
         
-                <input type="text" id="lobbyIDInput" size = 20 maxlength=35 value="">
+                <input type="text" id="lobbyIDInput" size = 20 maxlength="35" value="">
     
     
             </div>
@@ -104,7 +104,7 @@
                     Enter your name:
                 </h2>
     
-                <input type="text" id="usernameInput" size = 20 maxlength=35 value="">
+                <input type="text" id="usernameInput" size = 20 maxlength="35" value="">
         
             </div>
             <br></br>
@@ -208,7 +208,7 @@
                     Give us your best prompt!
                 </h1>
 
-                <textarea name="text" id="prompt" rows="6"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
+                <textarea name="text" id="prompt" rows="6"  wrap="soft" maxlength="25" placeholder="Enter Prompt Here"> </textarea>
                 <br>
                 </br>
                 <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked()">Enter</button>
@@ -228,7 +228,7 @@
             </div>
 
             <div align="center">
-                <textarea name="text" id="prompt2" rows="6"  wrap="soft" placeholder="Enter Prompt Here"> </textarea>
+                <textarea name="text" id="prompt2" rows="6"  wrap="soft" maxlength="25" placeholder="Enter Prompt Here"> </textarea>
                 <br>
                 </br>
                 <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked2()">Enter</button>
@@ -436,21 +436,27 @@
            
             <table align="center">
                 <tr>
-                    <td style="padding: 20px;"><button class="box" id="book1" onclick="book1Clicked()"></button></td>
-                    <td style="padding: 20px;"><button class="box" id="book2" onclick="book2Clicked()"></button></td>
-                    <td style="padding: 20px;"><button class="box" id="book3" onclick="book3Clicked()"></button></td>
+                    <td class="bookButton"><button class="box" id="book1Box" onclick="book1Clicked()"></button></td>
+                    <td class="bookButton"><button class="box" id="book2Box" onclick="book2Clicked()"></button></td>
+                    <td class="bookButton" id="book3" style="display:none;"><button class="box" id="book3Box" onclick="book3Clicked()"></button></td>
                 </tr>
                 <tr>
-                    <td style="padding: 20px;"><button class="box" id="book4" onclick="book4Clicked()"></button></td>
-                    <td style="padding: 20px;"><button class="box" id="book5" onclick="book5Clicked()"></button></td>
-                    <td style="padding: 20px;"><button class="box" id="book6" onclick="book6Clicked()"></button></td>
+                    <td class="bookButton" id="book4" style="display:none;"><button class="box" id="book4Box" onclick="book4Clicked()"></button></td>
+                    <td class="bookButton" id="book5" style="display:none;"><button class="box" id="book5Box" onclick="book5Clicked()"></button></td>
+                    <td class="bookButton" id="book6" style="display:none;"><button class="box" id="book6Box" onclick="book6Clicked()"></button></td>
                 </tr>
                 <tr>
-                    <td style="padding: 20px;"><button class="box" id="book7" onclick="book7Clicked()"></button></td>
-                    <td style="padding: 20px;"><button class="box" id="book8" onclick="book8Clicked()"></button></td>
-                    <td style="padding: 20px;"><button class="box" id="book9" onclick="book9Clicked()"></button></td>
+                    <td class="bookButton" id="book7" style="display:none;"><button class="box" id="book7Box" onclick="book7Clicked()"></button></td>
+                    <td class="bookButton" id="book7" style="display:none;"><button class="box" id="book8Box" onclick="book8Clicked()"></button></td>
+                    <td class="bookButton" id="book9" style="display:none;"><button class="box" id="book9Box" onclick="book9Clicked()"></button></td>
                 </tr>
             </table>
+
+            <div align="center">
+            <button class="new_button" onClick="window.location.reload()">
+                Return to homescreen
+            </button>
+            </div>
               
         </div>
 
@@ -460,13 +466,17 @@
             <div align="center">
 
                 <h1>
-                    Here is the drawing from <span id="playerBook"></span>'s book
+                    <div class="text" id="playerBookCanvas"></div>
                 </h1>
+
+                <h2>
+                    <div class="text" id="drawnBy"></div>
+                </h2>
         
             </div>
            
             <div class="container">
-                <button class="arrow-button left">&lt;</button>
+                <button class="arrow-button left" id="canvasLeftArrow" onclick="canvasLeftArrowClicked()">&lt;</button>
                 <img id="endGameCanvas"
                     width="1000" height="500">
                 </img>
@@ -481,16 +491,20 @@
             <div align="center">
 
                 <h1>
-                    Here are the contents from <span id="playerBook"></span>'s book
+                    <div class="text" id="playerBookPrompt"></div>
                 </h1>
+
+                <h2>
+                    <div class="text" id="writtenBy"></div>
+                </h2>
         
             </div>
            
             <div class="container">
-                <button class="arrow-button left">&lt;</button>
+                <button class="arrow-button left" id="promptLeftArrow" onclick="promptLeftArrowClicked()">&lt;</button>
                 <div align="center">
                     <h2>
-                        <div class="text" id="resultsPrompt">
+                        <div class="resultPrompt" id="resultsPrompt">
                             Prompt
                         </div>
                     </h2>
@@ -511,8 +525,11 @@
                 <h2>
                     Pay attention to the main screen to see the results!
                 </h2>
+
+                <button class="new_button" onClick="window.location.reload()">
+                    Return to homescreen
+                </button>
             </div>
-        
         </div>
 
 
@@ -543,6 +560,16 @@
               playerEndGameResults: document.getElementById("playerEndGameResults")
             };
 
+            const bookViews = {
+              book3: document.getElementById("book3"),
+              book4: document.getElementById("book4"),
+              book5: document.getElementById("book5"),
+              book6: document.getElementById("book6"),
+              book7: document.getElementById("book7"),
+              book8: document.getElementById("book8"),
+              book9: document.getElementById("book9")
+            };
+
             const lobbyIDInput = document.getElementById("lobbyIDInput");
             const usernameInput = document.getElementById("usernameInput");
             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
@@ -562,11 +589,12 @@
             const canvasDrawing = document.getElementById('canvas');
             const canvasForPrompt = document.getElementById('canvasForPrompt');
 
-            const playerBook = document.getElementById("playerBook");
             const endGameCanvas = document.getElementById('endGameCanvas');
             const resultsPrompt = document.getElementById("resultsPrompt");
             const promptRightArrow = document.getElementById("promptRightArrow");
             const canvasRightArrow = document.getElementById("canvasRightArrow");
+            const promptLeftArrow = document.getElementById("promptLeftArrow");
+            const canvasLeftArrow = document.getElementById("canvasLeftArrow");
             
             
             /* Utility Functions */
@@ -581,7 +609,6 @@
                 }
               }
             }
-            
             
             /* Game Functionality */
             
@@ -616,7 +643,6 @@
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
                 const promptValue = document.getElementById("prompt").value;
-                console.log(promptValue);
                 socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, promptValue);
             }
 
@@ -643,50 +669,65 @@
 
             function book1Clicked(){
                 socket.emit("bookClicked", 1, socket.id);
+                document.getElementById("book1Box").innerHTML += "<br/>(seen)"
             }
 
             function book2Clicked(){
                 socket.emit("bookClicked", 2, socket.id);
+                document.getElementById("book2Box").innerHTML += "<br/>(seen)"
             }
 
             function book3Clicked(){
                 socket.emit("bookClicked", 3, socket.id);
+                document.getElementById("book3Box").innerHTML += "<br/>(seen)"
             }
 
             function book4Clicked(){
                 socket.emit("bookClicked", 4, socket.id);
+                document.getElementById("book4Box").innerHTML += "<br/>(seen)"
             }
 
             function book5Clicked(){
                 socket.emit("bookClicked", 5, socket.id);
+                document.getElementById("book5Box").innerHTML += "<br/>(seen)"
             }
 
             function book6Clicked(){
                 socket.emit("bookClicked", 6, socket.id);
+                document.getElementById("book6Box").innerHTML += "<br/>(seen)"
             }
 
             function book7Clicked(){
                 socket.emit("bookClicked", 7, socket.id);
+                document.getElementById("book7Box").innerHTML += "<br/>(seen)"
             }
 
             function book8Clicked(){
                 socket.emit("bookClicked", 8, socket.id);
+                document.getElementById("book8Box").innerHTML += "<br/>(seen)"
             }
 
             function book9Clicked(){
                 socket.emit("bookClicked", 9, socket.id);
+                document.getElementById("book9Box").innerHTML += "<br/>(seen)"
             }
 
             /* Results Page Navigation */
 
             function promptRightArrowClicked() {
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("promptRightArrowClicked", lobbyIDInput, playerBook);
+                socket.emit("promptRightArrowClicked", socket.id);
             }
 
             function canvasRightArrowClicked() {
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("canvasRightArrowClicked", lobbyIDInput, playerBook);
+                socket.emit("canvasRightArrowClicked", socket.id);
+            }
+
+            function promptLeftArrowClicked() {
+                socket.emit("promptLeftArrowClicked", socket.id);
+            }
+
+            function canvasLeftArrowClicked() {
+                socket.emit("canvasLeftArrowClicked", socket.id);
             }
 
 
@@ -803,25 +844,53 @@
                 switchView("playerEndGameResults");
             });
 
+            /* Switches the main screen to where it chooses the book to view the results of. */
             socket.on("mainToEndgame", function() {
                 switchView("endGameChoose");
             });
 
-            //how do we want to call this?
-            socket.on("displayEndGameCanvas", function(game, username) {
-                switchView("endGameCanvasResults");
-                for(let j = 0; j < game.numPlayers; j++){
-                    if (game.players[j].socketID == socket.id){
-                        endGameCanvas.src = game.players[j].currentBook.pages[game.currRound-1].stringInput;
-                        break;
-                    }
-                }
-                playerBook.textContent = username;
+            /* Makes visible the books based on the number of players, and
+                puts the player name on the books (Only allow to do once) */
+            socket.on("putNamesOnBooks", function(game) {
+                document.getElementById("book1Box").innerHTML = game.players[0].username;
+                document.getElementById("book2Box").innerHTML = game.players[1].username;
+                if (3 <= game.numPlayers) {
+                    document.getElementById("book3").style.display = 'block';
+                    document.getElementById("book3Box").innerHTML = game.players[2].username;
+                    if (4 <= game.numPlayers) {
+                        document.getElementById("book4").style.display = 'block';
+                        document.getElementById("book4Box").innerHTML = game.players[3].username;
+                        if (5 <= game.numPlayers) {
+                            document.getElementById("book5").style.display = 'block';
+                            document.getElementById("book5Box").innerHTML = game.players[4].username;
+                            if (6 <= game.numPlayers) {
+                                document.getElementById("book6").style.display = 'block';
+                                document.getElementById("book6Box").innerHTML = game.players[5].username;
+                                if (7 <= game.numPlayers) {
+                                    document.getElementById("book7").style.display = 'block';
+                                    document.getElementById("book7Box").innerHTML = game.players[6].username;
+                                    if (8 <= game.numPlayers) {
+                                        document.getElementById("book8").style.display = 'block';
+                                        document.getElementById("book8Box").innerHTML = game.players[7].username;
+                                        if (9 <= game.numPlayers) {
+                                            document.getElementById("book9").style.display = 'block';
+                                            document.getElementById("book9Box").innerHTML = game.players[8].username;
+                                        }}}}}}}
             });
 
-            socket.on("displayEndGamePrompt", function(prompt, username) {
+                                        
+            //how do we want to call this?
+            socket.on("displayEndGameCanvas", function(game, player, whoInputted) {
+                switchView("endGameCanvasResults");
+                document.getElementById("playerBookCanvas").innerHTML = player.username + '\'s Book';
+                document.getElementById("drawnBy").innerHTML = "Drawn by " + whoInputted;
+                endGameCanvas.src = player.startBook.pages[game.host.currResultPage].stringInput;
+            });
+
+            socket.on("displayEndGamePrompt", function(player, prompt, whoInputted) {
                 switchView("endGamePromptResults");
-                playerBook.textContent = username;
+                document.getElementById("playerBookPrompt").innerHTML = player.username + '\'s Book';
+                document.getElementById("writtenBy").innerHTML = "Written by " + whoInputted;
                 resultsPrompt.innerHTML = prompt;
             });
 
@@ -873,7 +942,6 @@
                     if (game.timerStatus == true){
                         // today's date and time
                         var nowDate = new Date().getTime();
-
                         // timeleft
                         var timeLeft = startDate - nowDate;
                         
@@ -905,35 +973,40 @@
                         
                         if (timeLeft < 0) {
                             clearInterval(x);
-                            if(timeLeft != -5){
-                                document.getElementById("timerLabel1").innerHTML = "EXPIRED";
-                                document.getElementById("timerLabel2").innerHTML = "EXPIRED";
-                                document.getElementById("timerLabel3").innerHTML = "EXPIRED";
-                            }
-                        
-
+                            //startDate = new Date();
+                            //startDate.setMinutes(startDate.getMinutes() + 1);
+                            document.getElementById("timerLabel1").innerHTML = "EXPIRED";
+                            document.getElementById("timerLabel2").innerHTML = "EXPIRED";
+                            document.getElementById("timerLabel3").innerHTML = "EXPIRED";
+                            //figure out how to find what pages are displaying
+                            //figure out how to subimt all responses forcefully
+                            const lobbyIDDisplay = document.getElementById("lobbyIDDisplay").innerHTML;
                             page = page.trim();
-                            //console.log(page, 'page');
-                            if (timeLeft != -5){
-                                if (page == 'prompt' || page == 'start'){
-
-                                    allPlayersSubmit(lobbyID, game, 'prompt');
-                                    
-                                }
-                                if (page == 'canvas'){
-                                    //allPlayersSubmit(lobbyID, game, 'canvas');
-
-                                }   
+                            if (page == 'canvas' || page == 'start'){
+                                //document.getElementById('submitPrompt').click();
+                                socket.emit("timerFinishedPrompt", lobbyIDDisplay);
                             }
-                            
+                            if (page == 'prompt'){
+                                //document.getElementById('submitCanvas').click();
+                                socket.emit("timerFinishedCanvas", lobbyIDDisplay);
+                            }   
 
                         }
-                    } else{
+                   // } else{
                         //console.log('here');
-                        clearInterval(x);
-                        //const lobbyID = document.getElementById("lobbyIDInput");
+                        //clearInterval(x);
+                        /*const lobbyID = document.getElementById("lobbyIDDisplay").innerHTML;
                         page = page.trim();
-                        
+                        if (page == 'prompt'){
+                            //document.getElementById('submitPrompt').click();
+                            socket.emit("timerFinishedPrompt", lobbyID);
+                            //enterPromptButtonClicked();
+                        }
+                        if (page == 'canvas'){
+                            //document.getElementById('submitCanvas').click();
+                            socket.emit("timerFinishedCanvas", lobbyID);
+                            //enterCanvasButtonClicked();
+                        } */
                         //startDate = new Date();
                         //startDate.setMinutes(startDate.getMinutes() + 1);
                         //document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
