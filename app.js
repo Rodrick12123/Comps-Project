@@ -8,7 +8,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var numRounds = 5;
-var maxPlayers = 8; //Will be in game object
+var maxPlayers = 9; //Will be in game object
 
 
 /* Setting up the Server */
@@ -127,10 +127,12 @@ io.on('connection', function(socket){
             if (games[i].lobbyID == lobbyID){
                 if (games[i].numPlayers >= maxPlayers){
                     socket.emit("tooManyPlayers");
+                    break;
                 }
                 
                 if (games[i].getCurrRound() > 0){
                     socket.emit("gameInProgress");
+                    break;
                 }
 
                 if (username == ''){

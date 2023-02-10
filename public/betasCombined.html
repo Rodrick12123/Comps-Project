@@ -86,6 +86,13 @@
 
         <!--Transition join screen-->
         <div id="joinPage" style="display:none">
+            <div id="gameProgressStatus" align=""center>
+                <p></p>
+            </div>
+            <div id="gameFullStatus" align=""center>
+                <p></p>
+            </div>
+
             <div align="center">
 
                 <h1>
@@ -443,19 +450,19 @@
            
             <table align="center">
                 <tr>
-                    <td class="bookButton"><button class="box" id="book1Box" onclick="book1Clicked()"></button></td>
-                    <td class="bookButton"><button class="box" id="book2Box" onclick="book2Clicked()"></button></td>
-                    <td class="bookButton" id="book3" style="display:none;"><button class="box" id="book3Box" onclick="book3Clicked()"></button></td>
+                    <td class="bookButton" style="visibility:visible;"><button class="box" id="book1Box" onclick="book1Clicked()"></button></td>
+                    <td class="bookButton" style="visibility:visible;"><button class="box" id="book2Box" onclick="book2Clicked()"></button></td>
+                    <td class="bookButton" id="book3" style="visibility:hidden;"><button class="box" id="book3Box" onclick="book3Clicked()"></button></td>
                 </tr>
                 <tr>
-                    <td class="bookButton" id="book4" style="display:none;"><button class="box" id="book4Box" onclick="book4Clicked()"></button></td>
-                    <td class="bookButton" id="book5" style="display:none;"><button class="box" id="book5Box" onclick="book5Clicked()"></button></td>
-                    <td class="bookButton" id="book6" style="display:none;"><button class="box" id="book6Box" onclick="book6Clicked()"></button></td>
+                    <td class="bookButton" id="book4" style="visibility:hidden;"><button class="box" id="book4Box" onclick="book4Clicked()"></button></td>
+                    <td class="bookButton" id="book5" style="visibility:hidden;"><button class="box" id="book5Box" onclick="book5Clicked()"></button></td>
+                    <td class="bookButton" id="book6" style="visibility:hidden;"><button class="box" id="book6Box" onclick="book6Clicked()"></button></td>
                 </tr>
                 <tr>
-                    <td class="bookButton" id="book7" style="display:none;"><button class="box" id="book7Box" onclick="book7Clicked()"></button></td>
-                    <td class="bookButton" id="book7" style="display:none;"><button class="box" id="book8Box" onclick="book8Clicked()"></button></td>
-                    <td class="bookButton" id="book9" style="display:none;"><button class="box" id="book9Box" onclick="book9Clicked()"></button></td>
+                    <td class="bookButton" id="book7" style="visibility:hidden;"><button class="box" id="book7Box" onclick="book7Clicked()"></button></td>
+                    <td class="bookButton" id="book7" style="visibility:hidden;"><button class="box" id="book8Box" onclick="book8Clicked()"></button></td>
+                    <td class="bookButton" id="book9" style="visibility:hidden;"><button class="box" id="book9Box" onclick="book9Clicked()"></button></td>
                 </tr>
             </table>
 
@@ -679,7 +686,9 @@
 
             function book1Clicked(){
                 socket.emit("bookClicked", 1, socket.id);
-                document.getElementById("book1Box").innerHTML += "<br/>(seen)"
+                if (!document.getElementById("book1Box").innerHTML.includes("seen")) {
+                    document.getElementById("book1Box").innerHTML += "<br/>(seen)"
+                }
             }
 
             function book2Clicked(){
@@ -859,31 +868,39 @@
                 switchView("endGameChoose");
             });
 
+            socket.on("gameInProgress", function() {
+                document.getElementById("gameProgressStatus").innerHTML = "Sorry, you cannot join a game that is already in progress!";
+            });
+
+            socket.on("tooManyPlayers", function() {
+                document.getElementById("gameFullStatus").innerHTML = "Sorry, the game you are trying to join is full!";
+            });
+
             /* Makes visible the books based on the number of players, and
                 puts the player name on the books (Only allow to do once) */
             socket.on("putNamesOnBooks", function(game) {
                 document.getElementById("book1Box").innerHTML = game.players[0].username;
                 document.getElementById("book2Box").innerHTML = game.players[1].username;
                 if (3 <= game.numPlayers) {
-                    document.getElementById("book3").style.display = 'block';
+                    document.getElementById("book3").style.visibility = 'visible';
                     document.getElementById("book3Box").innerHTML = game.players[2].username;
                     if (4 <= game.numPlayers) {
-                        document.getElementById("book4").style.display = 'block';
+                        document.getElementById("book4").style.visibility = 'visible';
                         document.getElementById("book4Box").innerHTML = game.players[3].username;
                         if (5 <= game.numPlayers) {
-                            document.getElementById("book5").style.display = 'block';
+                            document.getElementById("book5").style.visibility = 'visible';
                             document.getElementById("book5Box").innerHTML = game.players[4].username;
                             if (6 <= game.numPlayers) {
-                                document.getElementById("book6").style.display = 'block';
+                                document.getElementById("book6").style.visibility = 'visible';
                                 document.getElementById("book6Box").innerHTML = game.players[5].username;
                                 if (7 <= game.numPlayers) {
-                                    document.getElementById("book7").style.display = 'block';
+                                    document.getElementById("book7").style.visibility = 'visible';
                                     document.getElementById("book7Box").innerHTML = game.players[6].username;
                                     if (8 <= game.numPlayers) {
-                                        document.getElementById("book8").style.display = 'block';
+                                        document.getElementById("book8").style.visibility = 'visible';
                                         document.getElementById("book8Box").innerHTML = game.players[7].username;
                                         if (9 <= game.numPlayers) {
-                                            document.getElementById("book9").style.display = 'block';
+                                            document.getElementById("book9").style.visibility = 'visible';
                                             document.getElementById("book9Box").innerHTML = game.players[8].username;
                                         }}}}}}}
             });
