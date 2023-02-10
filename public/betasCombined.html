@@ -13,70 +13,75 @@
     <body>
         
         <!--Main Page screen-->
+        
+        <audio id="audio" loop>
+            <source src="BorderMusic.mp3" type="audio/mp3">
+        </audio>
+
         <div id="mainPage">
-            <div class="main_Page">
-                <div align="center">
+            
+            <div align="center">
 
-                    <h1>
-                        Welcome to Pictionary Telephone
-                    </h1>
-            
-                </div>
+                <h1>
+                    Welcome to Pictionary Telephone
+                </h1>
+        
+            </div>
 
-                <div align="center">
+            <div align="center">
 
-                    <h2>
-                        If you are on a smartphone, please tilt your phone horizontally for the best results
-                    </h2>
+                <h2>
+                    If you are on a smartphone, please tilt your phone horizontally for the best results
+                </h2>
+        
+            </div>
+            <div align="center">
+    
+                <h2>
+                    Start a new game?
+                </h2>
+        
+                <button class="new_button" onclick="createButtonClicked()">
+                    Make new game!
+                </button>
+    
+            </div>
+    
+            <div align="center">
+    
+                <h2>
+                    Join an existing game?
+                </h2>
+    
+                <button class="join_button" id="mainJoinButton" onclick="mainJoinButtonClicked()">
+                    Join existing game!
+                </button>
+        
+            </div>
+    
+            <div class="gamedescrip">
             
-                </div>
-                <div align="center">
+                <h2 align="center">
+                    Description:
+                </h2>
+    
+                <p class="description">
+                    Welcome to Pictionary Telephone. Pictionary Telephone is a drawing version of the classic game, Telephone. 
+                    The game will consist of multiple rounds that are either prompt rounds or 
+                    drawing rounds. In the 
+                    initial prompt round, players will have to come up with a prompt. Then it will be a drawing round
+                    Player must draw a picture that they 
+                    believe best represents the random prompt that they were given. Similarly,
+                    the following round 
+                    will involve each player getting a random drawn picture they will have to 
+                    guess what the initial prompt was. This process repeats until all the rounds
+                    have concluded. Then, there will be a time at the end to collectively view the
+                    journey that each prompt went through 
+    
+                </p>
         
-                    <h2>
-                        Start a new game?
-                    </h2>
-            
-                    <button class="new_button" onclick="createButtonClicked()">
-                        Make new game!
-                    </button>
-        
-                </div>
-        
-                <div align="center">
-        
-                    <h2>
-                        Join an existing game?
-                    </h2>
-        
-                    <button class="join_button" id="mainJoinButton" onclick="mainJoinButtonClicked()">
-                        Join existing game!
-                    </button>
-            
-                </div>
-        
-                <div class="gamedescrip">
-                
-                    <h2 align="center">
-                        Description:
-                    </h2>
-        
-                    <p class="description">
-                        Welcome to Pictionary Telephone. Pictionary Telephone is a drawing version of the classic game, Telephone. 
-                        The game will consist of multiple rounds that are either prompt rounds or 
-                        drawing rounds. In the 
-                        initial prompt round, players will have to come up with a prompt. Then it will be a drawing round
-                        Player must draw a picture that they 
-                        believe best represents the random prompt that they were given. Similarly,
-                        the following round 
-                        will involve each player getting a random drawn picture they will have to 
-                        guess what the initial prompt was. This process repeats until all the rounds
-                        have concluded. Then, there will be a time at the end to collectively view the
-                        journey that each prompt went through 
-        
-                    </p>
-            
-                </div>
-            <div>
+            </div>
+
         </div>
 
         <!--Transition join screen-->
@@ -616,8 +621,11 @@
             
             /* Create a new game. Emit newGame event. */
             function createButtonClicked() {
+                var audio = document.getElementById("audio");
+                audio.play();
                 socket.emit('createClicked', socket.id);
             }
+            
             
             
             /* The join button was clicked on the initial main screen */
