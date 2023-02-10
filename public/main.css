@@ -70,10 +70,14 @@ margin: 0; /* recommended */
 
 .container {
   display: flex;
-  justify-content: center; /* center the items horizontally */
-  align-items: center; /* center the items vertically */
-  height: 100vh; /* set the height of the container to the full height of the viewport */
-  position: relative;
+  justify-content: center;
+  align-items: center;
+  height: 75vh; /* reduced height of the container */
+  width: 60%; /* reduced width of the container */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .box2 {
