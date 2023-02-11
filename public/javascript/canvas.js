@@ -44,6 +44,7 @@ function changeColor() {
 //changes brush size
 function changeSize() {
   canvas.freeDrawingBrush.width = document.getElementById("sizepicker").value;
+  sizeValue.value = document.getElementById("sizepicker").value;
 }
 
 function clearCanvas() {

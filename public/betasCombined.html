@@ -322,7 +322,8 @@
                 <input type="color" id="colorpicker" value="#000000" oninput="changeColor()">
                 
                 <label for="sizepicker" style="color:white">Change Brush Size:</label>
-                <input type="number" id="sizepicker" min="1" value="5" oninput="changeSize()">
+                <input type="range" id="sizepicker" min="1" max="30" value="5" oninput="changeSize()">
+                <output id="sizeValue" style="color:white"></output>
 
                 <button onclick="undo()">Undo</button>
                 <button onclick="redo()">Redo</button>
