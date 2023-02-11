@@ -318,10 +318,13 @@
                 <script src="https://cdn.jsdelivr.net/npm/fabric"></script>
                 
                 <label for="colorpicker" style="color:white">Change Color:</label>
-                <input type="color" id="colorpicker" value="#0000ff" oninput="changeColor()">
+                <input type="color" id="colorpicker" value="black" oninput="changeColor()">
                 
                 <label for="sizepicker" style="color:white">Change Brush Size:</label>
                 <input type="number" id="sizepicker" min="1" value="5" oninput="changeSize()">
+
+                <button onclick="undo()">Undo</button>
+                <button onclick="redo()">Redo</button>
                 
                 <script src="javascript/canvas.js"></script>
 
@@ -595,6 +598,8 @@
             const promptToDraw = document.getElementById("promptToDraw");
             const canvasDrawing = document.getElementById('canvas');
             const canvasForPrompt = document.getElementById('canvasForPrompt');
+            const colorPicker = document.getElementById("colorpicker").value;
+            const sizePicker = document.getElementById("sizepicker").value;
 
             const endGameCanvas = document.getElementById('endGameCanvas');
             const resultsPrompt = document.getElementById("resultsPrompt");
@@ -840,6 +845,8 @@
             socket.on("playerToCanvas", function() {
                 // startTimer = true;
                 clearCanvas();
+                colorPicker="black"
+                sizePicker="5"
                 switchView("canvasPage");
             });
 
