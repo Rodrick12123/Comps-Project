@@ -70,10 +70,14 @@ margin: 0; /* recommended */
 
 .container {
   display: flex;
-  justify-content: center; /* center the items horizontally */
-  align-items: center; /* center the items vertically */
-  height: 100vh; /* set the height of the container to the full height of the viewport */
-  position: relative;
+  justify-content: center;
+  align-items: center;
+  height: 75vh; /* reduced height of the container */
+  width: 60%; /* reduced width of the container */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .box2 {
@@ -156,10 +160,11 @@ min-width: 80px;
 }
 
 .gamedescrip {
-
-margin-left: 10%;
+margin-left: 5%;
+margin-right: 5%;
+/* margin-left: 10%; */
 word-wrap: break-word;
-width: 85%;
+/* width: 85%; */
 
 
 }
@@ -240,6 +245,56 @@ padding:10px;
 min-height:15px; 
 min-width: 80px;
 
+}
+
+.enter_button:hover {
+  /* animation: colorTrans 4s infinite alternate; */
+  background-color: rgb(92, 92, 92);
+  cursor: pointer;
+}
+
+.bookButton:hover {
+  /* animation: colorTrans 4s infinite alternate; */
+  background-color: rgb(92, 92, 92);
+  cursor: pointer;
+}
+
+.new_button:hover {
+  animation: colorTrans 1s infinite alternate;
+  /* background-color: rgb(92, 92, 92); */
+  cursor: pointer;
+}
+
+.join_button:hover {
+  animation: colorTrans 1s infinite alternate;
+  /* background-color: rgb(92, 92, 92); */
+  cursor: pointer;
+}
+
+.arrow_button:hover {
+  /* animation: colorTrans 4s infinite alternate; */
+  background-color: rgb(92, 92, 92);
+  cursor: pointer;
+}
+
+.start_button:hover {
+  /* animation: colorTrans 1s infinite alternate; */
+  background-color: rgb(92, 92, 92);
+  cursor: pointer;
+}
+
+@keyframes colorTrans {
+  100% {
+    background-color: rgb(40, 226, 220);
+  }
+  50% {
+    background-color: rgb(72, 0, 93);
+  }
+}
+
+.main_Page{
+  display: flex;
+  flex-direction: column;
 }
 
 /* Remove here */

@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="main.css" type="text/css" />
 
     <head>
-        <title>Hometown</title>
+        <title>PictaPhone</title>
         <script src="./javascript/canvas.js" defer></script>
         <script src="./javascript/prompt.js" defer></script>
         <meta name="viewport" content="width=device-width, user-scalable=no, intial-scale=1">
@@ -13,22 +13,22 @@
     <body>
         
         <!--Main Page screen-->
+        
+        <audio id="audio" loop>
+            <source src="BorderMusic.mp3" type="audio/mp3">
+        </audio>
+
         <div id="mainPage">
+            
             <div align="center">
 
                 <h1>
-                    Welcome to Pictionary Telephone
+                    Welcome to PictaPhone
                 </h1>
         
             </div>
 
-            <div align="center">
-
-                <h2>
-                    If you are on a smartphone, please tilt your phone horizontally for the best results
-                </h2>
-        
-            </div>
+            
             <div align="center">
     
                 <h2>
@@ -54,19 +54,19 @@
             </div>
     
             <div class="gamedescrip">
-               
+            
                 <h2 align="center">
                     Description:
                 </h2>
     
                 <p class="description">
-                    Welcome to Pictionary Telephone. Pictionary Telephone is a drawing version of the classic game, Telephone. 
+                    Welcome to PictaPhone. PictaPhone is a drawing version of the classic game, Telephone. 
                     The game will consist of multiple rounds that are either prompt rounds or 
                     drawing rounds. In the 
                     initial prompt round, players will have to come up with a prompt. Then it will be a drawing round
                     Player must draw a picture that they 
                     believe best represents the random prompt that they were given. Similarly,
-                     the following round 
+                    the following round 
                     will involve each player getting a random drawn picture they will have to 
                     guess what the initial prompt was. This process repeats until all the rounds
                     have concluded. Then, there will be a time at the end to collectively view the
@@ -75,6 +75,7 @@
                 </p>
         
             </div>
+
         </div>
 
         <!--Transition join screen-->
@@ -215,7 +216,7 @@
                     Give us your best prompt!
                 </h1>
 
-                <textarea name="text" id="prompt" rows="6"  wrap="soft" maxlength="25" placeholder="Enter Prompt Here"> </textarea>
+                <textarea name="text" id="prompt" rows="6"  wrap="soft" maxlength="100" placeholder="Enter Prompt Here"> </textarea>
                 <br>
                 </br>
                 <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked()">Enter</button>
@@ -235,7 +236,7 @@
             </div>
 
             <div align="center">
-                <textarea name="text" id="prompt2" rows="6"  wrap="soft" maxlength="25" placeholder="Enter Prompt Here"> </textarea>
+                <textarea name="text" id="prompt2" rows="6"  wrap="soft" maxlength="100" placeholder="Enter Prompt Here"> </textarea>
                 <br>
                 </br>
                 <button class="enter_button" id="submitPrompt" onclick="enterPromptButtonClicked2()">Enter</button>
@@ -294,7 +295,7 @@
         <div id="canvasPage" style="display:none">
             <div align="center">
                 <h1>
-                    Name of Game
+                    PictaPhone
                 </h1>
             </div>
             <div align="center">
@@ -488,7 +489,7 @@
             <div class="container">
                 <button class="arrow-button left" id="canvasLeftArrow" onclick="canvasLeftArrowClicked()">&lt;</button>
                 <img id="endGameCanvas"
-                    width="1000" height="500">
+                    width="70%" height="70%">
                 </img>
                 <button class="arrow-button right" id="canvasRightArrow" onclick="canvasRightArrowClicked()">&gt;</button>
               </div>
@@ -626,8 +627,11 @@
             
             /* Create a new game. Emit newGame event. */
             function createButtonClicked() {
+                var audio = document.getElementById("audio");
+                audio.play();
                 socket.emit('createClicked', socket.id);
             }
+            
             
             
             /* The join button was clicked on the initial main screen */
@@ -957,11 +961,14 @@
                 //console.log("here");
                 //var startDate = new Date();
                 var startDate = new Date(start);
-                document.getElementById("timerLabel2").innerHTML = 1 + "m " + 0 + "s ";
+                document.getElementById("timerLabel2").innerHTML = 0 + "m " + 30 + "s ";
 
                 //startDate.setMinutes(startDate.getMinutes() + 1);
-                startDate.setSeconds(startDate.getSeconds() + 10);
-                //console.log(page, 'in');
+                startDate.setSeconds(startDate.getSeconds() + 31);
+                
+                if (page == 'prompt'){
+                    startDate.setMinutes(startDate.getMinutes() + 1);
+                }
                 var x = setInterval(function() {
                     if (game.timerStatus == true){
                         // today's date and time
