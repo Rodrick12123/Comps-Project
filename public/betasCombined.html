@@ -319,7 +319,7 @@
                 <script src="https://cdn.jsdelivr.net/npm/fabric"></script>
                 
                 <label for="colorpicker" style="color:white">Change Color:</label>
-                <input type="color" id="colorpicker" value="black" oninput="changeColor()">
+                <input type="color" id="colorpicker" value="#000000" oninput="changeColor()">
                 
                 <label for="sizepicker" style="color:white">Change Brush Size:</label>
                 <input type="number" id="sizepicker" min="1" value="5" oninput="changeSize()">
@@ -849,8 +849,8 @@
             socket.on("playerToCanvas", function() {
                 // startTimer = true;
                 clearCanvas();
-                colorPicker="black"
-                sizePicker="5"
+                document.getElementById("colorpicker").value="#000000";
+                document.getElementById("sizepicker").value="5";
                 switchView("canvasPage");
             });
 

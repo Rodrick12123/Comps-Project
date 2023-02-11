@@ -1,7 +1,7 @@
 //sets initial conditions for canvas
 const canvas = new fabric.Canvas("canvas")
 canvas.isDrawingMode = true;
-canvas.freeDrawingBrush.color = 'blue';
+canvas.freeDrawingBrush.color = 'black';
 canvas.freeDrawingBrush.width = 5;
 canvas.backgroundColor = "white";
 canvas.renderAll();
@@ -30,7 +30,7 @@ function redo(){
 
 function rebuildCanvas() {
   canvas.isDrawingMode = true;
-  canvas.freeDrawingBrush.color = 'blue';
+  canvas.freeDrawingBrush.color = 'black';
   canvas.freeDrawingBrush.width = 5;
   canvas.backgroundColor = "white";
   canvas.renderAll();
