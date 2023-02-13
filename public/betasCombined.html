@@ -981,13 +981,13 @@
                 document.getElementById("timerLabel2").innerHTML = 0 + "m " + 30 + "s ";
 
                 //startDate.setMinutes(startDate.getMinutes() + 1);
-                //startDate.setSeconds(startDate.getSeconds() + 31);
-                startDate.setSeconds(startDate.getSeconds() + 11);
+                startDate.setSeconds(startDate.getSeconds() + 31);
+                //startDate.setSeconds(startDate.getSeconds() + 11);
 
                 
                 if (page == 'prompt'){
-                    //startDate.setMinutes(startDate.getMinutes() + 1);
-                    startDate.setSeconds(startDate.getSeconds() + 20);
+                    startDate.setMinutes(startDate.getMinutes() + 1);
+                    //startDate.setSeconds(startDate.getSeconds() + 20);
                 }
                 var x = setInterval(function() {
                     if (game.timerStatus == true){
