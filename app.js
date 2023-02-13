@@ -286,12 +286,13 @@ io.on('connection', function(socket){
             if (games[i].lobbyID == lobbyID){
                 for(let j = 0; j < games[i].numPlayers; j++){
                     if (!(games[i].finishedPlayers.includes(games[i].players[j].username))){
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput("No drawing");//.toString());
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
+                        io.to(games[i].players[j].socketID).emit('enterCanvas');
+                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput("No drawing");//.toString());
+                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                     }
                 }
 
-                games[i].timerStatus = false;
+                /*games[i].timerStatus = false;
                 
                 var startDate = new Date();
                 //prob only have to do prompt here. Or maybe nothing
@@ -316,7 +317,7 @@ io.on('connection', function(socket){
                 
                 startDate = new Date();
                 //console.log(startDate, 'out');
-                io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);
+                io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);*/
                 break;
             }
         }
@@ -335,12 +336,13 @@ io.on('connection', function(socket){
                 for(let j = 0; j < games[i].numPlayers; j++){
                     console.log(games[i].players[j].username)
                     if (!(games[i].finishedPlayers.includes(games[i].players[j].username))){
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput("No Prompt");
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
+                        io.to(games[i].players[j].socketID).emit('enterPrompt');
+                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput("No Prompt");
+                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                     }
                 }
                 
-                games[i].timerStatus = false;
+                /*games[i].timerStatus = false;
                 var startDate = new Date();
                 //figure out what page dis add parameter
                 io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);
@@ -359,7 +361,7 @@ io.on('connection', function(socket){
                 io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate);
                 //io.emit("timerStart", games[i], "prompt", startDate);
                 games[i].numPlayersInWaitRoom = 0;
-                games[i].finishedPlayers = [];
+                games[i].finishedPlayers = [];*/
                 
                 break;
             }
