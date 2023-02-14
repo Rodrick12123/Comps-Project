@@ -96,11 +96,32 @@ function createPlayer(game, username, lobbyID, socketID){
 io.on('connection', function(socket){
 
     socket.on("disconnect", function() {
+        console.log("socket.id: " + socket.id);
+        
+        for (let i = 0; i < games.length; i++) {
+            for (let j = 0; j < games[i].players.length; j++) {
+                if (games[i].players[j].socketID == socket.id) {
+                    games[i].disconnectPlayer(socket.id);
+                    let index = games[i].finishedPlayers.indexOf(games[i].players[j]);
+                    games[i].finishedPlayers.splice(index,1);
+                    
+                    
+                    // Work in progress – need to figure out how to properly remove player from finishedPlayers list
+                    if (!games[i].finishedPlayers.includes(games[i].players[j])) {
+
+                        io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames);
+                        io.to(games[i].socketID).emit("mainPromptFinishedList", games[i].finishedPlayers, games[i].usernames);
+                        io.to(socket.id).emit('playerToWaitingNextRound');
+                    }
+                }
+            }
+        }
+
         /* TODO List: 
-            remove from players list
             be able to end the round (send players in waiting room on)
             remove that player from the list of unfinished players HTML
             What about their book????*/
+
         console.log("player disconnected");
     });
 
@@ -131,7 +152,19 @@ io.on('connection', function(socket){
                 }
                 
                 if (games[i].getCurrRound() > 0){
-                    socket.emit("gameInProgress");
+                    if (games[i].hasDisconnectedPlayers()) {
+                        games[i].reconnectPlayer(username);
+                        socket.join(lobbyID);
+
+                        // if currRound is odd, send to prompt page
+                        // else if currRound is even, send to canvas page
+                    
+                        // emit something to send to right page
+                        // console.log()
+                    }
+                    else {
+                        socket.emit("gameInProgress");
+                    }
                     break;
                 }
 
