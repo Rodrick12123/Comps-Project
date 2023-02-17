@@ -481,11 +481,11 @@
             </div>
            
             <div class="container">
-                <button class="arrow-button left" id="canvasLeftArrow" onclick="canvasLeftArrowClicked()">&lt;</button>
+                <button class="arrow-button left" id="canvasLeftArrow" onclick="setTimeout(canvasLeftArrowClicked, 500)">&lt;</button>
                 <img id="endGameCanvas"
                     width="70%" height="70%">
                 </img>
-                <button class="arrow-button right" id="canvasRightArrow" onclick="canvasRightArrowClicked()">&gt;</button>
+                <button class="arrow-button right" id="canvasRightArrow" onclick="setTimeout(canvasRightArrowClicked, 500)">&gt;</button>
               </div>
               
         </div>
@@ -506,7 +506,7 @@
             </div>
            
             <div class="container">
-                <button class="arrow-button left" id="promptLeftArrow" onclick="promptLeftArrowClicked()">&lt;</button>
+                <button class="arrow-button left" id="promptLeftArrow" onclick="setTimeout(promptLeftArrowClicked, 500)">&lt;</button>
                 <div align="center">
                     <h2>
                         <div class="resultPrompt" id="resultsPrompt">
@@ -514,7 +514,7 @@
                         </div>
                     </h2>
                 </div>
-                <button class="arrow-button right" id="promptRightArrow" onclick="promptRightArrowClicked()">&gt;</button>
+                <button class="arrow-button right" id="promptRightArrow" onclick="setTimeout(promptRightArrowClicked, 500)">&gt;</button>
               </div>
               
         </div>
