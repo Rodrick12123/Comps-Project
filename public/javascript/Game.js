@@ -41,6 +41,7 @@ class Game {
                 console.log("removing player: " + this.players[i].username);
                 this.disconnectedPlayers.push(this.players[i]); // add player to disconnectedPlayers[]
                 this.players.splice(i, 1); // remove the player from players list
+                this.usernames.splice(i,1);
             }
         }
 
