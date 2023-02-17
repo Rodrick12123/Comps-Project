@@ -876,6 +876,7 @@
 
             socket.on("playerToCanvas", function() {
                 // startTimer = true;
+                console.log("we're in the socket receiving 'player to canvas'");
                 clearCanvas();
                 document.getElementById("colorpicker").value="#000000";
                 document.getElementById("sizepicker").value="5";

@@ -147,7 +147,7 @@ io.on('connection', function(socket){
                             games[i].timerStatus = false;
                             var startDate = new Date();
 
-                            io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate, lobbyID);
+                            io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate, games[i].lobbyID);
                             swapBooks(games[i]);
                             games[i].setCurrRound(games[i].getCurrRound()+1);
                             io.emit('displayCanvas', games[i]);
@@ -159,7 +159,8 @@ io.on('connection', function(socket){
                                 break;
                             }
 
-                            io.in(lobbyID).emit("playerToPromptWithCanvas");
+                            console.log("trying to emit playerToPromptWithCanvas to lobby id : " + games[i].lobbyID);
+                            io.in(games[i].lobbyID).emit("playerToPromptWithCanvas");
                             io.to(games[i].socketID).emit("mainToPrompt");
 
                             games[i].numPlayersInWaitRoom = 0;
@@ -167,24 +168,26 @@ io.on('connection', function(socket){
                             games[i].timerStatus = true;
 
                             startDate = new Date();
-                            io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate, lobbyID);
+                            io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate, games[i].lobbyID);
                         }
 
                         else {
                             games[i].timerStatus = false;
                             var startDate = new Date();
 
-                            io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate, lobbyID);
+                            io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate, games[i].lobbyID);
+                            io.emit("timerStart", games[i], "prompt", startDate, games[i].lobbyID);
                             swapBooks(games[i]);
                             games[i].setCurrRound(games[i].getCurrRound()+1);
                             io.emit('displayPrompt', games[i]);
                             
-                            io.in(lobbyID).emit("playerToCanvas");
+                            console.log("trying to emit playerToCanvas to lobby id : " + games[i].lobbyID);
+                            io.in(games[i].lobbyID).emit("playerToCanvas");
                             io.to(games[i].socketID).emit("mainToCanvas");
         
                             
                             startDate = new Date();
-                            io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate, lobbyID);
+                            io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate, games[i].lobbyID);
 
                             games[i].timerStatus = true;
                             games[i].numPlayersInWaitRoom = 0;
