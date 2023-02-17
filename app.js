@@ -100,18 +100,105 @@ io.on('connection', function(socket){
         
         for (let i = 0; i < games.length; i++) {
             for (let j = 0; j < games[i].players.length; j++) {
-                if (games[i].players[j].socketID == socket.id) {
-                    games[i].disconnectPlayer(socket.id);
-                    let index = games[i].finishedPlayers.indexOf(games[i].players[j]);
-                    games[i].finishedPlayers.splice(index,1);
-                    
-                    
-                    // Work in progress – need to figure out how to properly remove player from finishedPlayers list
-                    if (!games[i].finishedPlayers.includes(games[i].players[j])) {
+                if (games[i].players[j].socketID == socket.id) {                    
+                    console.log("current round is: " + games[i].getCurrRound());
 
-                        io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames);
+                    /// Work in progress – need to figure out how to properly remove player from finishedPlayers list
+
+                    console.log("player is finished status: " + games[i].finishedPlayers.includes(games[i].players[j].username));
+                    // if disconnected player has not submitted yet
+                    if (!games[i].finishedPlayers.includes(games[i].players[j].username)) {
+                        // if canvas round
+                        if (games[i].getCurrRound() % 2 == 0) {
+                            console.log("entering canvas");
+                            // io.to(games[i].players[j].socketID).emit('enterCanvas'); // If player hasn't submitted canvas, submit
+                            socket.emit("canvasEntered", games[i].players[j].username, games[i].lobbyID, null);
+                        }
+                        // if prompt round
+                        else {
+                            console.log("entering prompt");
+                            // io.to(games[i].players[j].socketID).emit('enterPrompt'); // If player hasn't submmited prompt, submit
+                            socket.emit("promptEntered", games[i].players[j].username, games[i].lobbyID, null);
+                        }
+
+                        console.log("1. number of players in wait room: " + games[i].numPlayersInWaitRoom);
+                        console.log("1. games.numPlayers: " + games[i].numPlayers);
+
+                    }
+                    else {
+                        for (let k = 0; k < games[i].finishedPlayers; k++) {
+                            if (games[i].finishedPlayers[k] == games[i].players[j].username) {
+                                games[i].finishedPlayers.splice(k, 1);
+                            }
+                        } 
+                    }
+                    
+                    // disconnect player from game lists
+                    games[i].disconnectPlayer(socket.id);
+
+                    console.log("2. number of players in wait room: " + games[i].numPlayersInWaitRoom);
+                    console.log("2. games.numPlayers: " + games[i].numPlayers);
+
+                    /// Because I can't make the promptEntered work, here I'm trying to trigger the conditional manually to
+                    /// send the game to the next state if this player was the last player to have a prompt/canvas
+                    if (games[i].numPlayersInWaitRoom >= games[i].numPlayers){
+                        if (games[i].getCurrRound() % 2 == 0) {
+
+                            games[i].timerStatus = false;
+                            var startDate = new Date();
+
+                            io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate, lobbyID);
+                            swapBooks(games[i]);
+                            games[i].setCurrRound(games[i].getCurrRound()+1);
+                            io.emit('displayCanvas', games[i]);
+
+                            if (games[i].getCurrRound() >= games[i].maxRounds) {
+                                io.in(lobbyID).emit("playersToEndgame");
+                                io.to(games[i].socketID).emit("mainToEndgame");
+                                io.to(games[i].socketID).emit("putNamesOnBooks", games[i]);
+                                break;
+                            }
+
+                            io.in(lobbyID).emit("playerToPromptWithCanvas");
+                            io.to(games[i].socketID).emit("mainToPrompt");
+
+                            games[i].numPlayersInWaitRoom = 0;
+                            games[i].finishedPlayers = [];
+                            games[i].timerStatus = true;
+
+                            startDate = new Date();
+                            io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate, lobbyID);
+                        }
+
+                        else {
+                            games[i].timerStatus = false;
+                            var startDate = new Date();
+
+                            io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate, lobbyID);
+                            swapBooks(games[i]);
+                            games[i].setCurrRound(games[i].getCurrRound()+1);
+                            io.emit('displayPrompt', games[i]);
+                            
+                            io.in(lobbyID).emit("playerToCanvas");
+                            io.to(games[i].socketID).emit("mainToCanvas");
+        
+                            
+                            startDate = new Date();
+                            io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate, lobbyID);
+
+                            games[i].timerStatus = true;
+                            games[i].numPlayersInWaitRoom = 0;
+                            games[i].finishedPlayers = [];
+                        }
+                    }
+
+                    // should re-emit finished players without the disconnected player –– work in progress
+                    io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames);
+                    if (games[i].getCurrRound() % 2 == 0) {
+                        io.to(games[i].socketID).emit("mainCanvasFinishedList", games[i].finishedPlayers, games[i].usernames);
+                    }
+                    else {
                         io.to(games[i].socketID).emit("mainPromptFinishedList", games[i].finishedPlayers, games[i].usernames);
-                        io.to(socket.id).emit('playerToWaitingNextRound');
                     }
                 }
             }
@@ -211,6 +298,8 @@ io.on('connection', function(socket){
 
 
     socket.on('promptEntered', function(username, lobbyID, prompt){
+        console.log("promptEntered called");
+
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
@@ -226,7 +315,7 @@ io.on('connection', function(socket){
                     }
                 }
                 
-                if (games[i].numPlayersInWaitRoom == games[i].numPlayers){
+                if (games[i].numPlayersInWaitRoom >= games[i].numPlayers){
                     games[i].timerStatus = false;
                     var startDate = new Date();
                     //figure out what page dis add parameter
@@ -261,6 +350,8 @@ io.on('connection', function(socket){
     });
 
     socket.on('canvasEntered', function(username, lobbyID, drawing){
+        console.log("canvasEntered called");
+
         if(drawing != null){
             lobbyID = lobbyID.trim();
         }
