@@ -80,6 +80,33 @@ margin: 0; /* recommended */
   transform: translate(-50%, -50%);
 }
 
+.written {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 450px;
+}
+
+.written h1 {
+  color: rgb(248, 248, 248);
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+
+.drawn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 550px;
+}
+
+.drawn h1 {
+  color: rgb(248, 248, 248);
+  text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+}
+
+
 .box2 {
   width: 60%; /* adjust the width as needed */
   height: 60%; /* adjust the height as needed */
