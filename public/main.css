@@ -172,7 +172,7 @@ word-wrap: break-word;
 .description {
 
 font-family: 'Times New Roman', Times, serif;
-font-size: 14pt;
+font-size: 18pt;
 font-weight: bolder;
 color: rgb(255, 251, 251);
 margin:0;
@@ -315,6 +315,8 @@ min-width: 80px;
   stroke-width: 7px;
   stroke: grey;
 }
+
+
 
 .timerBox {
   display: flex;
