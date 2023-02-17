@@ -108,7 +108,7 @@ io.on('connection', function(socket){
                     
                     // Work in progress – need to figure out how to properly remove player from finishedPlayers list
                     if (!(games[i].finishedPlayers.includes(games[i].players[j]))) {
-                        games[i].numPlayersInWaitRoom++;
+                        
                         io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames);
                         if((games[i].getCurrRound() % 2) == 1){
                             io.to(games[i].socketID).emit("mainPromptFinishedList", games[i].finishedPlayers, games[i].usernames);
@@ -164,6 +164,7 @@ io.on('connection', function(socket){
                         // if currRound is odd, send to prompt page
                         // else if currRound is even, send to canvas page
                         games[i].addPlayerToFinishedPlayers(games[i].players[(games[i].numPlayers -1)].username);
+                        games[i].numPlayersInWaitRoom++;
                         if((games[i].getCurrRound() % 2) == 1){
                             //socket.broadcast.emit("playerToPrompt");
                             io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames);

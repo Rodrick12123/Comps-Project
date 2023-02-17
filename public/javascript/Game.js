@@ -45,8 +45,8 @@ class Game {
             }
         }
 
+        // decrement numPlayers
         this.numPlayers--;
-        // remove player username from usernames[]
 
         // console.log("current players: " + this.displayPlayers());
         console.log("current players length: " + this.players.length);
@@ -68,7 +68,9 @@ class Game {
         newPlayer.socketID = socketID;
         this.addPlayer(newPlayer);
         console.log("player reconnecting: " + newPlayer.username);
-    
+
+        // need to update player's book page –– not sure how
+
         // might need to handle interactions with the re-added player's book object not 
         // corresponding with current game state
     }
