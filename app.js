@@ -96,11 +96,32 @@ function createPlayer(game, username, lobbyID, socketID){
 io.on('connection', function(socket){
 
     socket.on("disconnect", function() {
+        console.log("socket.id: " + socket.id);
+        
+        for (let i = 0; i < games.length; i++) {
+            for (let j = 0; j < games[i].players.length; j++) {
+                if (games[i].players[j].socketID == socket.id) {
+                    games[i].disconnectPlayer(socket.id);
+                    let index = games[i].finishedPlayers.indexOf(games[i].players[j]);
+                    games[i].finishedPlayers.splice(index,1);
+                    
+                    
+                    // Work in progress – need to figure out how to properly remove player from finishedPlayers list
+                    if (!games[i].finishedPlayers.includes(games[i].players[j])) {
+
+                        io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames);
+                        io.to(games[i].socketID).emit("mainPromptFinishedList", games[i].finishedPlayers, games[i].usernames);
+                        io.to(socket.id).emit('playerToWaitingNextRound');
+                    }
+                }
+            }
+        }
+
         /* TODO List: 
-            remove from players list
             be able to end the round (send players in waiting room on)
             remove that player from the list of unfinished players HTML
             What about their book????*/
+
         console.log("player disconnected");
     });
 
@@ -131,7 +152,19 @@ io.on('connection', function(socket){
                 }
                 
                 if (games[i].getCurrRound() > 0){
-                    socket.emit("gameInProgress");
+                    if (games[i].hasDisconnectedPlayers()) {
+                        games[i].reconnectPlayer(username);
+                        socket.join(lobbyID);
+
+                        // if currRound is odd, send to prompt page
+                        // else if currRound is even, send to canvas page
+                    
+                        // emit something to send to right page
+                        // console.log()
+                    }
+                    else {
+                        socket.emit("gameInProgress");
+                    }
                     break;
                 }
 
@@ -286,12 +319,13 @@ io.on('connection', function(socket){
             if (games[i].lobbyID == lobbyID){
                 for(let j = 0; j < games[i].numPlayers; j++){
                     if (!(games[i].finishedPlayers.includes(games[i].players[j].username))){
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput("No drawing");//.toString());
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
+                        io.to(games[i].players[j].socketID).emit('enterCanvas');
+                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput("No drawing");//.toString());
+                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                     }
                 }
 
-                games[i].timerStatus = false;
+                /*games[i].timerStatus = false;
                 
                 var startDate = new Date();
                 //prob only have to do prompt here. Or maybe nothing
@@ -316,7 +350,7 @@ io.on('connection', function(socket){
                 
                 startDate = new Date();
                 //console.log(startDate, 'out');
-                io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);
+                io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);*/
                 break;
             }
         }
@@ -335,12 +369,13 @@ io.on('connection', function(socket){
                 for(let j = 0; j < games[i].numPlayers; j++){
                     console.log(games[i].players[j].username)
                     if (!(games[i].finishedPlayers.includes(games[i].players[j].username))){
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput("No Prompt");
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
+                        io.to(games[i].players[j].socketID).emit('enterPrompt');
+                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput("No Prompt");
+                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                     }
                 }
                 
-                games[i].timerStatus = false;
+                /*games[i].timerStatus = false;
                 var startDate = new Date();
                 //figure out what page dis add parameter
                 io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);
@@ -359,7 +394,7 @@ io.on('connection', function(socket){
                 io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate);
                 //io.emit("timerStart", games[i], "prompt", startDate);
                 games[i].numPlayersInWaitRoom = 0;
-                games[i].finishedPlayers = [];
+                games[i].finishedPlayers = [];*/
                 
                 break;
             }
