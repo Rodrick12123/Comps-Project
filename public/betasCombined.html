@@ -474,35 +474,39 @@
                     <div class="text" id="playerBookCanvas"></div>
                 </h1>
 
-                
+                <h2>
+                    <div class="text" id="drawnBy"></div>
+                </h2>
         
             </div>
            
             <div class="container">
-                <button class="arrow-button left" id="canvasLeftArrow" onclick="setTimeout(canvasLeftArrowClicked, 500)">&lt;</button>
+                <button class="arrow-button left" id="canvasLeftArrow" onclick="canvasLeftArrowClicked()">&lt;</button>
                 <img id="endGameCanvas"
                     width="70%" height="70%">
                 </img>
-                <button class="arrow-button right" id="canvasRightArrow" onclick="setTimeout(canvasRightArrowClicked, 500)">&gt;</button>
+                <button class="arrow-button right" id="canvasRightArrow" onclick="canvasRightArrowClicked()">&gt;</button>
               </div>
               
-              <div class="drawn">
-                <h1>
-                    <div class="text" id="drawnBy"></div>
-                </h1>
-            </div>
         </div>
 
 
-        <!--End Game prompt results-->
+         <!--End Game prompt results-->
         <div id="endGamePromptResults" style="display:none">
             <div align="center">
+
                 <h1>
                     <div class="text" id="playerBookPrompt"></div>
                 </h1>
+
+                <h2>
+                    <div class="text" id="writtenBy"></div>
+                </h2>
+        
             </div>
+           
             <div class="container">
-                <button class="arrow-button left" id="promptLeftArrow" onclick="setTimeout(promptLeftArrowClicked, 500)">&lt;</button>
+                <button class="arrow-button left" id="promptLeftArrow" onclick="promptLeftArrowClicked()">&lt;</button>
                 <div align="center">
                     <h2>
                         <div class="resultPrompt" id="resultsPrompt">
@@ -510,15 +514,10 @@
                         </div>
                     </h2>
                 </div>
-                <button class="arrow-button right" id="promptRightArrow" onclick="setTimeout(promptRightArrowClicked, 500)">&gt;</button>
-            </div>
-            <div class="written">
-                <h1>
-                    <div class="text" id="writtenBy"></div>
-                </h1>
-            </div>
+                <button class="arrow-button right" id="promptRightArrow" onclick="promptRightArrowClicked()">&gt;</button>
+              </div>
+              
         </div>
-
 
          <!--End Game PLAYER PAGE-->
         <div id="playerEndGameResults" style="display:none">   
