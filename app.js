@@ -242,6 +242,10 @@ io.on('connection', function(socket){
                 var prompt4 = "Make me laugh";
                 var prompt5 = "Make the monkey laugh";
                 var prompt6 = "How about them apples";
+                var prompt7 = "She's a bad mamba jamba";
+                var prompt8 = "When dogs grow beards"
+                var prompt9 = "Up up and away."
+                var prompt10 = "Fast and furious"
 
                 games[i].addPrompt(prompt1);
                 games[i].addPrompt(prompt2);
@@ -249,6 +253,11 @@ io.on('connection', function(socket){
                 games[i].addPrompt(prompt4);
                 games[i].addPrompt(prompt5);
                 games[i].addPrompt(prompt6);
+                games[i].addPrompt(prompt7);
+                games[i].addPrompt(prompt8);
+                games[i].addPrompt(prompt9);
+                games[i].addPrompt(prompt10);
+                
                 console.log(games[i].defaultPrompt);
                 if (games[i].numPlayers >= maxPlayers){
                     socket.emit("tooManyPlayers");
@@ -318,7 +327,7 @@ io.on('connection', function(socket){
         console.log("promptEntered called");
         console.log("entered" , prompt);
         lobbyID = lobbyID.trim();
-        let rand = Math.floor(Math.random() * 5);
+        let rand = Math.floor(Math.random() * 9);
         var p = String(prompt);
         //console.log(p.length);
         for (let i = 0; i < games.length; i++) {
