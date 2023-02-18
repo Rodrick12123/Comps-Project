@@ -5,7 +5,7 @@ class Game {
         this.lobbyID = lobbyID;
         this.socketID = socketID;
         this.currRound = 0;
-        this.maxRounds = 1;
+        this.maxRounds = 5;
         this.numPlayers = 0;
         this.numPlayersInWaitRoom = 0;
         this.players = [];
@@ -44,8 +44,9 @@ class Game {
             if (this.players[i].socketID == socketID) {
                 console.log("removing player: " + this.players[i].username);
                 this.disconnectedPlayers.push(this.players[i]); // add player to disconnectedPlayers[]
+                let index = this.usernames.indexOf(this.players[i].username) 
+                this.usernames.splice(index, 1); // remove player username from usernames[]
                 this.players.splice(i, 1); // remove the player from players list
-                this.usernames.splice(i,1);
             }
         }
 
