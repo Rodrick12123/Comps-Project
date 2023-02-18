@@ -18,8 +18,12 @@ class Game {
         this.host = host;
         this.numPlayersInWaitRoom = 0;
         this.disconnectedPlayers = [];
+        this.defaultPrompt = [];
     }
 
+    addPrompt(prompt) {
+        this.defaultPrompt.push(prompt);
+    }
 
     /* Appends the player to the list of players */
     addPlayer(player) {
