@@ -240,10 +240,10 @@ io.on('connection', function(socket){
                 var prompt2 = "Houston we have takeoff";
                 var prompt3 = "The roof the roof the roof is on fire";
                 var prompt4 = "Make me laugh";
-                var prompt5 = "Make the monkey laugh";
+                var prompt5 = "Dancing in the rain";
                 var prompt6 = "How about them apples";
                 var prompt7 = "She's a bad mamba jamba";
-                var prompt8 = "When dogs grow beards"
+                var prompt8 = "Its a bird its a plane."
                 var prompt9 = "Up up and away."
                 var prompt10 = "Fast and furious"
 
@@ -329,7 +329,7 @@ io.on('connection', function(socket){
         lobbyID = lobbyID.trim();
         let rand = Math.floor(Math.random() * 9);
         var p = String(prompt);
-        //console.log(p.length);
+        console.log(p.length);
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++;
@@ -337,14 +337,12 @@ io.on('connection', function(socket){
                 for(let j = 0; j < games[i].numPlayers; j++){
                     if (games[i].players[j].socketID == socket.id){
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
-                        
-                        if(p.length == 1){
+                        if(p.length == 0){
                             
                             games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(games[i].defaultPrompt[rand]);
                         }else{
                             games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
                         }
-                        
                         games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                         playerNum = j;
                         break;

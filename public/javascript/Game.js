@@ -21,9 +21,6 @@ class Game {
         this.defaultPrompt = [];
     }
 
-    addPrompt(prompt) {
-        this.defaultPrompt.push(prompt);
-    }
 
     /* Appends the player to the list of players */
     addPlayer(player) {
@@ -44,9 +41,9 @@ class Game {
             if (this.players[i].socketID == socketID) {
                 console.log("removing player: " + this.players[i].username);
                 this.disconnectedPlayers.push(this.players[i]); // add player to disconnectedPlayers[]
-                let index = this.usernames.indexOf(this.players[i].username) 
-                this.usernames.splice(index, 1); // remove player username from usernames[]
                 this.players.splice(i, 1); // remove the player from players list
+                let index = this.usernames.indexOf(this.players[i].username) // remove player username from usernames[]
+                this.usernames.splice(index, 1);
             }
         }
 
@@ -130,6 +127,10 @@ class Game {
         for(let i=0; i<this.disconnectedPlayers.length; i++) {
             console.log(this.disconnectedPlayers[i]);
         }
+    }
+
+    addPrompt(prompt) {
+        this.defaultPrompt.push(prompt);
     }
 
 }
