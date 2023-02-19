@@ -88,6 +88,12 @@
         
                 
             </div>
+            <div id="gameProgressStatus" align=""center>
+                <p></p>
+            </div>
+            <div id="gameFullStatus" align=""center>
+                <p></p>
+            </div>
             <div align="center">
     
                 <h2>
@@ -799,6 +805,15 @@
                 switchView("lobbyPage");
 
                 lobbyIDDisplay.innerHTML = lobbyID;
+            });
+
+
+            socket.on("gameInProgress", function() {
+                document.getElementById("gameProgressStatus").innerHTML = "Sorry, you cannot join a game that is already in progress!";
+            });
+
+            socket.on("tooManyPlayers", function() {
+                document.getElementById("gameFullStatus").innerHTML = "Sorry, the game you are trying to join is full!";
             });
 
 
