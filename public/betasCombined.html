@@ -644,8 +644,8 @@
             // The start game button was clicked
             function startGameButtonClicked() {
 
-                const lobbyIDInput = document.getElementById("lobbyIDInput");
-                socket.emit("startGameClicked", socket.id);
+                const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
+                socket.emit("startGameClicked", socket.id, lobbyIDDisplay.innerHTML);
             }
 
             // The enter prompt button was clicked
@@ -876,7 +876,6 @@
 
             socket.on("playerToCanvas", function() {
                 // startTimer = true;
-                console.log("we're in the socket receiving 'player to canvas'");
                 clearCanvas();
                 document.getElementById("colorpicker").value="#000000";
                 document.getElementById("sizepicker").value="5";
@@ -985,7 +984,7 @@
                 document.getElementById("timerLabel2").innerHTML = 0 + "m " + 45 + "s ";
 
                 //startDate.setMinutes(startDate.getMinutes() + 1);
-                startDate.setSeconds(startDate.getSeconds() + 5);
+                startDate.setSeconds(startDate.getSeconds() + 46);
                 //startDate.setSeconds(startDate.getSeconds() + 11);
 
                 

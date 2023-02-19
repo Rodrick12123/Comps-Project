@@ -187,7 +187,7 @@ io.on('connection', function(socket){
         
                             
                             startDate = new Date();
-                            io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate, games[i].lobbyID);
+                            io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate, lobbyID);
 
                             games[i].timerStatus = true;
                             games[i].numPlayersInWaitRoom = 0;
@@ -242,10 +242,6 @@ io.on('connection', function(socket){
                 var prompt4 = "Make me laugh";
                 var prompt5 = "Make the monkey laugh";
                 var prompt6 = "How about them apples";
-                var prompt7 = "She's a bad mamba jamba";
-                var prompt8 = "When dogs grow beards"
-                var prompt9 = "Up up and away."
-                var prompt10 = "Fast and furious"
 
                 games[i].addPrompt(prompt1);
                 games[i].addPrompt(prompt2);
@@ -253,12 +249,7 @@ io.on('connection', function(socket){
                 games[i].addPrompt(prompt4);
                 games[i].addPrompt(prompt5);
                 games[i].addPrompt(prompt6);
-                games[i].addPrompt(prompt7);
-                games[i].addPrompt(prompt8);
-                games[i].addPrompt(prompt9);
-                games[i].addPrompt(prompt10);
-                
-                console.log(games[i].defaultPrompt);
+
                 if (games[i].numPlayers >= maxPlayers){
                     socket.emit("tooManyPlayers");
                     break;
@@ -297,7 +288,8 @@ io.on('connection', function(socket){
         }
     });
 
-    socket.on('startGameClicked', function(socketID){
+    socket.on('startGameClicked', function(socketID, lobbyID){
+        lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
                 if (games[i].host.getReadyToStart()) {
@@ -306,7 +298,7 @@ io.on('connection', function(socket){
                     // console.log(games[i].timerStatus);
                     // console.log('games[i].timerStatus');
                     
-                    socket.broadcast.emit("playerToPrompt");
+                    io.in(lobbyID).emit("playerToPrompt");
                     socket.emit("mainToPrompt");
                     //change
                     var startDate = new Date();
@@ -325,11 +317,8 @@ io.on('connection', function(socket){
 
     socket.on('promptEntered', function(username, lobbyID, prompt){
         console.log("promptEntered called");
-        console.log("entered" , prompt);
+
         lobbyID = lobbyID.trim();
-        let rand = Math.floor(Math.random() * 9);
-        var p = String(prompt);
-        //console.log(p.length);
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++;
@@ -337,14 +326,7 @@ io.on('connection', function(socket){
                 for(let j = 0; j < games[i].numPlayers; j++){
                     if (games[i].players[j].socketID == socket.id){
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
-                        
-                        if(p.length == 1){
-                            
-                            games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(games[i].defaultPrompt[rand]);
-                        }else{
-                            games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
-                        }
-                        
+                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
                         games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                         playerNum = j;
                         break;
@@ -452,6 +434,32 @@ io.on('connection', function(socket){
                     }
                 }
 
+                /*games[i].timerStatus = false;
+                
+                var startDate = new Date();
+                //prob only have to do prompt here. Or maybe nothing
+                io.to(games[i].socketID).emit("timerStart", games[i], "start", startDate);
+                io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate);
+                io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);
+                swapBooks(games[i]);
+                games[i].setCurrRound(games[i].getCurrRound()+1);
+                io.emit('displayCanvas', games[i]);
+                if (games[i].getCurrRound() >= games[i].maxRounds) {
+                    console.log("endTime")
+                    io.in(lobbyID).emit("playersToEndgame");
+                    io.to(games[i].socketID).emit("mainToEndgame");
+                    io.to(games[i].socketID).emit("putNamesOnBooks", games[i]);
+                    break;
+                }
+                io.in(lobbyID).emit("playerToPromptWithCanvas");
+                io.to(games[i].socketID).emit("mainToPrompt");
+                games[i].numPlayersInWaitRoom = 0;
+                games[i].finishedPlayers = [];
+                games[i].timerStatus = true;
+                
+                startDate = new Date();
+                //console.log(startDate, 'out');
+                io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);*/
                 break;
             }
         }
@@ -461,19 +469,41 @@ io.on('connection', function(socket){
 
     socket.on("timerFinishedPrompt", function(lobbyID) {
         lobbyID = lobbyID.trim();
-        
+        console.log('here');
+        let rand = Math.random();
         for (let i = 0; i < games.length; i++) {
             
             if (games[i].lobbyID == lobbyID){
+                console.log(games[i].numPlayers)
+                console.log(games[i].finishedPlayers);
                 for(let j = 0; j < games[i].numPlayers; j++){
+                    console.log(games[i].players[j].username)
                     if (!(games[i].finishedPlayers.includes(games[i].players[j].username))){
                         io.to(games[i].players[j].socketID).emit('enterPrompt');
-                        
-                        
-                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
+                        //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput("No Prompt");
                         //games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                     }
                 }
+                
+                /*games[i].timerStatus = false;
+                var startDate = new Date();
+                //figure out what page dis add parameter
+                io.to(games[i].socketID).emit("timerStart", games[i], "canvas", startDate);
+                //io.emit("timerStart", games[i], "prompt", startDate);
+                swapBooks(games[i]);
+                games[i].setCurrRound(games[i].getCurrRound()+1);
+                io.emit('displayPrompt', games[i]);
+                //use this for timer
+                io.in(lobbyID).emit("playerToCanvas");
+                io.to(games[i].socketID).emit("mainToCanvas");
+                games[i].timerStatus = true;
+                startDate = new Date();
+                //console.log(startDate, 'out');
+                io.to(games[i].socketID).emit("timerStart", games[i], "prompt", startDate);
+                //io.emit("timerStart", games[i], "prompt", startDate);
+                games[i].numPlayersInWaitRoom = 0;
+                games[i].finishedPlayers = [];*/
+                
                 break;
             }
         }
