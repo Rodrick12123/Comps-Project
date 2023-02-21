@@ -97,6 +97,21 @@ io.on('connection', function(socket){
 
     socket.on("disconnect", function() {
         console.log("socket.id: " + socket.id);
+
+        for (i = 0; i < games.length; i++) {
+            for (j = 0; j < games[i].numPlayers; j++) {
+                if (games[i].players[j].socketID == socket.id && games[i].currRound != games[i].maxRounds) {
+                    games[i].players.splice(j, 1);
+                    games[i].numPlayers--;
+                    for (k = 0; k < games[i].numPlayers; k++) {
+                        io.to(games[i].players[k].socketID).emit('sendToBeginning');
+                    }
+                    io.to(games[i].socketID).emit('sendToBeginning');
+                    break;
+                }
+            }
+        }
+
         console.log("player disconnected");
     });
 
