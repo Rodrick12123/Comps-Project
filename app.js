@@ -290,7 +290,10 @@ io.on('connection', function(socket){
                 socket.join(lobbyID);
 
                 //console.log(games[i].players);
-                io.emit('addPlayerToWaitingList', games[i].players);
+                io.to(games[i].socketID).emit('addPlayerToWaitingList', games[i].players)
+                for (j = 0; j < games[i].numPlayers; j++) {
+                    io.to(games[i].players[j].socketID).emit('addPlayerToWaitingList', games[i].players);
+                }
                 io.to(socket.id).emit('playerToWaitingRoom');
                 break;
             }
@@ -305,8 +308,9 @@ io.on('connection', function(socket){
                     games[i].timerStatus = true;
                     // console.log(games[i].timerStatus);
                     // console.log('games[i].timerStatus');
-                    
-                    socket.broadcast.emit("playerToPrompt");
+                    for (j = 0; j < games[i].numPlayers; j++) {
+                        io.to(games[i].players[j].socketID).emit("playerToPrompt");
+                    }
                     socket.emit("mainToPrompt");
                     //change
                     var startDate = new Date();
