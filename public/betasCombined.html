@@ -458,7 +458,7 @@
                 </tr>
                 <tr>
                     <td class="bookButton" id="book7" style="visibility:hidden;"><button class="box" id="book7Box" onclick="book7Clicked()"></button></td>
-                    <td class="bookButton" id="book7" style="visibility:hidden;"><button class="box" id="book8Box" onclick="book8Clicked()"></button></td>
+                    <td class="bookButton" id="book8" style="visibility:hidden;"><button class="box" id="book8Box" onclick="book8Clicked()"></button></td>
                     <td class="bookButton" id="book9" style="visibility:hidden;"><button class="box" id="book9Box" onclick="book9Clicked()"></button></td>
                 </tr>
             </table>
@@ -479,10 +479,6 @@
                 <h1>
                     <div class="text" id="playerBookCanvas"></div>
                 </h1>
-
-                <h2>
-                    <div class="text" id="drawnBy"></div>
-                </h2>
         
             </div>
            
@@ -492,7 +488,13 @@
                     width="70%" height="70%">
                 </img>
                 <button class="arrow-button right" id="canvasRightArrow" style="visibility: hidden;" onclick="canvasRightArrowClicked()">&gt;</button>
-              </div>
+            </div>
+
+            <div class="drawn">
+                <h1>
+                    <div class="text" id="drawnBy"></div>
+                </h1>
+            </div>
               
         </div>
 
@@ -504,10 +506,6 @@
                 <h1>
                     <div class="text" id="playerBookPrompt"></div>
                 </h1>
-
-                <h2>
-                    <div class="text" id="writtenBy"></div>
-                </h2>
         
             </div>
            
@@ -521,7 +519,13 @@
                     </h2>
                 </div>
                 <button class="arrow-button right" id="promptRightArrow" style="visibility: hidden;" onclick="promptRightArrowClicked()">&gt;</button>
-              </div>
+            </div>
+
+            <div class="written">
+                <h1>
+                    <div class="text" id="writtenBy"></div>
+                </h1>
+            </div>
               
         </div>
 
@@ -814,6 +818,11 @@
 
             socket.on("tooManyPlayers", function() {
                 document.getElementById("gameFullStatus").innerHTML = "Sorry, the game you are trying to join is full!";
+            });
+
+            socket.on("htmlLog", function() {
+                socket.emit("wow");
+                // switchView("mainPage");
             });
 
 
