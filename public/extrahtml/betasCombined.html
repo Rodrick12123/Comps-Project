@@ -552,13 +552,10 @@
         <script src="/socket.io/socket.io.js"></script>
 
         <script>
+            /* Establish connection to the server */
             const socket = io();
-            //var startTimer;
             
             /* HTML elements */
-
-
-            
             const screenViews = {
               mainPage: document.getElementById("mainPage"),
               joinPage: document.getElementById("joinPage"),
@@ -576,16 +573,7 @@
               playerEndGameResults: document.getElementById("playerEndGameResults")
             };
 
-            const bookViews = {
-              book3: document.getElementById("book3"),
-              book4: document.getElementById("book4"),
-              book5: document.getElementById("book5"),
-              book6: document.getElementById("book6"),
-              book7: document.getElementById("book7"),
-              book8: document.getElementById("book8"),
-              book9: document.getElementById("book9")
-            };
-
+            /* Various elements from the HTML file */
             const lobbyIDInput = document.getElementById("lobbyIDInput");
             const usernameInput = document.getElementById("usernameInput");
             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
@@ -617,6 +605,7 @@
             
             /* Utility Functions */
             
+            /* Switches the screen view of the current player/main */
             function switchView(newViewName){
               for (let [viewName, view] of Object.entries(screenViews)) {
                 if (viewName === newViewName) {
@@ -652,14 +641,14 @@
                 socket.emit("joinClicked", usernameInput.value, lobbyIDInput.value);
             }
 
-            // The start game button was clicked
+            /* The start game button was clicked */
             function startGameButtonClicked() {
 
                 const lobbyIDDisplay = document.getElementById("lobbyIDDisplay");
                 socket.emit("startGameClicked", socket.id, lobbyIDDisplay.innerHTML);
             }
 
-            // The enter prompt button was clicked
+            /* The enter prompt button was clicked */
             function enterPromptButtonClicked() {
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
@@ -667,7 +656,7 @@
                 socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, promptValue);
             }
 
-            // The enter prompt button was clicked
+            /* The enter prompt button was clicked */
             function enterPromptButtonClicked2() {
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
@@ -676,7 +665,7 @@
                 socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, promptValue2);
             }
 
-            // The enter canvas button was clicked
+            /* The enter canvas button was clicked */
             function enterCanvasButtonClicked() {
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
@@ -753,6 +742,7 @@
 
             /* Results Page Navigation */
 
+            /* The right arrow is clicked when reviewing a prompt page of a book */
             function promptRightArrowClicked() {
                 promptRightArrow.style.visibility = 'hidden';
                 promptLeftArrow.style.visibility = 'hidden';
@@ -761,6 +751,7 @@
                 }, 500);
             }
 
+            /* The right arrow is clicked when reviewing a canvas page of a book */
             function canvasRightArrowClicked() {
                 canvasRightArrow.style.visibility = 'hidden';
                 canvasLeftArrow.style.visibility = 'hidden';
@@ -769,6 +760,7 @@
                 }, 500);
             }
 
+            /* The left arrow is clicked when reviewing a prompt page of a book */
             function promptLeftArrowClicked() {
                 promptRightArrow.style.visibility = 'hidden';
                 promptLeftArrow.style.visibility = 'hidden';
@@ -777,6 +769,7 @@
                 }, 500);
             }
 
+            /* The left arrow is clicked when reviewing a canvas page of a book */
             function canvasLeftArrowClicked() {
                 canvasRightArrow.style.visibility = 'hidden';
                 canvasLeftArrow.style.visibility = 'hidden';
@@ -788,6 +781,7 @@
 
             /* Socket Functionality */
 
+            /* Used when the timer runs out on the prompt page to auto submit everyones prompt */
             socket.on("enterPrompt", function() {
                 const promptValue = document.getElementById("prompt").value;
                 if(promptValue != ""){
@@ -800,45 +794,50 @@
                 }
             });
 
-
+            /* Used when the timer runs out on the canvas page to auto submit a blank canvas */
             socket.on("enterCanvas", function() {
                 enterCanvasButtonClicked();
             });
 
-
+            /* A new room was created
+                Run by the main screen */
             socket.on("roomCreated", function(lobbyID) {
                 switchView("lobbyPage");
 
                 lobbyIDDisplay.innerHTML = lobbyID;
             });
 
-
+            /* A player tries to join a game already in progress */
             socket.on("gameInProgress", function() {
                 document.getElementById("gameProgressStatus").innerHTML = "Sorry, you cannot join a game that is already in progress!";
             });
 
+            /* A player tries to join a game already with the max number of players */
             socket.on("tooManyPlayers", function() {
                 document.getElementById("gameFullStatus").innerHTML = "Sorry, the game you are trying to join is full!";
             });
             
-
+            /* Sends everyone and the main screen in a particular game to the beginning
+                Run when someone disconnects from the game */
             socket.on("sendToBeginning", function() {
                 window.location.reload()
             });
 
-
+            /* Displays all of the players currently in the game before the game starts
+                Shows on the main screen and the players' screens */
             socket.on("addPlayerToWaitingList", function(players) {
                 playerUsernames = players.map((player) => player.username);
                 playerList.innerHTML = playerUsernames.join('<br>');
                 playerListPlayer.innerHTML = playerUsernames.join('<br>');
             });
 
-
+            /* Sends the player to the waiting room for the next round */
             socket.on("playerToWaitingRoom", function() {
                 switchView("playerLobbyPage"); 
             });
 
-
+            /* Displays all of the players in the game before the game who has enterted their prompt/drawing
+                Shows on the players' screens */
             socket.on("addPlayerToFinishedList", function(finishedUsernames, allUsernames){
                 finishedPlayers.innerHTML = finishedUsernames.join('<br>'); 
                 unfinishedUsernames = allUsernames.filter(
@@ -850,7 +849,8 @@
                 unfinishedPlayers.innerHTML = unfinishedUsernames.join('<br>');
             });
 
-
+            /* Displays all of the players in the game before the game who has enterted their prompt
+                Shows on the main screen */
             socket.on("mainPromptFinishedList", function(finishedUsernames, allUsernames){
                 mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>" + finishedUsernames.join('<br>');
                 unfinishedUsernames = allUsernames.filter(
@@ -862,7 +862,8 @@
                 mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>" + unfinishedUsernames.join('<br>');
             });
 
-
+            /* Displays all of the players in the game before the game who has enterted their canvas
+                Shows on the main screen */
             socket.on("mainCanvasFinishedList", function(finishedUsernames, allUsernames){
                 mainCanvasFinishedPlayers.innerHTML = "Cool People with beautiful drawings:<br>" + finishedUsernames.join('<br>');
                 unfinishedUsernames = allUsernames.filter(
@@ -874,25 +875,28 @@
                 mainCanvasUnfinishedPlayers.innerHTML = "People who draw slow:<br>" + unfinishedUsernames.join('<br>');
             });
 
-
+            /* Sends the player to the initial prompt screen
+                Runs once the main screen starts the game */
             socket.on("playerToPrompt", function() {
                 document.getElementById("prompt").value = "";
                 switchView("promptPage");
             });
 
-
+            /* Sends the player to the prompt screen that shows a drawing
+                Runs after a drawing round */
             socket.on("playerToPromptWithCanvas", function() {
                 document.getElementById("prompt").value = "";
                 switchView("promptPageWithCanvas");
             });
 
-
+            /* Sends the main screen to its display during the prompt/guessing rounds */
             socket.on("mainToPrompt", function() {
                 mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>";
                 mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>";
                 switchView("mainPromptPage");
             });
 
+            /* Displays a prompt from the previous round about the drawing canvas */
             socket.on("displayPrompt", function(game) {
                 for(let j = 0; j < game.numPlayers; j++){
                     if (game.players[j].socketID == socket.id){
@@ -902,6 +906,7 @@
                 }
             });
 
+            /* Shows the drawing from the previous round for a player to guess */
             socket.on("displayCanvas", function(game) {
                 for(let j = 0; j < game.numPlayers; j++){
                     if (game.players[j].socketID == socket.id){
@@ -911,10 +916,12 @@
                 }
             });
 
+            /* Brings players to the waiting room for the next round */
             socket.on("playerToWaitingNextRound", function() {
                 switchView("waitingNextRoundPage");
             });
 
+            /* Sends the player to the canvas drawing page */
             socket.on("playerToCanvas", function() {
                 clearCanvas();
                 document.getElementById("colorpicker").value="#000000";
@@ -922,12 +929,15 @@
                 switchView("canvasPage");
             });
 
+             /* Sends the main screen to its page while players draw */
             socket.on("mainToCanvas", function() {
                 mainCanvasFinishedPlayers.innerHTML = "Cool People with beautiful drawings:<br>";
                 mainCanvasUnfinishedPlayers.innerHTML = "People who draw slow:<br>";
                 switchView("mainCanvasPage");
             });
 
+            /* Sends the players to their screen when all rounds are complete
+                Results are displayed on the main screen */
             socket.on("playersToEndgame", function() {
                 switchView("playerEndGameResults");
             });
@@ -939,7 +949,7 @@
 
             /* Makes visible the books based on the number of players, and
                 puts the player name on the books (Only allow to do once) */
-                socket.on("putNamesOnBooks", function(game) {
+            socket.on("putNamesOnBooks", function(game) {
                 document.getElementById("book1Box").innerHTML = game.players[0].username;
                 document.getElementById("book2Box").innerHTML = game.players[1].username;
                 if (3 <= game.numPlayers) {
@@ -966,7 +976,8 @@
                                         }}}}}}}
             });
 
-                                        
+            /* Shows the current drawing on the main screen
+                Along with who's book it is and who drew it */                 
             socket.on("displayEndGameCanvas", function(game, player, whoInputted) {
                 switchView("endGameCanvasResults");
                 document.getElementById("playerBookCanvas").innerHTML = player.username + '\'s Book';
@@ -976,6 +987,8 @@
                 canvasLeftArrow.style.visibility = 'visible';
             });
 
+            /* Shows the current prompt on the main screen
+                Along with who's book it is and who wrote it */    
             socket.on("displayEndGamePrompt", function(player, prompt, whoInputted) {
                 switchView("endGamePromptResults");
                 document.getElementById("playerBookPrompt").innerHTML = player.username + '\'s Book';
@@ -985,6 +998,8 @@
                 promptLeftArrow.style.visibility = 'visible';
             });
 
+            /* Helper Function:
+                Finds what page is currently displaying for a particular screen */
             function isPageDisplaying(page)
             {
                 let newViewName;
@@ -1008,6 +1023,8 @@
                 return true;
             }
 
+            /* Helper Function:
+                Submits for all players when timer runs out */
             function allPlayersSubmit(lobbyID, games, page){
                 for(let j = 0; j < games.numPlayers; j++){
                     if (!(games.finishedPlayers.includes(games.players[j].socketID))){
@@ -1020,6 +1037,7 @@
                 }
             }
 
+            /* Timer functionality */
             socket.on("timerStart", function(game, page, start, lobbyID) {
                 var startDate = new Date(start);
                 document.getElementById("timerLabel2").innerHTML = 0 + "m " + 45 + "s ";

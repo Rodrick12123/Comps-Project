@@ -1,14 +1,15 @@
 
 
-
+/* Socket.io setup */
 var express = require('express');
 const { SocketAddress } = require('net');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+/* Global variables needed for before we set up the game object */
 var numRounds = 5;
-var maxPlayers = 9; //Will be in game object
+var maxPlayers = 9;
 
 
 /* Setting up the Server */
@@ -18,7 +19,7 @@ app.get('/', function(req, res) {
     res.sendFile('public/betasCombined.html', {root: __dirname});
 })
 
-
+/* Importing various classes  */
 const Game = require("./public/javascript/Game.js");
 const Host = require("./public/javascript/Host.js");
 const Player = require("./public/javascript/Player.js");
@@ -26,8 +27,10 @@ const Book = require("./public/javascript/Book.js");
 const Page = require("./public/javascript/Page.js");
 const { finished } = require('stream');
 
-
+/* Array holding all of the games that are running */
 const games = [];
+/* Helper Function:
+    Creates a new game object */
 function createGame(socketID) {
     let lobbyID = (Math.floor(Math.random() * (Math.floor(99999) - Math.ceil(10000) + 1)) + Math.ceil(10000));
 
@@ -41,7 +44,7 @@ function createGame(socketID) {
 
 
 /* Helper Function:
-Creates the new Page objects for the given Book based on the number of rounds */
+    Creates the new Page objects for the given Book based on the number of rounds */
 function createPages(book){
     for (let i = 0; i < numRounds; i++){
         let currPage = new Page();
@@ -51,7 +54,7 @@ function createPages(book){
 
 
 /* Helper Function:
-Creates the new Book object for the given player */
+    Creates the new Book object for the given player */
 function createBook(game, player){
     let currBook = new Book();
     player.setStartBook(currBook);
@@ -62,7 +65,7 @@ function createBook(game, player){
 }
 
 /* Helper Function:
-Swaps Book objects among players */
+    Swaps Book objects among players */
 function swapBooks(game){
     newBook = game.getPlayerByName(game.players[0].username).getCurrentBook();
     for (let i = 1; i < game.numPlayers; i++){
@@ -75,7 +78,7 @@ function swapBooks(game){
 
 
 /* Helper Function:
-Creates the new Player object with the given username */
+    Creates the new Player object with the given username */
 function createPlayer(game, username, lobbyID, socketID){
     if (username == ''){
         username = "Player " + game.numPlayers++;
@@ -93,11 +96,12 @@ function createPlayer(game, username, lobbyID, socketID){
 }
 
 
+/* Establishes the socket.io connection */
 io.on('connection', function(socket){
 
+    /*  Handles when a player accidentally disconnects 
+        Sends everyone back to beginning page */
     socket.on("disconnect", function() {
-        console.log("socket.id: " + socket.id);
-
         for (i = 0; i < games.length; i++) {
             for (j = 0; j < games[i].numPlayers; j++) {
                 if (games[i].players[j].socketID == socket.id && games[i].currRound != games[i].maxRounds) {
@@ -107,12 +111,11 @@ io.on('connection', function(socket){
                         io.to(games[i].players[k].socketID).emit('sendToBeginning');
                     }
                     io.to(games[i].socketID).emit('sendToBeginning');
+                    games.splice(i, 1);
                     break;
                 }
             }
         }
-
-        console.log("player disconnected");
     });
 
 	/* Create game server functionality 
@@ -165,18 +168,7 @@ io.on('connection', function(socket){
                 }
                 
                 if (games[i].getCurrRound() > 0){
-                    if (games[i].hasDisconnectedPlayers()) {
-                        games[i].reconnectPlayer(username);
-                        socket.join(lobbyID);
-                        
-                        // if currRound is odd, send to prompt page
-                        // else if currRound is even, send to canvas page
-                    
-                        // emit something to send to right page
-                    }
-                    else {
-                        socket.emit("gameInProgress");
-                    }
+                    socket.emit("gameInProgress");
                     break;
                 }
 
@@ -198,6 +190,7 @@ io.on('connection', function(socket){
         }
     });
 
+    /* The start game button was clicked on the main screen */
     socket.on('startGameClicked', function(socketID){
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
@@ -219,7 +212,7 @@ io.on('connection', function(socket){
         }
     });
 
-
+    /* The enter prompt button was clicked on one of the players screens */
     socket.on('promptEntered', function(username, lobbyID, prompt){
         console.log("promptEntered called");
         console.log("entered" , prompt);
@@ -275,6 +268,7 @@ io.on('connection', function(socket){
         }
     });
 
+    /* The enter canvas button was clicked on one of the players screens */
     socket.on('canvasEntered', function(username, lobbyID, drawing){
         console.log("canvasEntered called");
 
@@ -328,6 +322,7 @@ io.on('connection', function(socket){
         }
     });
 
+    /* Functionality for the timer expiring when the players are on the canvas page */
     socket.on("timerFinishedCanvas", function(lobbyID) {
         console.log("there")
         lobbyID = lobbyID.trim();
@@ -345,7 +340,7 @@ io.on('connection', function(socket){
 
     });
 
-
+    /* Functionality for the timer expiring when the players are on the prompt page */
     socket.on("timerFinishedPrompt", function(lobbyID) {
         lobbyID = lobbyID.trim();
         
@@ -362,14 +357,8 @@ io.on('connection', function(socket){
         }
     });
 
-    socket.on("getPlayerNames", function(players) {
-        var playerNames = [];
-        for (let i = 0; i < players.length; i++) {
-            playerNames.push(players[i].username);
-        }
-        io.in(players[0].gameLobbyID).emit("showPlayerNames", playerNames);
-    });
-
+    /* Functionality for when one of the books are clicked on the final results page.
+        Done on the main screen. */
     socket.on("bookClicked", function(playerNum, socketID) {
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
@@ -385,6 +374,7 @@ io.on('connection', function(socket){
         }
     });
 
+    /* The right arrow is clicked when reviewing a prompt page of a book */
     socket.on("promptRightArrowClicked", function(socketID) {
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
@@ -398,6 +388,7 @@ io.on('connection', function(socket){
         }
     });
 
+    /* The left arrow is clicked when reviewing a prompt page of a book */
     socket.on("promptLeftArrowClicked", function(socketID) {
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
@@ -415,6 +406,7 @@ io.on('connection', function(socket){
         }
     });
 
+    /* The right arrow is clicked when reviewing a canvas page of a book */
     socket.on("canvasRightArrowClicked", function(socketID) {
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){
@@ -433,6 +425,7 @@ io.on('connection', function(socket){
         }
     });
 
+    /* The left arrow is clicked when reviewing a canvas page of a book */
     socket.on("canvasLeftArrowClicked", function(socketID) {
         for (let i = 0; i < games.length; i++) {
             if (games[i].socketID == socketID){

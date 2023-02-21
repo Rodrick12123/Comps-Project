@@ -11,10 +11,6 @@ class Book {
     addPage(page){
         this.pages.push(page);
     }
-
-    //Probably want get functions for these variables
-
-    // Might want some more methods implemented
 }
 
 module.exports = Book;
