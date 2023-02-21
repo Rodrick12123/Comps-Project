@@ -266,7 +266,7 @@ io.on('connection', function(socket){
                     break;
                 }
                 else{
-                    io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames);
+                    io.in(lobbyID).emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames);
                     io.to(games[i].socketID).emit("mainPromptFinishedList", games[i].finishedPlayers, games[i].usernames);
                     io.to(socket.id).emit('playerToWaitingNextRound');
                     break;
@@ -319,7 +319,7 @@ io.on('connection', function(socket){
                     break;
                 }
                 else{
-                    io.emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames); // All the players are already in this list so it tries to display them all
+                    io.in(lobbyID).emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames); // All the players are already in this list so it tries to display them all
                     io.to(games[i].socketID).emit("mainCanvasFinishedList", games[i].finishedPlayers, games[i].usernames);
                     io.to(socket.id).emit('playerToWaitingNextRound');
                     break;
