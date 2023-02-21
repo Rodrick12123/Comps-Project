@@ -819,10 +819,10 @@
             socket.on("tooManyPlayers", function() {
                 document.getElementById("gameFullStatus").innerHTML = "Sorry, the game you are trying to join is full!";
             });
+            
 
-            socket.on("htmlLog", function() {
-                socket.emit("wow");
-                // switchView("mainPage");
+            socket.on("sendToBeginning", function() {
+                window.location.reload()
             });
 
 
