@@ -282,7 +282,7 @@ io.on('connection', function(socket){
                     if (games[i].hasDisconnectedPlayers()) {
                         games[i].reconnectPlayer(username);
                         socket.join(lobbyID);
-
+                        
                         // if currRound is odd, send to prompt page
                         // else if currRound is even, send to canvas page
                     

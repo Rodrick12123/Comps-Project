@@ -41,8 +41,8 @@ class Game {
             if (this.players[i].socketID == socketID) {
                 console.log("removing player: " + this.players[i].username);
                 this.disconnectedPlayers.push(this.players[i]); // add player to disconnectedPlayers[]
-                this.players.splice(i, 1); // remove the player from players list
                 let index = this.usernames.indexOf(this.players[i].username) // remove player username from usernames[]
+                this.players.splice(i, 1); // remove the player from players list
                 this.usernames.splice(index, 1);
             }
         }
