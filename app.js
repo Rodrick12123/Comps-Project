@@ -133,19 +133,11 @@ io.on('connection', function(socket){
                         }
                         // if prompt round
                         else {
-                            io.to(games[i].players[0].socketID).emit('enterPrompt', games[i].lobbyID, null);
+                            io.to(games[i].players[0].socketID).emit('enterPrompt', games[i].lobbyID, "");
                         }
                     }
                     games[i].usernames.splice(usernameIndex, 1);
                     games[i].finishedPlayers.splice(finishedPlayersIndex, 1);
-
-                    //// Jeremy implementation
-                    // for (k = 0; k < games[i].numPlayers; k++) {
-                    //     io.to(games[i].players[k].socketID).emit('sendToBeginning');
-                    // }
-                    // io.to(games[i].socketID).emit('sendToBeginning');
-                    // games.splice(i, 1);
-                    // break;
                 }
             }
         }
@@ -224,7 +216,6 @@ io.on('connection', function(socket){
 
     /* The enter prompt button was clicked on one of the players screens */
     socket.on('promptEntered', function(lobbyID, prompt){
-        console.log("promptEntered entered");
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
@@ -276,7 +267,6 @@ io.on('connection', function(socket){
 
     /* The enter canvas button was clicked on one of the players screens */
     socket.on('canvasEntered', function(lobbyID, drawing){
-        console.log("canvasEntered entered");
         if(drawing != null){
             lobbyID = lobbyID.trim();
         }
