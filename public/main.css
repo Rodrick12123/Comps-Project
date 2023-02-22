@@ -48,7 +48,7 @@ max-width: 160px;
 border: 1px solid rgb(0, 0, 0) ;
 background-color: #fff;
 width: 300px;
-height: 200px;
+height: 225px;
 position: relative; /* usually the parent, in this case the body element, has position relative so that the absolute positioned child is positioned relative to it */
 height: relative; /* 100% of the viewport height */
 margin: 0; /* recommended */
@@ -56,7 +56,7 @@ margin: 0; /* recommended */
 
 .box {
   width: 150px; /* adjust as needed */
-  height: 200px; /* adjust as needed */
+  height: 225px; /* adjust as needed */
   background-color: white;
   border: 1px solid black; /* optional */
 }
@@ -263,7 +263,7 @@ position: relative;
 border: 1px solid rgb(0, 0, 0) ;
 background-color: #fff;
 width: 300px;
-height: 200px;
+height: 225px;
 margin-left: 54%;
 margin-bottom: 0%;
 align-items: center;
