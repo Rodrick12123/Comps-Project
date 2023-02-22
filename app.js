@@ -257,9 +257,9 @@ io.on('connection', function(socket){
                 var prompt5 = "Dancing in the rain";
                 var prompt6 = "How about them apples";
                 var prompt7 = "She's a bad mamba jamba";
-                var prompt8 = "Its a bird its a plane."
-                var prompt9 = "Up up and away."
-                var prompt10 = "Fast and furious"
+                var prompt8 = "Its a bird its a plane.";
+                var prompt9 = "Up up and away.";
+                var prompt10 = "Fast and furious";
 
                 games[i].addPrompt(prompt1);
                 games[i].addPrompt(prompt2);
@@ -304,7 +304,7 @@ io.on('connection', function(socket){
                 socket.join(lobbyID);
 
                 //console.log(games[i].players);
-                io.to(games[i].socketID).emit('addPlayerToWaitingList', games[i].players)
+                io.to(games[i].socketID).emit('addPlayerToWaitingList', games[i].players);
                 for (j = 0; j < games[i].numPlayers; j++) {
                     io.to(games[i].players[j].socketID).emit('addPlayerToWaitingList', games[i].players);
                 }
