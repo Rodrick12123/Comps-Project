@@ -110,6 +110,19 @@ io.on('connection', function(socket){
                     let disconnectUsername = games[i].players[j].username;
                     let usernameIndex = games[i].usernames.indexOf(disconnectUsername);
                     let finishedPlayersIndex = games[i].finishedPlayers.indexOf(disconnectUsername);
+
+                    if (games[i].currRound != 1) {
+                        let disconnectCurrBook = games[i].players[j].currentBook;
+                        let bookToReplaceIndex = usernameIndex;
+                        for (let r = 1; r < games[i].currRound; r++) {
+                            bookToReplaceIndex++;
+                            if (bookToReplaceIndex == games[i].players.length) {
+                                bookToReplaceIndex = 0;
+                            }
+                        }
+                        games[i].players[bookToReplaceIndex].currentBook = disconnectCurrBook;
+                    }
+
                     games[i].players.splice(j, 1);
 
                     if (!games[i].finishedPlayers.includes(disconnectUsername) && 
