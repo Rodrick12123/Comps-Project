@@ -835,12 +835,12 @@
 
 
             socket.on("playerToWaitingRoom", function() {
-                switchView("playerLobbyPage"); //Will be a different page
+                switchView("playerLobbyPage"); 
             });
 
 
             socket.on("addPlayerToFinishedList", function(finishedUsernames, allUsernames){
-                finishedPlayers.innerHTML = finishedUsernames.join('<br>'); //Might want to change this to appending a child, otherwise it will replace
+                finishedPlayers.innerHTML = finishedUsernames.join('<br>'); 
                 unfinishedUsernames = allUsernames.filter(
                 function(i) {
                     return this.indexOf(i) < 0;
@@ -916,7 +916,6 @@
             });
 
             socket.on("playerToCanvas", function() {
-                // startTimer = true;
                 clearCanvas();
                 document.getElementById("colorpicker").value="#000000";
                 document.getElementById("sizepicker").value="5";
@@ -968,7 +967,6 @@
             });
 
                                         
-            //how do we want to call this?
             socket.on("displayEndGameCanvas", function(game, player, whoInputted) {
                 switchView("endGameCanvasResults");
                 document.getElementById("playerBookCanvas").innerHTML = player.username + '\'s Book';
@@ -1023,19 +1021,13 @@
             }
 
             socket.on("timerStart", function(game, page, start, lobbyID) {
-                //console.log("here");
-                //var startDate = new Date();
                 var startDate = new Date(start);
                 document.getElementById("timerLabel2").innerHTML = 0 + "m " + 45 + "s ";
 
-                //startDate.setMinutes(startDate.getMinutes() + 1);
                 startDate.setSeconds(startDate.getSeconds() + 46);
-                //startDate.setSeconds(startDate.getSeconds() + 11);
-
                 
                 if (page == 'prompt'){
                     startDate.setMinutes(startDate.getMinutes() + 1);
-                    //startDate.setSeconds(startDate.getSeconds() + 20);
                 }
                 var x = setInterval(function() {
                     if (game.timerStatus == true){
@@ -1044,8 +1036,6 @@
                         // timeleft
                         var timeLeft = startDate - nowDate;
                         
-                        // var days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                        // var hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                         var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                         var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
@@ -1065,54 +1055,24 @@
                             timeLeft = -5;
                             
                         }
-                        //document.getElementById("timerLabel1").innerHTML = minutes + "m " + seconds + "s ";
-                        //document.getElementById("timerLabel2").innerHTML = minutes + "m " + seconds + "s ";
-                        //document.getElementById("timerLabel3").innerHTML = minutes + "m " + seconds + "s ";
-                        //All entries are subimited when time =0
                         
                         if (timeLeft < 0) {
                             clearInterval(x);
-                            //startDate = new Date();
-                            //startDate.setMinutes(startDate.getMinutes() + 1);
                             document.getElementById("timerLabel1").innerHTML = "EXPIRED";
                             document.getElementById("timerLabel2").innerHTML = "EXPIRED";
                             document.getElementById("timerLabel3").innerHTML = "EXPIRED";
-                            //figure out how to find what pages are displaying
-                            //figure out how to subimt all responses forcefully
                             const lobbyIDDisplay = document.getElementById("lobbyIDDisplay").innerHTML;
                             page = page.trim();
                             if(timeLeft != -5){
                                 if (page == 'canvas' || page == 'start'){
-                                    //document.getElementById('submitPrompt').click();
                                     socket.emit("timerFinishedPrompt", lobbyIDDisplay);
                                 }
                                 if (page == 'prompt'){
-                                    //document.getElementById('submitCanvas').click();
                                     socket.emit("timerFinishedCanvas", lobbyIDDisplay);
                                 }
                             }   
 
                         }
-                   // } else{
-                        //console.log('here');
-                        //clearInterval(x);
-                        /*const lobbyID = document.getElementById("lobbyIDDisplay").innerHTML;
-                        page = page.trim();
-                        if (page == 'prompt'){
-                            //document.getElementById('submitPrompt').click();
-                            socket.emit("timerFinishedPrompt", lobbyID);
-                            //enterPromptButtonClicked();
-                        }
-                        if (page == 'canvas'){
-                            //document.getElementById('submitCanvas').click();
-                            socket.emit("timerFinishedCanvas", lobbyID);
-                            //enterCanvasButtonClicked();
-                        } */
-                        //startDate = new Date();
-                        //startDate.setMinutes(startDate.getMinutes() + 1);
-                        //document.getElementById("timerLabel1").innerHTML = 1 + "m " + 0 + "s ";
-                        //document.getElementById("timerLabel2").innerHTML = 1 + "m " + 0 + "s ";
-                        //document.getElementById("timerLabel3").innerHTML = 1 + "m " + 0 + "s ";
                     }
                 }, 1000);
             });
