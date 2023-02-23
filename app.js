@@ -225,7 +225,7 @@ io.on('connection', function(socket){
                     if (games[i].players[j].socketID == socket.id){
                         let rand = Math.floor(Math.random() * games[i].defaultPrompts.length);
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
-                        if(String(prompt).length < 1){ 
+                        if(String(prompt).length < 2){ 
                             games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(games[i].defaultPrompts[rand]);
                         }else{
                             games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
