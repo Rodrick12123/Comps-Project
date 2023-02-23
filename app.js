@@ -192,7 +192,7 @@ io.on('connection', function(socket){
     });
 
     /* The enter prompt button was clicked on one of the players screens */
-    socket.on('promptEntered', function(username, lobbyID, prompt){
+    socket.on('promptEntered', function(lobbyID, prompt){
         console.log("promptEntered called");
         console.log("entered" , prompt);
         lobbyID = lobbyID.trim();
@@ -245,7 +245,7 @@ io.on('connection', function(socket){
     });
 
     /* The enter canvas button was clicked on one of the players screens */
-    socket.on('canvasEntered', function(username, lobbyID, drawing){
+    socket.on('canvasEntered', function(lobbyID, drawing){
         console.log("canvasEntered called");
 
         if(drawing != null){

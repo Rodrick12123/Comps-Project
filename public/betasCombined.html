@@ -658,9 +658,8 @@
                 submitPromptButton.disabled = true;
                 submitCanvasButton.disabled = false;
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
-                const usernameInput = document.getElementById("usernameInput");
                 const promptValue = document.getElementById("prompt").value;
-                socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, promptValue);
+                socket.emit("promptEntered", lobbyIDInput.value, promptValue);
             }
 
             /* The enter prompt button was clicked */
@@ -670,10 +669,9 @@
                 submitPromptButton.disabled = true;
                 submitCanvasButton.disabled = false;
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
-                const usernameInput = document.getElementById("usernameInput");
                 const promptValue2 = document.getElementById("prompt2").value;
                 console.log(promptValue2);
-                socket.emit("promptEntered", usernameInput.value, lobbyIDInput.value, promptValue2);
+                socket.emit("promptEntered", lobbyIDInput.value, promptValue2);
             }
 
             /* The enter canvas button was clicked */
@@ -686,7 +684,7 @@
                 const usernameInput = document.getElementById("usernameInput");
                 const canvasDrawing = document.getElementById('canvas');
                 const savedCanvas = canvasDrawing.toDataURL('png');
-                socket.emit("canvasEntered", usernameInput.value, lobbyIDInput.value, savedCanvas);
+                socket.emit("canvasEntered", lobbyIDInput.value, savedCanvas);
             }
             
 
@@ -1052,9 +1050,9 @@
                 for(let j = 0; j < games.numPlayers; j++){
                     if (!(games.finishedPlayers.includes(games.players[j].socketID))){
                         if(page == 'prompt'){
-                            socket.emit("promptEntered", games.players[j].username, lobbyID, null);
+                            socket.emit("promptEntered", lobbyID, null);
                         }else{
-                            socket.emit("canvasEntered", games.players[j].username, lobbyID, null);
+                            socket.emit("canvasEntered", lobbyID, null);
                         }
                     }
                 }
