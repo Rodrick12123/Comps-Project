@@ -37,7 +37,6 @@ function createGame(socketID) {
     let host = new Host();
     let currGame = new Game(lobbyID, host, socketID);
     games.push(currGame);
-    console.log(games);
 
     return lobbyID;
 }
@@ -123,7 +122,6 @@ io.on('connection', function(socket){
     This is done on an outside device (Main Screen) */
     socket.on('createClicked', function(socketID){
         lobbyID = createGame(socketID);
-        console.log(lobbyID);
 
         // Make the home screen the correct html
         socket.emit('roomCreated', lobbyID);
@@ -140,7 +138,6 @@ io.on('connection', function(socket){
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 
-                console.log(games[i].defaultPrompts);
                 if (games[i].numPlayers >= maxPlayers){
                     socket.emit("tooManyPlayers");
                     break;
@@ -193,8 +190,6 @@ io.on('connection', function(socket){
 
     /* The enter prompt button was clicked on one of the players screens */
     socket.on('promptEntered', function(lobbyID, prompt){
-        console.log("promptEntered called");
-        console.log("entered" , prompt);
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
@@ -246,7 +241,6 @@ io.on('connection', function(socket){
 
     /* The enter canvas button was clicked on one of the players screens */
     socket.on('canvasEntered', function(lobbyID, drawing){
-        console.log("canvasEntered called");
 
         if(drawing != null){
             lobbyID = lobbyID.trim();
@@ -300,7 +294,6 @@ io.on('connection', function(socket){
 
     /* Functionality for the timer expiring when the players are on the canvas page */
     socket.on("timerFinishedCanvas", function(lobbyID) {
-        console.log("there")
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
@@ -340,11 +333,9 @@ io.on('connection', function(socket){
             if (games[i].socketID == socketID){
                 currPlayer = games[i].players[playerNum-1];
                 games[i].host.currResultPage += 1; 
-                console.log("page " + games[i].host.currResultPage);
                 games[i].host.currPlayerBook = playerNum;
                 initialPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].input;
                 whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
-                console.log(whoInputted + "x");
                 socket.emit("displayEndGamePrompt", currPlayer, initialPrompt, whoInputted);
             }
         }
@@ -356,9 +347,7 @@ io.on('connection', function(socket){
             if (games[i].socketID == socketID){
                 currPlayer = games[i].players[games[i].host.currPlayerBook-1];
                 games[i].host.currResultPage += 1;
-                console.log("page " + games[i].host.currResultPage);
                 whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
-                console.log(whoInputted + "x");
                 socket.emit("displayEndGameCanvas", games[i], currPlayer, whoInputted);
             }
         }
@@ -375,7 +364,6 @@ io.on('connection', function(socket){
                     socket.emit("mainToEndgame");
                     break;
                 }
-                console.log("page " + games[i].host.currResultPage);
                 whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
                 socket.emit("displayEndGameCanvas", games[i], currPlayer, whoInputted);
             }
@@ -393,7 +381,6 @@ io.on('connection', function(socket){
                     socket.emit("mainToEndgame");
                     break;
                 }
-                console.log("page " + games[i].host.currResultPage);
                 currPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].input;
                 whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
                 socket.emit("displayEndGamePrompt", currPlayer, currPrompt, whoInputted);
@@ -407,7 +394,6 @@ io.on('connection', function(socket){
             if (games[i].socketID == socketID){
                 currPlayer = games[i].players[games[i].host.currPlayerBook-1];
                 games[i].host.currResultPage -= 1;
-                console.log("page " + games[i].host.currResultPage);
                 currPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].input;
                 whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
                 socket.emit("displayEndGamePrompt", currPlayer, currPrompt, whoInputted);

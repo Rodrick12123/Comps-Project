@@ -667,7 +667,6 @@
                 submitCanvasButton.disabled = false;
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const promptValue2 = document.getElementById("prompt2").value;
-                console.log(promptValue2);
                 socket.emit("promptEntered", lobbyIDInput.value, promptValue2);
             }
 
@@ -851,11 +850,9 @@
             socket.on("enterPrompt", function() {
                 const promptValue = document.getElementById("prompt").value;
                 if(promptValue != ""){
-                    console.log("entering enterPromptButtonClicked()");
                     enterPromptButtonClicked();
                 }
                 else{
-                    console.log("entering enterPromptButton2Clicked()");
                     enterPromptButtonClicked2();
                 }
             });
