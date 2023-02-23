@@ -48,18 +48,18 @@ class Game {
         return this.timerStatus;
     }
 
-    /* get function for the current round 
+    /* Get function for the current round 
     Used to check if the game is started and when it should finish */
     getCurrRound(){
         return this.currRound;
     }
 
-    /* get function for the current round */
+    /* Set function for the current round */
     setCurrRound(round){
         return this.currRound = round;
     }
 
-    /* Gets a players' username */
+    /* Gets a player's username */
     getPlayerByName(name){
         for(let i=0; i<this.numPlayers; i++){
             if(this.players[i].username==name){

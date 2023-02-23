@@ -3,8 +3,7 @@
 class Page {
     constructor() {
         this.whoInputted;
-        this.stringInput; //Should it be initializes with the empty string?
-        this.drawingInput; //IDK what goes here yet
+        this.input;
     }
 
     /* Sets who inputted the page */
@@ -17,31 +16,16 @@ class Page {
         return this.whoInputted;
     }
 
-    /* Sets string input */
-    setStringInput(stringInput) {
-        this.stringInput = stringInput;
+    /* Sets input */
+    setStringInput(input) {
+        this.input = input;
     }
 
-    /* Gets string input */
-    getStringInput() {
-        return this.stringInput;
+    /* Gets input */
+    getinput() {
+        return this.input;
     }
 
-    /* Sets drawing input */
-    setDrawingInput(drawingInput) {
-        //this.drawingInput = new Drawing(drawingInput);
-    }
-
-    /* Gets drawing input */
-    getDrawingInput() {
-        //return this.drawingInput;
-    }
-
-    //Probably want get functions for these variables
-
-    //Method to set the instance variables
-
-    // Might want some more methods implemented
 }
 
 module.exports = Page;

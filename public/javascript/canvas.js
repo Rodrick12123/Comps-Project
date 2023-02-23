@@ -1,33 +1,35 @@
-//sets initial conditions for canvas
+// Sets initial conditions for canvas
 const canvas = new fabric.Canvas("canvas")
 canvas.isDrawingMode = true;
 canvas.freeDrawingBrush.color = 'black';
 canvas.freeDrawingBrush.width = 5;
 canvas.backgroundColor = "white";
 canvas.renderAll();
+
+// Stack for undo and redo 
 canvas.on('object:added',function(){
   if(!isRedoing){
-    h = [];
+    stack = [];
   }
   isRedoing = false;
 });
 
 var isRedoing = false;
-var h = [];
+var stack = [];
 function undo(){
   if(canvas._objects.length>0){
-   h.push(canvas._objects.pop());
+   stack.push(canvas._objects.pop());
    canvas.renderAll();
   }
 }
 function redo(){
-  
-  if(h.length>0){
+  if(stack.length>0){
     isRedoing = true;
-   canvas.add(h.pop());
+   canvas.add(stack.pop());
   }
 }
 
+// Refreshes canvas
 function rebuildCanvas() {
   canvas.isDrawingMode = true;
   canvas.freeDrawingBrush.color = 'black';
@@ -36,12 +38,12 @@ function rebuildCanvas() {
   canvas.renderAll();
 }
 
-//changes brush color
+// Changes brush color
 function changeColor() {
   canvas.freeDrawingBrush.color = document.getElementById("colorpicker").value;
 }
 
-//changes brush size
+// Changes brush size
 function changeSize() {
   canvas.freeDrawingBrush.width = document.getElementById("sizepicker").value;
   sizeValue.value = document.getElementById("sizepicker").value;

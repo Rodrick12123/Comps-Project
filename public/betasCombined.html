@@ -882,7 +882,7 @@
             socket.on("displayPrompt", function(game) {
                 for(let j = 0; j < game.numPlayers; j++){
                     if (game.players[j].socketID == socket.id){
-                        promptToDraw.innerHTML = game.players[j].currentBook.pages[game.currRound-1].stringInput;
+                        promptToDraw.innerHTML = game.players[j].currentBook.pages[game.currRound-1].input;
                         break;
                     }
                 }
@@ -905,7 +905,7 @@
             socket.on("displayCanvas", function(game) {
                 for(let j = 0; j < game.numPlayers; j++){
                     if (game.players[j].socketID == socket.id){
-                        canvasForPrompt.src = game.players[j].currentBook.pages[game.currRound-1].stringInput;
+                        canvasForPrompt.src = game.players[j].currentBook.pages[game.currRound-1].input;
                         break;
                     }
                 }
@@ -1017,7 +1017,7 @@
                 switchView("endGameCanvasResults");
                 document.getElementById("playerBookCanvas").innerHTML = player.username + '\'s Book';
                 document.getElementById("drawnBy").innerHTML = "Drawn by " + whoInputted;
-                endGameCanvas.src = player.startBook.pages[game.host.currResultPage].stringInput;
+                endGameCanvas.src = player.startBook.pages[game.host.currResultPage].input;
                 canvasRightArrow.style.visibility = 'visible';
                 canvasLeftArrow.style.visibility = 'visible';
             });

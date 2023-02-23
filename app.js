@@ -205,9 +205,9 @@ io.on('connection', function(socket){
                         let rand = Math.floor(Math.random() * games[i].defaultPrompts.length);
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
                         if(String(prompt).length < 1){ 
-                            games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(games[i].defaultPrompts[rand]);
+                            games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setinput(games[i].defaultPrompts[rand]);
                         }else{
-                            games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
+                            games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setinput(prompt);
                         }
                         games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                         playerNum = j;
@@ -258,7 +258,7 @@ io.on('connection', function(socket){
                 for(let j = 0; j < games[i].numPlayers; j++){
                     if (games[i].players[j].socketID == socket.id){
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(drawing);
+                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setinput(drawing);
                         games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                         break;
                     }
@@ -342,7 +342,7 @@ io.on('connection', function(socket){
                 games[i].host.currResultPage += 1; 
                 console.log("page " + games[i].host.currResultPage);
                 games[i].host.currPlayerBook = playerNum;
-                initialPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].stringInput;
+                initialPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].input;
                 whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
                 console.log(whoInputted + "x");
                 socket.emit("displayEndGamePrompt", currPlayer, initialPrompt, whoInputted);
@@ -394,7 +394,7 @@ io.on('connection', function(socket){
                     break;
                 }
                 console.log("page " + games[i].host.currResultPage);
-                currPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].stringInput;
+                currPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].input;
                 whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
                 socket.emit("displayEndGamePrompt", currPlayer, currPrompt, whoInputted);
             }
@@ -408,7 +408,7 @@ io.on('connection', function(socket){
                 currPlayer = games[i].players[games[i].host.currPlayerBook-1];
                 games[i].host.currResultPage -= 1;
                 console.log("page " + games[i].host.currResultPage);
-                currPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].stringInput;
+                currPrompt = currPlayer.startBook.pages[games[i].host.currResultPage].input;
                 whoInputted = currPlayer.startBook.pages[games[i].host.currResultPage].whoInputted;
                 socket.emit("displayEndGamePrompt", currPlayer, currPrompt, whoInputted);
             }

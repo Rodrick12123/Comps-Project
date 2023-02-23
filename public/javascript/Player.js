@@ -30,10 +30,7 @@ class Player {
     getCurrentBook() {
         return this.currentBook;
     }
-
-    //Probably want get functions for these variables
-
-    // Might want some more methods implemented
+    
 }
 
 module.exports = Player;
