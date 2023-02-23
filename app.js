@@ -106,16 +106,25 @@ io.on('connection', function(socket){
                 if (games[i].players[j].socketID == socket.id && games[i].currRound != games[i].maxRounds) {
 
                     //// Brain implementation
-                    let index = games[i].usernames.indexOf(games[i].players[j].username);
-                    games[i].usernames.splice(index, 1);
                     games[i].numPlayers--;
-                    for (let k = 0; k < games[i].finishedPlayers; k++) {
-                        if (games[i].finishedPlayers[k] == games[i].players[j].username) {
-                            games[i].finishedPlayers.splice(k, 1);
-                        }
-                    } 
+                    let disconnectUsername = games[i].players[j].username;
+                    let usernameIndex = games[i].usernames.indexOf(disconnectUsername);
+                    let finishedPlayersIndex = games[i].finishedPlayers.indexOf(disconnectUsername);
                     games[i].players.splice(j, 1);
 
+                    if (!games[i].finishedPlayers.includes(disconnectUsername) && 
+                    (games[i].finishedPlayers.length == games[i].numPlayers)) {
+                        // if canvas round
+                        if (games[i].getCurrRound() % 2 == 0) {
+                            io.to(games[i].players[0].socketID).emit('enterCanvas', games[i].lobbyID, null);   
+                        }
+                        // if prompt round
+                        else {
+                            io.to(games[i].players[0].socketID).emit('enterPrompt', games[i].lobbyID, null);
+                        }
+                    }
+                    games[i].usernames.splice(usernameIndex, 1);
+                    games[i].finishedPlayers.splice(finishedPlayersIndex, 1);
 
                     //// Jeremy implementation
                     // for (k = 0; k < games[i].numPlayers; k++) {
@@ -202,6 +211,7 @@ io.on('connection', function(socket){
 
     /* The enter prompt button was clicked on one of the players screens */
     socket.on('promptEntered', function(lobbyID, prompt){
+        console.log("promptEntered entered");
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
@@ -253,7 +263,7 @@ io.on('connection', function(socket){
 
     /* The enter canvas button was clicked on one of the players screens */
     socket.on('canvasEntered', function(lobbyID, drawing){
-
+        console.log("canvasEntered entered");
         if(drawing != null){
             lobbyID = lobbyID.trim();
         }
