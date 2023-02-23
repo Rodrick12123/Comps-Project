@@ -595,6 +595,9 @@
             const colorPicker = document.getElementById("colorpicker").value;
             const sizePicker = document.getElementById("sizepicker").value;
 
+            const submitCanvasButton = document.getElementById("submitCanvas");
+            const submitPromptButton = document.getElementById("submitPrompt");
+
             const endGameCanvas = document.getElementById('endGameCanvas');
             const resultsPrompt = document.getElementById("resultsPrompt");
             const promptRightArrow = document.getElementById("promptRightArrow");
@@ -650,6 +653,10 @@
 
             /* The enter prompt button was clicked */
             function enterPromptButtonClicked() {
+                const submitPromptButton = document.getElementById("submitPrompt");
+                const submitCanvasButton = document.getElementById("submitCanvas");
+                submitPromptButton.disabled = true;
+                submitCanvasButton.disabled = false;
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
                 const promptValue = document.getElementById("prompt").value;
@@ -658,6 +665,10 @@
 
             /* The enter prompt button was clicked */
             function enterPromptButtonClicked2() {
+                const submitPromptButton = document.getElementById("submitPrompt");
+                const submitCanvasButton = document.getElementById("submitCanvas");
+                submitPromptButton.disabled = true;
+                submitCanvasButton.disabled = false;
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
                 const promptValue2 = document.getElementById("prompt2").value;
@@ -667,6 +678,10 @@
 
             /* The enter canvas button was clicked */
             function enterCanvasButtonClicked() {
+                const submitPromptButton = document.getElementById("submitPrompt");
+                const submitCanvasButton = document.getElementById("submitCanvas");
+                submitCanvasButton.disabled = true;
+                submitPromptButton.disabled = false;
                 const lobbyIDInput = document.getElementById("lobbyIDInput");
                 const usernameInput = document.getElementById("usernameInput");
                 const canvasDrawing = document.getElementById('canvas');
@@ -748,7 +763,7 @@
                 promptLeftArrow.style.visibility = 'hidden';
                 setTimeout(() => {
                     socket.emit("promptRightArrowClicked", socket.id);
-                }, 500);
+                }, 200);
             }
 
             /* The right arrow is clicked when reviewing a canvas page of a book */
@@ -757,7 +772,7 @@
                 canvasLeftArrow.style.visibility = 'hidden';
                 setTimeout(() => {
                     socket.emit("canvasRightArrowClicked", socket.id);
-                }, 500);
+                }, 200);
             }
 
             /* The left arrow is clicked when reviewing a prompt page of a book */
@@ -766,7 +781,7 @@
                 promptLeftArrow.style.visibility = 'hidden';
                 setTimeout(() => {
                     socket.emit("promptLeftArrowClicked", socket.id);
-                }, 500);
+                }, 200);
             }
 
             /* The left arrow is clicked when reviewing a canvas page of a book */
@@ -775,7 +790,7 @@
                 canvasLeftArrow.style.visibility = 'hidden';
                 setTimeout(() => {
                     socket.emit("canvasLeftArrowClicked", socket.id);
-                }, 500)
+                }, 200)
             }
 
 
