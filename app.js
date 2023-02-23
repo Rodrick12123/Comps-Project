@@ -116,15 +116,14 @@ io.on('connection', function(socket){
                     } 
                     games[i].players.splice(j, 1);
 
-                    
-                    //// Jeremy implementation
-                    // io.to(games[i].socketID).emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames);
-                    // for (k = 0; k < games[i].numPlayers; k++) {
-                    //     io.to(games[i].players[k].socketID).emit('sendToBeginning');
-                    // }
-                    // io.to(games[i].socketID).emit('sendToBeginning');
-                    // games.splice(i, 1);
-                    // break;
+
+                    // Jeremy implementation
+                    for (k = 0; k < games[i].numPlayers; k++) {
+                        io.to(games[i].players[k].socketID).emit('sendToBeginning');
+                    }
+                    io.to(games[i].socketID).emit('sendToBeginning');
+                    games.splice(i, 1);
+                    break;
                 }
             }
         }
