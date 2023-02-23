@@ -761,36 +761,44 @@
             function promptRightArrowClicked() {
                 promptRightArrow.style.visibility = 'hidden';
                 promptLeftArrow.style.visibility = 'hidden';
-                setTimeout(() => {
-                    socket.emit("promptRightArrowClicked", socket.id);
-                }, 200);
+                promptRightArrow.disabled = true;
+                promptLeftArrow.disabled = true;
+                socket.emit("promptRightArrowClicked", socket.id);
+                promptRightArrow.disabled = false;
+                promptLeftArrow.disabled = false;
             }
 
             /* The right arrow is clicked when reviewing a canvas page of a book */
             function canvasRightArrowClicked() {
                 canvasRightArrow.style.visibility = 'hidden';
                 canvasLeftArrow.style.visibility = 'hidden';
-                setTimeout(() => {
-                    socket.emit("canvasRightArrowClicked", socket.id);
-                }, 200);
+                canvasRightArrow.disabled = true;
+                canvasLeftArrow.disabled = true;
+                socket.emit("canvasRightArrowClicked", socket.id);
+                canvasRightArrow.disabled = false;
+                canvasLeftArrow.disabled = false;
             }
 
             /* The left arrow is clicked when reviewing a prompt page of a book */
             function promptLeftArrowClicked() {
                 promptRightArrow.style.visibility = 'hidden';
                 promptLeftArrow.style.visibility = 'hidden';
-                setTimeout(() => {
-                    socket.emit("promptLeftArrowClicked", socket.id);
-                }, 200);
+                promptRightArrow.disabled = true;
+                promptLeftArrow.disabled = true;
+                socket.emit("promptLeftArrowClicked", socket.id);
+                promptRightArrow.disabled = false;
+                promptLeftArrow.disabled = false;
             }
 
             /* The left arrow is clicked when reviewing a canvas page of a book */
             function canvasLeftArrowClicked() {
                 canvasRightArrow.style.visibility = 'hidden';
                 canvasLeftArrow.style.visibility = 'hidden';
-                setTimeout(() => {
-                    socket.emit("canvasLeftArrowClicked", socket.id);
-                }, 200)
+                canvasRightArrow.disabled = true;
+                canvasLeftArrow.disabled = true;
+                socket.emit("canvasLeftArrowClicked", socket.id);
+                canvasRightArrow.disabled = false;
+                canvasLeftArrow.disabled = false;
             }
 
 
