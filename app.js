@@ -196,17 +196,15 @@ io.on('connection', function(socket){
         console.log("promptEntered called");
         console.log("entered" , prompt);
         lobbyID = lobbyID.trim();
-        let rand = Math.floor(Math.random() * 9);
-        var p = String(prompt);
-        console.log(p.length);
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
                 games[i].numPlayersInWaitRoom++;
                 playerNum = 0;
                 for(let j = 0; j < games[i].numPlayers; j++){
                     if (games[i].players[j].socketID == socket.id){
+                        let rand = Math.floor(Math.random() * games[i].defaultPrompts.length);
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
-                        if(p.length < 1){ 
+                        if(String(prompt).length < 1){ 
                             games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(games[i].defaultPrompts[rand]);
                         }else{
                             games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
