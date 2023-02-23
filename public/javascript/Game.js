@@ -17,7 +17,9 @@ class Game {
         this.timerStatus = false;
         this.host = host;
         this.numPlayersInWaitRoom = 0;
-        this.defaultPrompt = [];
+        this.defaultPrompts = ["Make the monkey laugh", "Houston we have takeoff", "The roof the roof the roof is on fire",
+        "Make me laugh", "Dancing in the rain", "How about them apples", "She's a bad mamba jamba", "Its a bird its a plane",
+        "Up up and away", "Fast and furious"];
     }
 
 
@@ -64,12 +66,6 @@ class Game {
                 return this.players[i];
             }
         }
-    }
-
-    /* Adds a prompt to the default prompts 
-        For when someone doesn't give a prompt */
-    addPrompt(prompt) {
-        this.defaultPrompt.push(prompt);
     }
 
 }

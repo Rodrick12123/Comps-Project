@@ -139,29 +139,8 @@ io.on('connection', function(socket){
         lobbyID = lobbyID.trim();
         for (let i = 0; i < games.length; i++) {
             if (games[i].lobbyID == lobbyID){
-                var prompt1 = "Make the monkey laugh";
-                var prompt2 = "Houston we have takeoff";
-                var prompt3 = "The roof the roof the roof is on fire";
-                var prompt4 = "Make me laugh";
-                var prompt5 = "Dancing in the rain";
-                var prompt6 = "How about them apples";
-                var prompt7 = "She's a bad mamba jamba";
-                var prompt8 = "Its a bird its a plane.";
-                var prompt9 = "Up up and away.";
-                var prompt10 = "Fast and furious";
-
-                games[i].addPrompt(prompt1);
-                games[i].addPrompt(prompt2);
-                games[i].addPrompt(prompt3);
-                games[i].addPrompt(prompt4);
-                games[i].addPrompt(prompt5);
-                games[i].addPrompt(prompt6);
-                games[i].addPrompt(prompt7);
-                games[i].addPrompt(prompt8);
-                games[i].addPrompt(prompt9);
-                games[i].addPrompt(prompt10);
                 
-                console.log(games[i].defaultPrompt);
+                console.log(games[i].defaultPrompts);
                 if (games[i].numPlayers >= maxPlayers){
                     socket.emit("tooManyPlayers");
                     break;
@@ -227,9 +206,8 @@ io.on('connection', function(socket){
                 for(let j = 0; j < games[i].numPlayers; j++){
                     if (games[i].players[j].socketID == socket.id){
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
-                        if(p.length < 1){
-                            
-                            games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(games[i].defaultPrompt[rand]);
+                        if(p.length < 1){ 
+                            games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(games[i].defaultPrompts[rand]);
                         }else{
                             games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
                         }
