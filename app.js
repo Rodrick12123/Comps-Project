@@ -104,14 +104,27 @@ io.on('connection', function(socket){
         for (i = 0; i < games.length; i++) {
             for (j = 0; j < games[i].numPlayers; j++) {
                 if (games[i].players[j].socketID == socket.id && games[i].currRound != games[i].maxRounds) {
-                    games[i].players.splice(j, 1);
+
+                    //// Brain implementation
+                    let index = games[i].usernames.indexOf(games[i].players[j].username);
+                    games[i].usernames.splice(index, 1);
                     games[i].numPlayers--;
-                    for (k = 0; k < games[i].numPlayers; k++) {
-                        io.to(games[i].players[k].socketID).emit('sendToBeginning');
-                    }
-                    io.to(games[i].socketID).emit('sendToBeginning');
-                    games.splice(i, 1);
-                    break;
+                    for (let k = 0; k < games[i].finishedPlayers; k++) {
+                        if (games[i].finishedPlayers[k] == games[i].players[j].username) {
+                            games[i].finishedPlayers.splice(k, 1);
+                        }
+                    } 
+                    games[i].players.splice(j, 1);
+
+                    
+                    //// Jeremy implementation
+                    // io.to(games[i].socketID).emit('addPlayerToFinishedList', games[i].finishedPlayers, games[i].usernames);
+                    // for (k = 0; k < games[i].numPlayers; k++) {
+                    //     io.to(games[i].players[k].socketID).emit('sendToBeginning');
+                    // }
+                    // io.to(games[i].socketID).emit('sendToBeginning');
+                    // games.splice(i, 1);
+                    // break;
                 }
             }
         }
@@ -200,9 +213,9 @@ io.on('connection', function(socket){
                         let rand = Math.floor(Math.random() * games[i].defaultPrompts.length);
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
                         if(String(prompt).length < 1){ 
-                            games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setinput(games[i].defaultPrompts[rand]);
+                            games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(games[i].defaultPrompts[rand]);
                         }else{
-                            games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setinput(prompt);
+                            games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(prompt);
                         }
                         games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                         playerNum = j;
@@ -252,7 +265,7 @@ io.on('connection', function(socket){
                 for(let j = 0; j < games[i].numPlayers; j++){
                     if (games[i].players[j].socketID == socket.id){
                         games[i].addPlayerToFinishedPlayers(games[i].players[j].username);
-                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setinput(drawing);
+                        games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setStringInput(drawing);
                         games[i].getPlayerByName(games[i].players[j].username).getCurrentBook().pages[games[i].getCurrRound()].setWhoInputted(games[i].players[j].username);
                         break;
                     }
