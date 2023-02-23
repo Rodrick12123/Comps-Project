@@ -589,14 +589,13 @@
             const mainCanvasUnfinishedPlayers = document.getElementById("mainCanvasUnfinishedPlayers");
 
             const promptValue = document.getElementById("prompt").value;
+            const submitPromptButton = document.getElementById("submitPrompt");
             const promptToDraw = document.getElementById("promptToDraw");
             const canvasDrawing = document.getElementById('canvas');
             const canvasForPrompt = document.getElementById('canvasForPrompt');
             const colorPicker = document.getElementById("colorpicker").value;
             const sizePicker = document.getElementById("sizepicker").value;
-
             const submitCanvasButton = document.getElementById("submitCanvas");
-            const submitPromptButton = document.getElementById("submitPrompt");
 
             const endGameCanvas = document.getElementById('endGameCanvas');
             const resultsPrompt = document.getElementById("resultsPrompt");
@@ -628,8 +627,6 @@
                 audio.play();
                 socket.emit('createClicked', socket.id);
             }
-            
-            
             
             /* The join button was clicked on the initial main screen */
             function mainJoinButtonClicked() {
@@ -802,24 +799,6 @@
 
             /* Socket Functionality */
 
-            /* Used when the timer runs out on the prompt page to auto submit everyones prompt */
-            socket.on("enterPrompt", function() {
-                const promptValue = document.getElementById("prompt").value;
-                if(promptValue != ""){
-                    console.log("entering enterPromptButtonClicked()");
-                    enterPromptButtonClicked();
-                }
-                else{
-                    console.log("entering enterPromptButton2Clicked()");
-                    enterPromptButtonClicked2();
-                }
-            });
-
-            /* Used when the timer runs out on the canvas page to auto submit a blank canvas */
-            socket.on("enterCanvas", function() {
-                enterCanvasButtonClicked();
-            });
-
             /* A new room was created
                 Run by the main screen */
             socket.on("roomCreated", function(lobbyID) {
@@ -844,6 +823,10 @@
                 window.location.reload()
             });
 
+
+
+            /* Socket functions for players: */
+
             /* Displays all of the players currently in the game before the game starts
                 Shows on the main screen and the players' screens */
             socket.on("addPlayerToWaitingList", function(players) {
@@ -852,9 +835,29 @@
                 playerListPlayer.innerHTML = playerUsernames.join('<br>');
             });
 
-            /* Sends the player to the waiting room for the next round */
+            /* Sends the player to the waiting room for the 1st round */
             socket.on("playerToWaitingRoom", function() {
                 switchView("playerLobbyPage"); 
+            });
+
+            /* Sends the player to the initial prompt screen
+                Runs once the main screen starts the game */
+            socket.on("playerToPrompt", function() {
+                document.getElementById("prompt").value = "";
+                switchView("promptPage");
+            });
+
+            /* Used when the timer runs out on the prompt page to auto submit everyones prompt */
+            socket.on("enterPrompt", function() {
+                const promptValue = document.getElementById("prompt").value;
+                if(promptValue != ""){
+                    console.log("entering enterPromptButtonClicked()");
+                    enterPromptButtonClicked();
+                }
+                else{
+                    console.log("entering enterPromptButton2Clicked()");
+                    enterPromptButtonClicked2();
+                }
             });
 
             /* Displays all of the players in the game before the game who has enterted their prompt/drawing
@@ -868,6 +871,73 @@
                 finishedUsernames
                 );
                 unfinishedPlayers.innerHTML = unfinishedUsernames.join('<br>');
+            });
+
+            /* Brings players to the waiting room for the next round */
+            socket.on("playerToWaitingNextRound", function() {
+                switchView("waitingNextRoundPage");
+            });
+
+            /* Displays a prompt from the previous round about the drawing canvas */
+            socket.on("displayPrompt", function(game) {
+                for(let j = 0; j < game.numPlayers; j++){
+                    if (game.players[j].socketID == socket.id){
+                        promptToDraw.innerHTML = game.players[j].currentBook.pages[game.currRound-1].stringInput;
+                        break;
+                    }
+                }
+            });
+
+            /* Sends the player to the canvas drawing page */
+            socket.on("playerToCanvas", function() {
+                clearCanvas();
+                document.getElementById("colorpicker").value="#000000";
+                document.getElementById("sizepicker").value="5";
+                switchView("canvasPage");
+            });
+
+            /* Used when the timer runs out on the canvas page to auto submit a blank canvas */
+            socket.on("enterCanvas", function() {
+                enterCanvasButtonClicked();
+            });
+
+            /* Shows the drawing from the previous round for a player to guess */
+            socket.on("displayCanvas", function(game) {
+                for(let j = 0; j < game.numPlayers; j++){
+                    if (game.players[j].socketID == socket.id){
+                        canvasForPrompt.src = game.players[j].currentBook.pages[game.currRound-1].stringInput;
+                        break;
+                    }
+                }
+            });
+
+            /* Sends the player to the prompt screen that shows a drawing
+                Runs after a drawing round */
+            socket.on("playerToPromptWithCanvas", function() {
+                document.getElementById("prompt").value = "";
+                switchView("promptPageWithCanvas");
+            });
+
+            /* Sends the players to their screen when all rounds are complete
+                Results are displayed on the main screen */
+            socket.on("playersToEndgame", function() {
+                switchView("playerEndGameResults");
+            });
+
+            /* Socket functions for main screen: */
+
+            /* Sends the main screen to its display during the prompt/guessing rounds */
+            socket.on("mainToPrompt", function() {
+                mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>";
+                mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>";
+                switchView("mainPromptPage");
+            });
+
+            /* Sends the main screen to its page while players draw */
+            socket.on("mainToCanvas", function() {
+                mainCanvasFinishedPlayers.innerHTML = "Cool People with beautiful drawings:<br>";
+                mainCanvasUnfinishedPlayers.innerHTML = "People who draw slow:<br>";
+                switchView("mainCanvasPage");
             });
 
             /* Displays all of the players in the game before the game who has enterted their prompt
@@ -894,73 +964,6 @@
                 finishedUsernames
                 );
                 mainCanvasUnfinishedPlayers.innerHTML = "People who draw slow:<br>" + unfinishedUsernames.join('<br>');
-            });
-
-            /* Sends the player to the initial prompt screen
-                Runs once the main screen starts the game */
-            socket.on("playerToPrompt", function() {
-                document.getElementById("prompt").value = "";
-                switchView("promptPage");
-            });
-
-            /* Sends the player to the prompt screen that shows a drawing
-                Runs after a drawing round */
-            socket.on("playerToPromptWithCanvas", function() {
-                document.getElementById("prompt").value = "";
-                switchView("promptPageWithCanvas");
-            });
-
-            /* Sends the main screen to its display during the prompt/guessing rounds */
-            socket.on("mainToPrompt", function() {
-                mainPromptFinishedPlayers.innerHTML = "Cool People with great prompts:<br>";
-                mainPromptUnfinishedPlayers.innerHTML = "People who don't know what a prompt is:<br>";
-                switchView("mainPromptPage");
-            });
-
-            /* Displays a prompt from the previous round about the drawing canvas */
-            socket.on("displayPrompt", function(game) {
-                for(let j = 0; j < game.numPlayers; j++){
-                    if (game.players[j].socketID == socket.id){
-                        promptToDraw.innerHTML = game.players[j].currentBook.pages[game.currRound-1].stringInput;
-                        break;
-                    }
-                }
-            });
-
-            /* Shows the drawing from the previous round for a player to guess */
-            socket.on("displayCanvas", function(game) {
-                for(let j = 0; j < game.numPlayers; j++){
-                    if (game.players[j].socketID == socket.id){
-                        canvasForPrompt.src = game.players[j].currentBook.pages[game.currRound-1].stringInput;
-                        break;
-                    }
-                }
-            });
-
-            /* Brings players to the waiting room for the next round */
-            socket.on("playerToWaitingNextRound", function() {
-                switchView("waitingNextRoundPage");
-            });
-
-            /* Sends the player to the canvas drawing page */
-            socket.on("playerToCanvas", function() {
-                clearCanvas();
-                document.getElementById("colorpicker").value="#000000";
-                document.getElementById("sizepicker").value="5";
-                switchView("canvasPage");
-            });
-
-             /* Sends the main screen to its page while players draw */
-            socket.on("mainToCanvas", function() {
-                mainCanvasFinishedPlayers.innerHTML = "Cool People with beautiful drawings:<br>";
-                mainCanvasUnfinishedPlayers.innerHTML = "People who draw slow:<br>";
-                switchView("mainCanvasPage");
-            });
-
-            /* Sends the players to their screen when all rounds are complete
-                Results are displayed on the main screen */
-            socket.on("playersToEndgame", function() {
-                switchView("playerEndGameResults");
             });
 
             /* Switches the main screen to where it chooses the book to view the results of. */
@@ -997,17 +1000,6 @@
                                         }}}}}}}
             });
 
-            /* Shows the current drawing on the main screen
-                Along with who's book it is and who drew it */                 
-            socket.on("displayEndGameCanvas", function(game, player, whoInputted) {
-                switchView("endGameCanvasResults");
-                document.getElementById("playerBookCanvas").innerHTML = player.username + '\'s Book';
-                document.getElementById("drawnBy").innerHTML = "Drawn by " + whoInputted;
-                endGameCanvas.src = player.startBook.pages[game.host.currResultPage].stringInput;
-                canvasRightArrow.style.visibility = 'visible';
-                canvasLeftArrow.style.visibility = 'visible';
-            });
-
             /* Shows the current prompt on the main screen
                 Along with who's book it is and who wrote it */    
             socket.on("displayEndGamePrompt", function(player, prompt, whoInputted) {
@@ -1017,6 +1009,17 @@
                 resultsPrompt.innerHTML = prompt;
                 promptRightArrow.style.visibility = 'visible';
                 promptLeftArrow.style.visibility = 'visible';
+            });
+
+            /* Shows the current drawing on the main screen
+                Along with who's book it is and who drew it */                 
+            socket.on("displayEndGameCanvas", function(game, player, whoInputted) {
+                switchView("endGameCanvasResults");
+                document.getElementById("playerBookCanvas").innerHTML = player.username + '\'s Book';
+                document.getElementById("drawnBy").innerHTML = "Drawn by " + whoInputted;
+                endGameCanvas.src = player.startBook.pages[game.host.currResultPage].stringInput;
+                canvasRightArrow.style.visibility = 'visible';
+                canvasLeftArrow.style.visibility = 'visible';
             });
 
             /* Helper Function:
